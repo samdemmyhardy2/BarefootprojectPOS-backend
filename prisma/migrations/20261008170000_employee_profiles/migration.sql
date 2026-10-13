@@ -1,0 +1,3 @@
+ALTER TABLE "User"
+  ADD COLUMN "jobTitle" TEXT NOT NULL DEFAULT 'Waiter',
+  ADD COLUMN "avatarUrl" TEXT;

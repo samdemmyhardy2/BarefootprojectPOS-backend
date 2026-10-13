@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider     = "prisma-client"
+  output       = "./generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  READY
+  SERVED
+  COMPLETED
+  CANCELLED
+}
+
+enum RoomSize {
+  NORMAL
+  FAMILY
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+}
+
+enum RoomChargeKind {
+  ROOM_FEE
+  WATER
+  FOOD
+  RESTAURANT_ORDER
+  OTHER
+}
+
+enum OrderPaymentMethod {
+  CASH
+  ROOM_CHECKOUT
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  jobTitle  String   @default("Waiter")
+  email     String   @unique
+  password  String
+  avatarUrl String?
+  role      Role     @default(EMPLOYEE)
+  isOnline  Boolean  @default(false)
+  orders    Order[]  @relation("WaiterOrders")
+  shifts    EmployeeShift[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EmployeeShift {
+  id         String    @id @default(uuid())
+  employeeId String
+  employee   User      @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  checkedInAt DateTime @default(now())
+  checkedOutAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([employeeId, checkedInAt])
+}
+
+model Table {
+  id          String      @id @default(uuid())
+  tableNumber Int         @unique
+  capacity    Int
+  status      TableStatus @default(AVAILABLE)
+  orders      Order[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Room {
+  id         String     @id @default(uuid())
+  roomNumber Int        @unique
+  size       RoomSize   @default(NORMAL)
+  usageFee   Decimal    @default(0) @db.Decimal(10, 2)
+  status     RoomStatus @default(AVAILABLE)
+  stays      RoomStay[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model RoomStay {
+  id              String        @id @default(uuid())
+  roomId          String
+  room            Room          @relation(fields: [roomId], references: [id])
+  primaryGuestName String
+  occupants       RoomOccupant[]
+  checkedInAt     DateTime      @default(now())
+  checkedOutAt    DateTime?
+  charges         RoomCharge[]
+  orders          Order[]
+  createdAt       DateTime      @default(now())
+
+  @@index([roomId, checkedOutAt])
+}
+
+model RoomOccupant {
+  id        String   @id @default(uuid())
+  stayId    String
+  stay      RoomStay @relation(fields: [stayId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model RoomCharge {
+  id          String         @id @default(uuid())
+  stayId      String
+  stay        RoomStay       @relation(fields: [stayId], references: [id], onDelete: Cascade)
+  orderId     String?        @unique
+  order       Order?         @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  kind        RoomChargeKind
+  description String
+  quantity    Int            @default(1)
+  unitPrice   Decimal        @db.Decimal(10, 2)
+  amount      Decimal        @db.Decimal(10, 2)
+  occurredAt  DateTime       @default(now())
+  createdAt   DateTime       @default(now())
+
+  @@index([stayId, occurredAt])
+}
+
+model Category {
+  id    String     @id @default(uuid())
+  name  String     @unique
+  items MenuItem[]
+}
+
+model MenuItem {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal     @db.Decimal(10, 2)
+  imageUrl    String?
+  allergens   String?
+  dietaryInfo String?
+  availableExtras String?
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  tableId     String?
+  table       Table?      @relation(fields: [tableId], references: [id])
+  roomStayId  String?
+  roomStay    RoomStay?   @relation(fields: [roomStayId], references: [id], onDelete: SetNull)
+  paymentMethod OrderPaymentMethod @default(CASH)
+  roomCharge  RoomCharge?
+  waiterId    String
+  waiter      User        @relation("WaiterOrders", fields: [waiterId], references: [id])
+  status      OrderStatus @default(PENDING)
+  totalAmount Decimal     @db.Decimal(10, 2)
+  items       OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model OrderItem {
+  id                String   @id @default(uuid())
+  orderId           String
+  order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId        String
+  menuItem          MenuItem @relation(fields: [menuItemId], references: [id])
+  quantity          Int
+  unitPrice         Decimal  @db.Decimal(10, 2)
+  removeIngredients String? // e.g. "No peanuts, No onions"
+  addExtras         String? // e.g. "Extra garlic sauce, Extra side salad"
+  specialNotes      String?
+  subtotal          Decimal  @db.Decimal(10, 2)
+}
