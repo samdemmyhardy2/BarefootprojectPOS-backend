@@ -9,9 +9,11 @@ import { AuthModule } from './modules/auth/auth.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { HealthController } from './health.controller';
 import { RoomsModule } from './modules/rooms/rooms.module';
+import { TasksModule } from './modules/tasks/tasks.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, OrdersModule, MenuModule, TablesModule, EmployeesModule, RoomsModule],
+  imports: [PrismaModule, AuthModule, OrdersModule, MenuModule, TablesModule, EmployeesModule, RoomsModule, TasksModule, AnalyticsModule],
   controllers: [AppController, HealthController],
   providers: [AppService],
 })

@@ -43,6 +43,10 @@ npm run db:bootstrap-users
 
 This creates or updates `admin@restaurant.com` and `agent@restaurant.com` without clearing restaurant data. The command compiles the Prisma 7 TypeScript client before running the generated JavaScript entrypoint.
 
+## Menu labels in three languages
+
+Menu allergens, dietary labels, and extras are entered manually in English, Burmese, and Thai. Each group requires all three language fields; separate entries with commas and keep them in the same order. Enter the localized equivalent of “None” when a group has no applicable labels. The API rejects incomplete or mismatched language lists. No translation API key or external translation service is used.
+
 ## Compile and run the project
 
 ```bash

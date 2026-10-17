@@ -1,0 +1,2 @@
+ALTER TABLE "OrderItem"
+ADD COLUMN "selectedAllergens" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[];

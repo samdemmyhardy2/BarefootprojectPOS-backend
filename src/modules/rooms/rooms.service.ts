@@ -6,6 +6,7 @@ import { CheckInRoomDto } from './dto/check-in-room.dto';
 import { CreateRoomChargeDto } from './dto/create-room-charge.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { UpdateRoomStatusDto } from './dto/update-room-status.dto';
 
 @Injectable()
 export class RoomsService {
@@ -14,26 +15,46 @@ export class RoomsService {
   findAll() {
     return this.prisma.room.findMany({
       orderBy: { roomNumber: 'asc' },
-      include: { stays: { where: { checkedOutAt: null }, take: 1, include: { occupants: true, _count: { select: { charges: true, orders: true } } } } },
+      include: { stays: { where: { checkedOutAt: null }, take: 1, include: { occupants: true, _count: { select: { charges: true, orders: true } } } }, _count: { select: { stays: true } } },
     });
   }
 
   async create(dto: CreateRoomDto) {
-    try { return await this.prisma.room.create({ data: { ...dto, usageFee: dto.usageFee ?? 0 } }); }
+    const facilities = this.cleanFacilities(dto.facilities);
+    try { return await this.prisma.room.create({ data: { ...dto, facilities, usageFee: dto.usageFee ?? 0 } }); }
     catch (error) { if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') throw new ConflictException('Room number already exists'); throw error; }
   }
 
   async update(id: string, dto: UpdateRoomDto) {
     await this.findRoom(id);
-    try { return await this.prisma.room.update({ where: { id }, data: dto }); }
+    const data = { ...dto, ...(dto.facilities !== undefined ? { facilities: this.cleanFacilities(dto.facilities) } : {}) };
+    try { return await this.prisma.room.update({ where: { id }, data }); }
     catch (error) { if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') throw new ConflictException('Room number already exists'); throw error; }
   }
 
-  async remove(id: string) {
+  async updateStatus(id: string, status: UpdateRoomStatusDto['status']) {
     await this.findRoom(id);
-    const history = await this.prisma.roomStay.count({ where: { roomId: id } });
-    if (history) throw new ConflictException('A room with stay history cannot be deleted');
-    return this.prisma.room.delete({ where: { id } });
+    if (status === RoomStatus.OCCUPIED) throw new BadRequestException('Rooms become occupied through guest check-in');
+    const activeStay = await this.prisma.roomStay.count({ where: { roomId: id, checkedOutAt: null } });
+    if (activeStay) throw new ConflictException('Check guests out before changing room availability');
+    return this.prisma.room.update({ where: { id }, data: { status } });
+  }
+
+  async remove(id: string, deleteHistory = false) {
+    await this.findRoom(id);
+    const stays = await this.prisma.roomStay.findMany({ where: { roomId: id }, select: { id: true, checkedOutAt: true } });
+    if (stays.some((stay) => stay.checkedOutAt === null)) throw new ConflictException('Check guests out before deleting this room');
+    if (stays.length && !deleteHistory) throw new ConflictException('Room has stay history. Archive it or explicitly delete its full history.');
+    if (!stays.length) return this.prisma.room.delete({ where: { id } });
+    const stayIds = stays.map((stay) => stay.id);
+    await this.prisma.$transaction(async (tx) => {
+      // Explicit permanent deletion also removes room-service tickets and folio charges.
+      await tx.roomCharge.deleteMany({ where: { stayId: { in: stayIds } } });
+      await tx.order.deleteMany({ where: { roomStayId: { in: stayIds } } });
+      await tx.roomStay.deleteMany({ where: { id: { in: stayIds } } });
+      await tx.room.delete({ where: { id } });
+    });
+    return { id, deleted: true, historyDeleted: true };
   }
 
   async checkIn(roomId: string, dto: CheckInRoomDto) {
@@ -91,6 +112,12 @@ export class RoomsService {
       if (stay.checkedOutAt) throw new ConflictException('This guest has already checked out');
       const changed = await tx.roomStay.updateMany({ where: { id: stayId, checkedOutAt: null }, data: { checkedOutAt: new Date() } });
       if (!changed.count) throw new ConflictException('This guest has already checked out');
+      // Backfill a room fee at checkout if this stay was created before the
+      // automatic check-in fee posting was in place. Never double-charge it.
+      const hasRoomFee = await tx.roomCharge.findFirst({ where: { stayId, kind: RoomChargeKind.ROOM_FEE }, select: { id: true } });
+      if (!hasRoomFee && Number(stay.room.usageFee) > 0) {
+        await tx.roomCharge.create({ data: { stayId, kind: RoomChargeKind.ROOM_FEE, description: 'Room usage fee', quantity: 1, unitPrice: stay.room.usageFee, amount: stay.room.usageFee } });
+      }
       const currentStay = await tx.roomStay.count({ where: { roomId: stay.roomId, checkedOutAt: null } });
       if (currentStay === 0) await tx.room.update({ where: { id: stay.roomId }, data: { status: RoomStatus.AVAILABLE } });
       const result = await tx.roomStay.findUniqueOrThrow({ where: { id: stayId }, include: this.stayDetails() });
@@ -102,6 +129,10 @@ export class RoomsService {
     const room = await this.prisma.room.findUnique({ where: { id } });
     if (!room) throw new NotFoundException('Room not found');
     return room;
+  }
+
+  private cleanFacilities(facilities?: string[]) {
+    return [...new Set((facilities ?? []).map((facility) => facility.trim()).filter(Boolean))];
   }
 
   private async activeStay(id: string) {
@@ -116,7 +147,7 @@ export class RoomsService {
       room: true,
       occupants: true,
       charges: { orderBy: { occurredAt: 'asc' as const } },
-      orders: { orderBy: { createdAt: 'asc' as const }, include: { items: { include: { menuItem: true } }, table: true, waiter: { select: { id: true, name: true } } } },
+      orders: { orderBy: { createdAt: 'asc' as const }, include: { items: { include: { menuItem: true } }, table: true, waiter: { select: { id: true, name: true } }, servedBy: { select: { id: true, name: true } } } },
     };
   }
 }

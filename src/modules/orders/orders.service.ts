@@ -9,7 +9,7 @@ import { PrismaService } from 'src/utils/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { TableStatus } from 'prisma/generated/prisma/enums';
-import { OrderPaymentMethod, OrderStatus } from 'prisma/generated/prisma/enums';
+import { OrderPaymentMethod, OrderPaymentStatus, OrderStatus } from 'prisma/generated/prisma/enums';
 
 @Injectable()
 export class OrdersService {
@@ -27,6 +27,8 @@ export class OrdersService {
   }
 
   async create(waiterId: string, dto: CreateOrderDto) {
+    const creator = await this.prisma.user.findUnique({ where: { id: waiterId }, select: { role: true, jobTitle: true } });
+    if (!creator) throw new NotFoundException('Order creator was not found');
     if (!dto.items || dto.items.length === 0) {
       throw new BadRequestException(
         'Order must contain at least one item',
@@ -35,6 +37,19 @@ export class OrdersService {
 
     if (!dto.tableId && !dto.roomStayId) throw new BadRequestException('Select a restaurant table or an active guest room');
     const paymentMethod = dto.paymentMethod ?? OrderPaymentMethod.CASH;
+    if (dto.tableId && dto.roomStayId && paymentMethod !== OrderPaymentMethod.ROOM_CHECKOUT) {
+      throw new BadRequestException('A restaurant table can only be linked to a room when charging the order to the guest folio');
+    }
+    if (dto.tableId && creator.role !== 'ADMIN' && creator.jobTitle.trim().toLowerCase() !== 'waiter') {
+      throw new BadRequestException('Your job role cannot place orders for restaurant tables');
+    }
+    const jobTitle = creator.jobTitle.trim().toLowerCase().replace(/[^a-z]/g, '');
+    const waiterTableCheckout = Boolean(dto.tableId)
+      && paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT
+      && jobTitle === 'waiter';
+    if (dto.roomStayId && creator.role !== 'ADMIN' && !waiterTableCheckout && !['guestwelcomer', 'bungalowmanager'].includes(jobTitle)) {
+      throw new BadRequestException('Your job role cannot place orders against guest room stays');
+    }
     if (paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && !dto.roomStayId) throw new BadRequestException('Choose an active room stay to charge at checkout');
     const table = dto.tableId ? await this.prisma.table.findUnique({ where: { id: dto.tableId } }) : null;
     if (dto.tableId && !table) throw new NotFoundException('Table not found');
@@ -81,6 +96,12 @@ export class OrdersService {
 
       const subtotal = unitPrice * item.quantity;
 
+      const menuItem = menuItems.find((candidate) => candidate.id === item.menuItemId);
+      const validAllergens = new Set(menuItem?.allergens ?? []);
+      if (item.selectedAllergens?.some((allergen) => !validAllergens.has(allergen))) {
+        throw new BadRequestException('Selected allergens must match the allergens configured for the menu item');
+      }
+
       totalAmount += subtotal;
 
       return {
@@ -91,6 +112,7 @@ export class OrdersService {
         removeIngredients:
           item.removeIngredients || null,
         addExtras: item.addExtras || null,
+        selectedAllergens: item.selectedAllergens ?? [],
         specialNotes:
           item.specialNotes || null,
       };
@@ -114,6 +136,7 @@ export class OrdersService {
           tableId: dto.tableId ?? null,
           roomStayId: dto.roomStayId ?? null,
           paymentMethod,
+          paymentStatus: paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT ? OrderPaymentStatus.ROOM_FOLIO : OrderPaymentStatus.UNPAID,
           waiterId,
           totalAmount,
           items: {
@@ -141,26 +164,20 @@ export class OrdersService {
     return order;
   }
 
+  activeRoomStays() {
+    return this.prisma.roomStay.findMany({
+      where: { checkedOutAt: null, room: { status: 'OCCUPIED' } },
+      select: { id: true, primaryGuestName: true, room: { select: { roomNumber: true } } },
+      orderBy: { checkedInAt: 'desc' },
+    });
+  }
+
   async findAll() {
     return this.prisma.order.findMany({
       orderBy: {
         createdAt: 'desc',
       },
-      include: {
-        items: {
-          include: {
-            menuItem: true,
-          },
-        },
-        table: true,
-        roomStay: { include: { room: true } },
-        waiter: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
+      include: this.orderDetails(),
     });
   }
 
@@ -169,21 +186,7 @@ export class OrdersService {
       where: {
         id,
       },
-      include: {
-        items: {
-          include: {
-            menuItem: true,
-          },
-        },
-        table: true,
-        roomStay: { include: { room: true } },
-        waiter: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
+      include: this.orderDetails(),
     });
 
     if (!order) {
@@ -198,11 +201,13 @@ export class OrdersService {
   async updateStatus(
     id: string,
     dto: UpdateOrderStatusDto,
+    actorId: string,
   ) {
     const order = await this.prisma.order.findUnique({
       where: {
         id,
       },
+      select: { id: true, tableId: true, status: true, preparingAt: true, readyAt: true, servedAt: true },
     });
 
     if (!order) {
@@ -211,7 +216,7 @@ export class OrdersService {
       );
     }
 
-    const updatedOrder = await this.setStatus(order, dto.status);
+    const updatedOrder = await this.setStatus(order, dto.status, actorId);
     this.orderEvents.next({ type: 'updated', order: updatedOrder });
     return updatedOrder;
   }
@@ -221,12 +226,12 @@ export class OrdersService {
   }
 
   async readyOrders() {
-    return this.prisma.order.findMany({ where: { status: OrderStatus.READY }, orderBy: { updatedAt: 'asc' }, include: this.orderDetails() });
+    return this.prisma.order.findMany({ where: { status: OrderStatus.READY }, orderBy: { readyAt: 'asc' }, include: this.orderDetails() });
   }
 
   async cookStart(id: string) { return this.transition(id, OrderStatus.PENDING, OrderStatus.PREPARING); }
   async cookReady(id: string) { return this.transition(id, OrderStatus.PREPARING, OrderStatus.READY); }
-  async acknowledgeReady(id: string) { return this.transition(id, OrderStatus.READY, OrderStatus.SERVED); }
+  async acknowledgeReady(id: string, servedById: string) { return this.transition(id, OrderStatus.READY, OrderStatus.SERVED, servedById); }
 
   async remove(id: string) {
     const order = await this.prisma.order.findUnique({ where: { id }, include: { roomCharge: true } });
@@ -243,8 +248,18 @@ export class OrdersService {
     return { id, deleted: true };
   }
 
-  private async transition(id: string, from: OrderStatus, to: OrderStatus) {
-    const changed = await this.prisma.order.updateMany({ where: { id, status: from }, data: { status: to } });
+  private async transition(id: string, from: OrderStatus, to: OrderStatus, servedById?: string) {
+    const now = new Date();
+    const changed = await this.prisma.order.updateMany({
+      where: { id, status: from },
+      data: {
+        status: to,
+        ...(to === OrderStatus.PREPARING ? { preparingAt: now } : {}),
+        ...(to === OrderStatus.READY ? { readyAt: now } : {}),
+        ...(to === OrderStatus.SERVED ? { servedAt: now } : {}),
+        ...(to === OrderStatus.SERVED && servedById ? { servedById } : {}),
+      },
+    });
     if (!changed.count) {
       const order = await this.prisma.order.findUnique({ where: { id }, select: { id: true, status: true } });
       if (!order) throw new NotFoundException('Order not found');
@@ -262,9 +277,20 @@ export class OrdersService {
     return updated;
   }
 
-  private async setStatus(order: { id: string; tableId: string | null }, status: OrderStatus) {
+  private async setStatus(order: { id: string; tableId: string | null; status: OrderStatus; preparingAt: Date | null; readyAt: Date | null; servedAt: Date | null }, status: OrderStatus, actorId: string) {
     return this.prisma.$transaction(async (tx) => {
-      const updated = await tx.order.update({ where: { id: order.id }, data: { status }, include: this.orderDetails() });
+      const now = new Date();
+      const updated = await tx.order.update({
+        where: { id: order.id },
+        data: {
+          status,
+          ...(status === OrderStatus.PREPARING && !order.preparingAt ? { preparingAt: now } : {}),
+          ...(status === OrderStatus.READY && !order.readyAt ? { readyAt: now } : {}),
+          ...(status === OrderStatus.SERVED && !order.servedAt ? { servedAt: now } : {}),
+          ...(status === OrderStatus.SERVED ? { servedById: actorId } : {}),
+        },
+        include: this.orderDetails(),
+      });
       if ((status === OrderStatus.COMPLETED || status === OrderStatus.CANCELLED) && order.tableId) {
         const activeOrders = await tx.order.count({ where: { tableId: order.tableId, status: { notIn: [OrderStatus.COMPLETED, OrderStatus.CANCELLED] } } });
         if (activeOrders === 0) await tx.table.update({ where: { id: order.tableId }, data: { status: TableStatus.AVAILABLE } });
@@ -274,6 +300,6 @@ export class OrdersService {
   }
 
   private orderDetails() {
-    return { items: { include: { menuItem: true } }, table: true, roomStay: { include: { room: true } }, waiter: { select: { id: true, name: true } } };
+    return { items: { include: { menuItem: true } }, table: true, roomStay: { include: { room: true } }, waiter: { select: { id: true, name: true } }, servedBy: { select: { id: true, name: true } } };
   }
 }

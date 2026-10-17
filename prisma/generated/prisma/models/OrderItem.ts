@@ -70,6 +70,7 @@ export type OrderItemCountAggregateOutputType = {
   unitPrice: number
   removeIngredients: number
   addExtras: number
+  selectedAllergens: number
   specialNotes: number
   subtotal: number
   _all: number
@@ -120,6 +121,7 @@ export type OrderItemCountAggregateInputType = {
   unitPrice?: true
   removeIngredients?: true
   addExtras?: true
+  selectedAllergens?: true
   specialNotes?: true
   subtotal?: true
   _all?: true
@@ -219,6 +221,7 @@ export type OrderItemGroupByOutputType = {
   unitPrice: runtime.Decimal
   removeIngredients: string | null
   addExtras: string | null
+  selectedAllergens: string[]
   specialNotes: string | null
   subtotal: runtime.Decimal
   _count: OrderItemCountAggregateOutputType | null
@@ -254,6 +257,7 @@ export type OrderItemWhereInput = {
   unitPrice?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   addExtras?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  selectedAllergens?: Prisma.StringNullableListFilter<"OrderItem">
   specialNotes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
@@ -268,6 +272,7 @@ export type OrderItemOrderByWithRelationInput = {
   unitPrice?: Prisma.SortOrder
   removeIngredients?: Prisma.SortOrderInput | Prisma.SortOrder
   addExtras?: Prisma.SortOrderInput | Prisma.SortOrder
+  selectedAllergens?: Prisma.SortOrder
   specialNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   order?: Prisma.OrderOrderByWithRelationInput
@@ -285,6 +290,7 @@ export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
   unitPrice?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   addExtras?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  selectedAllergens?: Prisma.StringNullableListFilter<"OrderItem">
   specialNotes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
@@ -299,6 +305,7 @@ export type OrderItemOrderByWithAggregationInput = {
   unitPrice?: Prisma.SortOrder
   removeIngredients?: Prisma.SortOrderInput | Prisma.SortOrder
   addExtras?: Prisma.SortOrderInput | Prisma.SortOrder
+  selectedAllergens?: Prisma.SortOrder
   specialNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   _count?: Prisma.OrderItemCountOrderByAggregateInput
@@ -319,6 +326,7 @@ export type OrderItemScalarWhereWithAggregatesInput = {
   unitPrice?: Prisma.DecimalWithAggregatesFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
   addExtras?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
+  selectedAllergens?: Prisma.StringNullableListFilter<"OrderItem">
   specialNotes?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
   subtotal?: Prisma.DecimalWithAggregatesFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -329,6 +337,7 @@ export type OrderItemCreateInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
@@ -343,6 +352,7 @@ export type OrderItemUncheckedCreateInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -353,6 +363,7 @@ export type OrderItemUpdateInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
@@ -367,6 +378,7 @@ export type OrderItemUncheckedUpdateInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -379,6 +391,7 @@ export type OrderItemCreateManyInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -389,6 +402,7 @@ export type OrderItemUpdateManyMutationInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -401,6 +415,7 @@ export type OrderItemUncheckedUpdateManyInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -423,6 +438,7 @@ export type OrderItemCountOrderByAggregateInput = {
   unitPrice?: Prisma.SortOrder
   removeIngredients?: Prisma.SortOrder
   addExtras?: Prisma.SortOrder
+  selectedAllergens?: Prisma.SortOrder
   specialNotes?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
 }
@@ -547,12 +563,22 @@ export type OrderItemUncheckedUpdateManyWithoutOrderNestedInput = {
   deleteMany?: Prisma.OrderItemScalarWhereInput | Prisma.OrderItemScalarWhereInput[]
 }
 
+export type OrderItemCreateselectedAllergensInput = {
+  set: string[]
+}
+
+export type OrderItemUpdateselectedAllergensInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type OrderItemCreateWithoutMenuItemInput = {
   id?: string
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
@@ -565,6 +591,7 @@ export type OrderItemUncheckedCreateWithoutMenuItemInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -606,6 +633,7 @@ export type OrderItemScalarWhereInput = {
   unitPrice?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   addExtras?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  selectedAllergens?: Prisma.StringNullableListFilter<"OrderItem">
   specialNotes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -616,6 +644,7 @@ export type OrderItemCreateWithoutOrderInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuItem: Prisma.MenuItemCreateNestedOneWithoutOrderItemsInput
@@ -628,6 +657,7 @@ export type OrderItemUncheckedCreateWithoutOrderInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -665,6 +695,7 @@ export type OrderItemCreateManyMenuItemInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -675,6 +706,7 @@ export type OrderItemUpdateWithoutMenuItemInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
@@ -687,6 +719,7 @@ export type OrderItemUncheckedUpdateWithoutMenuItemInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -698,6 +731,7 @@ export type OrderItemUncheckedUpdateManyWithoutMenuItemInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -709,6 +743,7 @@ export type OrderItemCreateManyOrderInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
   addExtras?: string | null
+  selectedAllergens?: Prisma.OrderItemCreateselectedAllergensInput | string[]
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -719,6 +754,7 @@ export type OrderItemUpdateWithoutOrderInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuItem?: Prisma.MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
@@ -731,6 +767,7 @@ export type OrderItemUncheckedUpdateWithoutOrderInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -742,6 +779,7 @@ export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addExtras?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedAllergens?: Prisma.OrderItemUpdateselectedAllergensInput | string[]
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
 }
@@ -756,6 +794,7 @@ export type OrderItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   unitPrice?: boolean
   removeIngredients?: boolean
   addExtras?: boolean
+  selectedAllergens?: boolean
   specialNotes?: boolean
   subtotal?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -770,6 +809,7 @@ export type OrderItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   unitPrice?: boolean
   removeIngredients?: boolean
   addExtras?: boolean
+  selectedAllergens?: boolean
   specialNotes?: boolean
   subtotal?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -784,6 +824,7 @@ export type OrderItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   unitPrice?: boolean
   removeIngredients?: boolean
   addExtras?: boolean
+  selectedAllergens?: boolean
   specialNotes?: boolean
   subtotal?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -798,11 +839,12 @@ export type OrderItemSelectScalar = {
   unitPrice?: boolean
   removeIngredients?: boolean
   addExtras?: boolean
+  selectedAllergens?: boolean
   specialNotes?: boolean
   subtotal?: boolean
 }
 
-export type OrderItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "menuItemId" | "quantity" | "unitPrice" | "removeIngredients" | "addExtras" | "specialNotes" | "subtotal", ExtArgs["result"]["orderItem"]>
+export type OrderItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "menuItemId" | "quantity" | "unitPrice" | "removeIngredients" | "addExtras" | "selectedAllergens" | "specialNotes" | "subtotal", ExtArgs["result"]["orderItem"]>
 export type OrderItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   menuItem?: boolean | Prisma.MenuItemDefaultArgs<ExtArgs>
@@ -830,6 +872,7 @@ export type $OrderItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     unitPrice: runtime.Decimal
     removeIngredients: string | null
     addExtras: string | null
+    selectedAllergens: string[]
     specialNotes: string | null
     subtotal: runtime.Decimal
   }, ExtArgs["result"]["orderItem"]>
@@ -1264,6 +1307,7 @@ export interface OrderItemFieldRefs {
   readonly unitPrice: Prisma.FieldRef<"OrderItem", 'Decimal'>
   readonly removeIngredients: Prisma.FieldRef<"OrderItem", 'String'>
   readonly addExtras: Prisma.FieldRef<"OrderItem", 'String'>
+  readonly selectedAllergens: Prisma.FieldRef<"OrderItem", 'String[]'>
   readonly specialNotes: Prisma.FieldRef<"OrderItem", 'String'>
   readonly subtotal: Prisma.FieldRef<"OrderItem", 'Decimal'>
 }

@@ -1,0 +1,2 @@
+ALTER TABLE "Room"
+ADD COLUMN "facilities" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[];

@@ -61,6 +61,7 @@ export type RoomCountAggregateOutputType = {
   roomNumber: number
   size: number
   usageFee: number
+  facilities: number
   status: number
   createdAt: number
   updatedAt: number
@@ -103,6 +104,7 @@ export type RoomCountAggregateInputType = {
   roomNumber?: true
   size?: true
   usageFee?: true
+  facilities?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -200,6 +202,7 @@ export type RoomGroupByOutputType = {
   roomNumber: number
   size: $Enums.RoomSize
   usageFee: runtime.Decimal
+  facilities: string[]
   status: $Enums.RoomStatus
   createdAt: Date
   updatedAt: Date
@@ -233,6 +236,7 @@ export type RoomWhereInput = {
   roomNumber?: Prisma.IntFilter<"Room"> | number
   size?: Prisma.EnumRoomSizeFilter<"Room"> | $Enums.RoomSize
   usageFee?: Prisma.DecimalFilter<"Room"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.StringNullableListFilter<"Room">
   status?: Prisma.EnumRoomStatusFilter<"Room"> | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeFilter<"Room"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Room"> | Date | string
@@ -244,6 +248,7 @@ export type RoomOrderByWithRelationInput = {
   roomNumber?: Prisma.SortOrder
   size?: Prisma.SortOrder
   usageFee?: Prisma.SortOrder
+  facilities?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -258,6 +263,7 @@ export type RoomWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.RoomWhereInput | Prisma.RoomWhereInput[]
   size?: Prisma.EnumRoomSizeFilter<"Room"> | $Enums.RoomSize
   usageFee?: Prisma.DecimalFilter<"Room"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.StringNullableListFilter<"Room">
   status?: Prisma.EnumRoomStatusFilter<"Room"> | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeFilter<"Room"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Room"> | Date | string
@@ -269,6 +275,7 @@ export type RoomOrderByWithAggregationInput = {
   roomNumber?: Prisma.SortOrder
   size?: Prisma.SortOrder
   usageFee?: Prisma.SortOrder
+  facilities?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -287,6 +294,7 @@ export type RoomScalarWhereWithAggregatesInput = {
   roomNumber?: Prisma.IntWithAggregatesFilter<"Room"> | number
   size?: Prisma.EnumRoomSizeWithAggregatesFilter<"Room"> | $Enums.RoomSize
   usageFee?: Prisma.DecimalWithAggregatesFilter<"Room"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.StringNullableListFilter<"Room">
   status?: Prisma.EnumRoomStatusWithAggregatesFilter<"Room"> | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Room"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Room"> | Date | string
@@ -297,6 +305,7 @@ export type RoomCreateInput = {
   roomNumber: number
   size?: $Enums.RoomSize
   usageFee?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomCreatefacilitiesInput | string[]
   status?: $Enums.RoomStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -308,6 +317,7 @@ export type RoomUncheckedCreateInput = {
   roomNumber: number
   size?: $Enums.RoomSize
   usageFee?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomCreatefacilitiesInput | string[]
   status?: $Enums.RoomStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -319,6 +329,7 @@ export type RoomUpdateInput = {
   roomNumber?: Prisma.IntFieldUpdateOperationsInput | number
   size?: Prisma.EnumRoomSizeFieldUpdateOperationsInput | $Enums.RoomSize
   usageFee?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomUpdatefacilitiesInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -330,6 +341,7 @@ export type RoomUncheckedUpdateInput = {
   roomNumber?: Prisma.IntFieldUpdateOperationsInput | number
   size?: Prisma.EnumRoomSizeFieldUpdateOperationsInput | $Enums.RoomSize
   usageFee?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomUpdatefacilitiesInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -341,6 +353,7 @@ export type RoomCreateManyInput = {
   roomNumber: number
   size?: $Enums.RoomSize
   usageFee?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomCreatefacilitiesInput | string[]
   status?: $Enums.RoomStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -351,6 +364,7 @@ export type RoomUpdateManyMutationInput = {
   roomNumber?: Prisma.IntFieldUpdateOperationsInput | number
   size?: Prisma.EnumRoomSizeFieldUpdateOperationsInput | $Enums.RoomSize
   usageFee?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomUpdatefacilitiesInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -361,9 +375,18 @@ export type RoomUncheckedUpdateManyInput = {
   roomNumber?: Prisma.IntFieldUpdateOperationsInput | number
   size?: Prisma.EnumRoomSizeFieldUpdateOperationsInput | $Enums.RoomSize
   usageFee?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomUpdatefacilitiesInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type RoomCountOrderByAggregateInput = {
@@ -371,6 +394,7 @@ export type RoomCountOrderByAggregateInput = {
   roomNumber?: Prisma.SortOrder
   size?: Prisma.SortOrder
   usageFee?: Prisma.SortOrder
+  facilities?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -411,6 +435,10 @@ export type RoomScalarRelationFilter = {
   isNot?: Prisma.RoomWhereInput
 }
 
+export type RoomCreatefacilitiesInput = {
+  set: string[]
+}
+
 export type EnumRoomSizeFieldUpdateOperationsInput = {
   set?: $Enums.RoomSize
 }
@@ -421,6 +449,11 @@ export type DecimalFieldUpdateOperationsInput = {
   decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
   multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type RoomUpdatefacilitiesInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type EnumRoomStatusFieldUpdateOperationsInput = {
@@ -446,6 +479,7 @@ export type RoomCreateWithoutStaysInput = {
   roomNumber: number
   size?: $Enums.RoomSize
   usageFee?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomCreatefacilitiesInput | string[]
   status?: $Enums.RoomStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -456,6 +490,7 @@ export type RoomUncheckedCreateWithoutStaysInput = {
   roomNumber: number
   size?: $Enums.RoomSize
   usageFee?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomCreatefacilitiesInput | string[]
   status?: $Enums.RoomStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -482,6 +517,7 @@ export type RoomUpdateWithoutStaysInput = {
   roomNumber?: Prisma.IntFieldUpdateOperationsInput | number
   size?: Prisma.EnumRoomSizeFieldUpdateOperationsInput | $Enums.RoomSize
   usageFee?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomUpdatefacilitiesInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -492,6 +528,7 @@ export type RoomUncheckedUpdateWithoutStaysInput = {
   roomNumber?: Prisma.IntFieldUpdateOperationsInput | number
   size?: Prisma.EnumRoomSizeFieldUpdateOperationsInput | $Enums.RoomSize
   usageFee?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  facilities?: Prisma.RoomUpdatefacilitiesInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -533,6 +570,7 @@ export type RoomSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   roomNumber?: boolean
   size?: boolean
   usageFee?: boolean
+  facilities?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -545,6 +583,7 @@ export type RoomSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   roomNumber?: boolean
   size?: boolean
   usageFee?: boolean
+  facilities?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -555,6 +594,7 @@ export type RoomSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   roomNumber?: boolean
   size?: boolean
   usageFee?: boolean
+  facilities?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -565,12 +605,13 @@ export type RoomSelectScalar = {
   roomNumber?: boolean
   size?: boolean
   usageFee?: boolean
+  facilities?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roomNumber" | "size" | "usageFee" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["room"]>
+export type RoomOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roomNumber" | "size" | "usageFee" | "facilities" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["room"]>
 export type RoomInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stays?: boolean | Prisma.Room$staysArgs<ExtArgs>
   _count?: boolean | Prisma.RoomCountOutputTypeDefaultArgs<ExtArgs>
@@ -588,6 +629,7 @@ export type $RoomPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     roomNumber: number
     size: $Enums.RoomSize
     usageFee: runtime.Decimal
+    facilities: string[]
     status: $Enums.RoomStatus
     createdAt: Date
     updatedAt: Date
@@ -1019,6 +1061,7 @@ export interface RoomFieldRefs {
   readonly roomNumber: Prisma.FieldRef<"Room", 'Int'>
   readonly size: Prisma.FieldRef<"Room", 'RoomSize'>
   readonly usageFee: Prisma.FieldRef<"Room", 'Decimal'>
+  readonly facilities: Prisma.FieldRef<"Room", 'String[]'>
   readonly status: Prisma.FieldRef<"Room", 'RoomStatus'>
   readonly createdAt: Prisma.FieldRef<"Room", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Room", 'DateTime'>

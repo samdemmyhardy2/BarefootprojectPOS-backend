@@ -2,14 +2,17 @@ import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UseGu
 import { ApiBearerAuth, ApiConflictResponse, ApiNotFoundResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from 'prisma/generated/prisma/enums';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { JobPermissions } from '../../common/decorators/job-permissions.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
 import { TablesService } from './tables.service';
 import { UpdateTableStatusDto } from './dto/update-table-status.dto';
+import { CheckoutTableDto } from './dto/checkout-table.dto';
+import { GetUser } from '../../common/decorators/get-user.decorator';
 
-@ApiTags('Tables') @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard) @Roles(Role.ADMIN, Role.EMPLOYEE) @Controller('tables')
+@ApiTags('Tables') @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard) @Roles(Role.ADMIN, Role.EMPLOYEE) @Controller('tables') @JobPermissions('TABLES')
 export class TablesController {
   constructor(private readonly tables: TablesService) {}
   @Get() @ApiOperation({ summary: 'Get table grid and availability' }) @ApiResponse({ status: 200, description: 'Tables ordered by table number, including AVAILABLE, OCCUPIED, or RESERVED status.' })
@@ -22,6 +25,8 @@ export class TablesController {
   update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateTableDto) { return this.tables.update(id, dto); }
   @Patch(':id/status') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Set table availability (admin or employee)' }) @ApiResponse({ status: 200, description: 'Table status updated.' }) @ApiNotFoundResponse({ description: 'Table not found.' })
   updateStatus(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateTableStatusDto) { return this.tables.updateStatus(id, dto); }
+  @Post(':id/checkout') @JobPermissions('ORDER_CREATE') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Settle all served orders on a table by cash or guest room folio' }) @ApiResponse({ status: 201, description: 'Orders settled, table released, and any room folio charges recorded.' }) @ApiConflictResponse({ description: 'Orders are not all served, a room stay is invalid, or an order is already settled.' })
+  checkout(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') cashierId: string, @Body() dto: CheckoutTableDto) { return this.tables.checkout(id, cashierId, dto); }
   @Delete(':id') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Delete a table without order history (admin)' }) @ApiResponse({ status: 200, description: 'Table deleted.' }) @ApiConflictResponse({ description: 'Table has order history.' }) @ApiNotFoundResponse({ description: 'Table not found.' })
   remove(@Param('id', ParseUUIDPipe) id: string) { return this.tables.remove(id); }
 }

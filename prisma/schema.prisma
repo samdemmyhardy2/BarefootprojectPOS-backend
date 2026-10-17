@@ -41,6 +41,8 @@ enum RoomSize {
 enum RoomStatus {
   AVAILABLE
   OCCUPIED
+  MAINTENANCE
+  ARCHIVED
 }
 
 enum RoomChargeKind {
@@ -56,6 +58,18 @@ enum OrderPaymentMethod {
   ROOM_CHECKOUT
 }
 
+enum OrderPaymentStatus {
+  UNPAID
+  PAID
+  ROOM_FOLIO
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+}
+
 model User {
   id        String   @id @default(uuid())
   name      String
@@ -66,9 +80,39 @@ model User {
   role      Role     @default(EMPLOYEE)
   isOnline  Boolean  @default(false)
   orders    Order[]  @relation("WaiterOrders")
+  servedOrders Order[] @relation("ServedOrders")
+  paidOrders Order[] @relation("OrderPaidBy")
   shifts    EmployeeShift[]
+  tasksAssigned TaskAssignment[] @relation("TaskAssignmentEmployee")
+  tasksCreated  Task[] @relation("TaskCreator")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id           String     @id @default(uuid())
+  title        String
+  description  String?
+  status       TaskStatus @default(TODO)
+  dueAt        DateTime?
+  assignments  TaskAssignment[]
+  createdById  String?
+  createdBy    User?      @relation("TaskCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([status, dueAt])
+}
+
+model TaskAssignment {
+  taskId     String
+  employeeId String
+  assignedAt DateTime @default(now())
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  employee   User     @relation("TaskAssignmentEmployee", fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, employeeId])
+  @@index([employeeId])
 }
 
 model EmployeeShift {
@@ -78,8 +122,20 @@ model EmployeeShift {
   checkedInAt DateTime @default(now())
   checkedOutAt DateTime?
   createdAt DateTime @default(now())
+  breaks    ShiftBreak[]
 
   @@index([employeeId, checkedInAt])
+}
+
+model ShiftBreak {
+  id              String        @id @default(uuid())
+  employeeShiftId String
+  employeeShift   EmployeeShift @relation(fields: [employeeShiftId], references: [id], onDelete: Cascade)
+  startedAt       DateTime      @default(now())
+  endedAt         DateTime?
+  createdAt       DateTime      @default(now())
+
+  @@index([employeeShiftId, endedAt])
 }
 
 model Table {
@@ -97,6 +153,7 @@ model Room {
   roomNumber Int        @unique
   size       RoomSize   @default(NORMAL)
   usageFee   Decimal    @default(0) @db.Decimal(10, 2)
+  facilities String[]   @default([])
   status     RoomStatus @default(AVAILABLE)
   stays      RoomStay[]
   createdAt  DateTime   @default(now())
@@ -155,9 +212,15 @@ model MenuItem {
   description String?
   price       Decimal     @db.Decimal(10, 2)
   imageUrl    String?
-  allergens   String?
-  dietaryInfo String?
-  availableExtras String?
+  allergens   String[] @default([])
+  allergensMy String[] @default([])
+  allergensTh String[] @default([])
+  dietaryInfo String[] @default([])
+  dietaryInfoMy String[] @default([])
+  dietaryInfoTh String[] @default([])
+  availableExtras String[] @default([])
+  availableExtrasMy String[] @default([])
+  availableExtrasTh String[] @default([])
   categoryId  String
   category    Category    @relation(fields: [categoryId], references: [id])
   orderItems  OrderItem[]
@@ -172,11 +235,20 @@ model Order {
   roomStayId  String?
   roomStay    RoomStay?   @relation(fields: [roomStayId], references: [id], onDelete: SetNull)
   paymentMethod OrderPaymentMethod @default(CASH)
+  paymentStatus OrderPaymentStatus @default(UNPAID)
+  paidAt        DateTime?
+  paidById      String?
+  paidBy        User?       @relation("OrderPaidBy", fields: [paidById], references: [id], onDelete: SetNull)
   roomCharge  RoomCharge?
   waiterId    String
   waiter      User        @relation("WaiterOrders", fields: [waiterId], references: [id])
+  servedById  String?
+  servedBy    User?       @relation("ServedOrders", fields: [servedById], references: [id], onDelete: SetNull)
   status      OrderStatus @default(PENDING)
   totalAmount Decimal     @db.Decimal(10, 2)
+  preparingAt DateTime?
+  readyAt     DateTime?
+  servedAt    DateTime?
   items       OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -192,6 +264,7 @@ model OrderItem {
   unitPrice         Decimal  @db.Decimal(10, 2)
   removeIngredients String? // e.g. "No peanuts, No onions"
   addExtras         String? // e.g. "Extra garlic sauce, Extra side salad"
+  selectedAllergens String[] @default([])
   specialNotes      String?
   subtotal          Decimal  @db.Decimal(10, 2)
 }

@@ -33,6 +33,7 @@ import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { JobPermissions } from 'src/common/decorators/job-permissions.decorator';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { Role } from 'prisma/generated/prisma/enums';
 import { AcceptStreamToken } from 'src/common/decorators/stream-token.decorator';
@@ -44,6 +45,14 @@ import { AcceptStreamToken } from 'src/common/decorators/stream-token.decorator'
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService, private readonly jwtService: JwtService) { }
 
+  @JobPermissions('ORDER_CREATE')
+  @Get('active-room-stays')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'List active guest rooms available for checkout billing on an order' })
+  @ApiResponse({ status: 200, description: 'Active stay IDs, guest names, and room numbers for order billing.' })
+  activeRoomStays() { return this.ordersService.activeRoomStays(); }
+
+  @JobPermissions('ORDER_CREATE')
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Roles(Role.ADMIN, Role.EMPLOYEE)
@@ -71,6 +80,7 @@ export class OrdersController {
     return this.ordersService.create(waiterId, createOrderDto);
   }
 
+  @JobPermissions('ORDER_VIEW')
   @Get()
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @ApiOperation({
@@ -87,24 +97,27 @@ export class OrdersController {
     return this.ordersService.findAll();
   }
 
+  @JobPermissions('ORDER_SERVE')
   @Get('ready')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @ApiOperation({ summary: 'Get orders ready for wait staff to collect' })
   @ApiResponse({ status: 200, description: 'Ready orders sorted oldest first.' })
   readyOrders() { return this.ordersService.readyOrders(); }
 
+  @JobPermissions('ORDER_VIEW')
   @Get('events/token')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @ApiOperation({ summary: 'Create a short-lived token for a browser order event stream' })
   @ApiResponse({ status: 200, description: 'A stream token valid for 15 minutes.' })
-  async createStreamToken(@GetUser() user: { id: string; role: Role }): Promise<{ streamToken: string; expiresInSeconds: number }> {
+  async createStreamToken(@GetUser() user: { id: string; role: Role; jobTitle: string }): Promise<{ streamToken: string; expiresInSeconds: number }> {
     const streamToken = await this.jwtService.signAsync(
-      { id: user.id, sub: user.id, role: user.role, scope: 'orders:stream' },
+      { id: user.id, sub: user.id, role: user.role, jobTitle: user.jobTitle, scope: 'orders:stream' },
       { secret: process.env.JWT_SECRET || 'super-secret-key', expiresIn: '15m' },
     );
     return { streamToken, expiresInSeconds: 900 };
   }
 
+  @JobPermissions('ORDER_VIEW')
   @Sse('events')
   @AcceptStreamToken()
   @Roles(Role.ADMIN, Role.EMPLOYEE)
@@ -135,6 +148,7 @@ export class OrdersController {
     });
   }
 
+  @JobPermissions('ORDER_VIEW')
   @Get(':id')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @ApiOperation({
@@ -181,16 +195,19 @@ export class OrdersController {
   updateStatus(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateOrderStatusDto: UpdateOrderStatusDto,
+    @GetUser('id') actorId: string,
   ) {
-    return this.ordersService.updateStatus(id, updateOrderStatusDto);
+    return this.ordersService.updateStatus(id, updateOrderStatusDto, actorId);
   }
 
+  @JobPermissions('KITCHEN')
   @Get('cook/queue')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @ApiOperation({ summary: 'Get pending and in-progress orders for the kitchen' })
   @ApiResponse({ status: 200, description: 'Kitchen queue sorted oldest first.' })
   cookQueue() { return this.ordersService.cookQueue(); }
 
+  @JobPermissions('KITCHEN')
   @Patch(':id/prepare')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @ApiOperation({ summary: 'Accept an order and start preparing it' })
@@ -198,6 +215,7 @@ export class OrdersController {
   @ApiNotFoundResponse({ description: 'Order not found.' })
   prepare(@Param('id', ParseUUIDPipe) id: string) { return this.ordersService.cookStart(id); }
 
+  @JobPermissions('KITCHEN')
   @Patch(':id/ready')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @ApiOperation({ summary: 'Mark a prepared order ready for collection' })
@@ -205,12 +223,13 @@ export class OrdersController {
   @ApiNotFoundResponse({ description: 'Order not found.' })
   markReady(@Param('id', ParseUUIDPipe) id: string) { return this.ordersService.cookReady(id); }
 
+  @JobPermissions('ORDER_SERVE')
   @Patch(':id/served')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   @ApiOperation({ summary: 'Acknowledge a ready order and mark it served' })
   @ApiResponse({ status: 200, description: 'Order moved from READY to SERVED.' })
   @ApiNotFoundResponse({ description: 'Order not found.' })
-  acknowledgeReady(@Param('id', ParseUUIDPipe) id: string) { return this.ordersService.acknowledgeReady(id); }
+  acknowledgeReady(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') servedById: string) { return this.ordersService.acknowledgeReady(id, servedById); }
 
   @Delete(':id')
   @Roles(Role.ADMIN)

@@ -48,7 +48,9 @@ export type RoomSize = (typeof RoomSize)[keyof typeof RoomSize]
 
 export const RoomStatus = {
   AVAILABLE: 'AVAILABLE',
-  OCCUPIED: 'OCCUPIED'
+  OCCUPIED: 'OCCUPIED',
+  MAINTENANCE: 'MAINTENANCE',
+  ARCHIVED: 'ARCHIVED'
 } as const
 
 export type RoomStatus = (typeof RoomStatus)[keyof typeof RoomStatus]
@@ -71,3 +73,21 @@ export const OrderPaymentMethod = {
 } as const
 
 export type OrderPaymentMethod = (typeof OrderPaymentMethod)[keyof typeof OrderPaymentMethod]
+
+
+export const OrderPaymentStatus = {
+  UNPAID: 'UNPAID',
+  PAID: 'PAID',
+  ROOM_FOLIO: 'ROOM_FOLIO'
+} as const
+
+export type OrderPaymentStatus = (typeof OrderPaymentStatus)[keyof typeof OrderPaymentStatus]
+
+
+export const TaskStatus = {
+  TODO: 'TODO',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]

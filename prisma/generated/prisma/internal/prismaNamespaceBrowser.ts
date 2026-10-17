@@ -52,7 +52,10 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Task: 'Task',
+  TaskAssignment: 'TaskAssignment',
   EmployeeShift: 'EmployeeShift',
+  ShiftBreak: 'ShiftBreak',
   Table: 'Table',
   Room: 'Room',
   RoomStay: 'RoomStay',
@@ -96,6 +99,29 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const TaskScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  dueAt: 'dueAt',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+
+
+export const TaskAssignmentScalarFieldEnum = {
+  taskId: 'taskId',
+  employeeId: 'employeeId',
+  assignedAt: 'assignedAt'
+} as const
+
+export type TaskAssignmentScalarFieldEnum = (typeof TaskAssignmentScalarFieldEnum)[keyof typeof TaskAssignmentScalarFieldEnum]
+
+
 export const EmployeeShiftScalarFieldEnum = {
   id: 'id',
   employeeId: 'employeeId',
@@ -105,6 +131,17 @@ export const EmployeeShiftScalarFieldEnum = {
 } as const
 
 export type EmployeeShiftScalarFieldEnum = (typeof EmployeeShiftScalarFieldEnum)[keyof typeof EmployeeShiftScalarFieldEnum]
+
+
+export const ShiftBreakScalarFieldEnum = {
+  id: 'id',
+  employeeShiftId: 'employeeShiftId',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ShiftBreakScalarFieldEnum = (typeof ShiftBreakScalarFieldEnum)[keyof typeof ShiftBreakScalarFieldEnum]
 
 
 export const TableScalarFieldEnum = {
@@ -124,6 +161,7 @@ export const RoomScalarFieldEnum = {
   roomNumber: 'roomNumber',
   size: 'size',
   usageFee: 'usageFee',
+  facilities: 'facilities',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -185,8 +223,14 @@ export const MenuItemScalarFieldEnum = {
   price: 'price',
   imageUrl: 'imageUrl',
   allergens: 'allergens',
+  allergensMy: 'allergensMy',
+  allergensTh: 'allergensTh',
   dietaryInfo: 'dietaryInfo',
+  dietaryInfoMy: 'dietaryInfoMy',
+  dietaryInfoTh: 'dietaryInfoTh',
   availableExtras: 'availableExtras',
+  availableExtrasMy: 'availableExtrasMy',
+  availableExtrasTh: 'availableExtrasTh',
   categoryId: 'categoryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -200,9 +244,16 @@ export const OrderScalarFieldEnum = {
   tableId: 'tableId',
   roomStayId: 'roomStayId',
   paymentMethod: 'paymentMethod',
+  paymentStatus: 'paymentStatus',
+  paidAt: 'paidAt',
+  paidById: 'paidById',
   waiterId: 'waiterId',
+  servedById: 'servedById',
   status: 'status',
   totalAmount: 'totalAmount',
+  preparingAt: 'preparingAt',
+  readyAt: 'readyAt',
+  servedAt: 'servedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -218,6 +269,7 @@ export const OrderItemScalarFieldEnum = {
   unitPrice: 'unitPrice',
   removeIngredients: 'removeIngredients',
   addExtras: 'addExtras',
+  selectedAllergens: 'selectedAllergens',
   specialNotes: 'specialNotes',
   subtotal: 'subtotal'
 } as const

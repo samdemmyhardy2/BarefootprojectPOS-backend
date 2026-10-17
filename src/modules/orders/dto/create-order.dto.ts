@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsArray,
+  ArrayMaxSize,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -54,6 +55,10 @@ export class CreateOrderItemDto {
   @IsString()
   @IsOptional()
   specialNotes?: string;
+
+  @ApiPropertyOptional({ type: [String], description: 'Canonical English allergen labels selected from this menu item. Localized by each kitchen employee.' })
+  @IsOptional() @IsArray() @ArrayMaxSize(40) @IsString({ each: true })
+  selectedAllergens?: string[];
 }
 
 export class CreateOrderDto {
