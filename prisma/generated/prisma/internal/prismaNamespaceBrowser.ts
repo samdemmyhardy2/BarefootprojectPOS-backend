@@ -149,6 +149,11 @@ export const TableScalarFieldEnum = {
   tableNumber: 'tableNumber',
   capacity: 'capacity',
   status: 'status',
+  shape: 'shape',
+  positionX: 'positionX',
+  positionY: 'positionY',
+  width: 'width',
+  height: 'height',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

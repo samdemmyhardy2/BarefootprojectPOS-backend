@@ -11,6 +11,7 @@ import { TablesService } from './tables.service';
 import { UpdateTableStatusDto } from './dto/update-table-status.dto';
 import { CheckoutTableDto } from './dto/checkout-table.dto';
 import { GetUser } from '../../common/decorators/get-user.decorator';
+import { UpdateTableLayoutDto } from './dto/update-table-layout.dto';
 
 @ApiTags('Tables') @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard) @Roles(Role.ADMIN, Role.EMPLOYEE) @Controller('tables') @JobPermissions('TABLES')
 export class TablesController {
@@ -19,6 +20,8 @@ export class TablesController {
   findAll() { return this.tables.findAll(); }
   @Get(':id') @ApiOperation({ summary: 'Get table by ID' }) @ApiResponse({ status: 200, description: 'Table returned.' }) @ApiNotFoundResponse({ description: 'Table not found.' })
   findOne(@Param('id', ParseUUIDPipe) id: string) { return this.tables.findOne(id); }
+  @Patch('layout') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Save all table floor positions and shapes (admin)' }) @ApiResponse({ status: 200, description: 'Floor layout saved atomically.' })
+  updateLayout(@Body() dto: UpdateTableLayoutDto) { return this.tables.updateLayout(dto); }
   @Post() @Roles(Role.ADMIN) @ApiOperation({ summary: 'Create a table (admin)' }) @ApiResponse({ status: 201, description: 'Table created.' }) @ApiConflictResponse({ description: 'Table number already exists.' })
   create(@Body() dto: CreateTableDto) { return this.tables.create(dto); }
   @Patch(':id') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Update a table (admin)' }) @ApiResponse({ status: 200, description: 'Table updated.' }) @ApiNotFoundResponse({ description: 'Table not found.' }) @ApiConflictResponse({ description: 'Table number already exists.' })

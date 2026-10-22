@@ -29,11 +29,19 @@ export type AggregateTable = {
 export type TableAvgAggregateOutputType = {
   tableNumber: number | null
   capacity: number | null
+  positionX: number | null
+  positionY: number | null
+  width: number | null
+  height: number | null
 }
 
 export type TableSumAggregateOutputType = {
   tableNumber: number | null
   capacity: number | null
+  positionX: number | null
+  positionY: number | null
+  width: number | null
+  height: number | null
 }
 
 export type TableMinAggregateOutputType = {
@@ -41,6 +49,11 @@ export type TableMinAggregateOutputType = {
   tableNumber: number | null
   capacity: number | null
   status: $Enums.TableStatus | null
+  shape: $Enums.TableShape | null
+  positionX: number | null
+  positionY: number | null
+  width: number | null
+  height: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +63,11 @@ export type TableMaxAggregateOutputType = {
   tableNumber: number | null
   capacity: number | null
   status: $Enums.TableStatus | null
+  shape: $Enums.TableShape | null
+  positionX: number | null
+  positionY: number | null
+  width: number | null
+  height: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,6 +77,11 @@ export type TableCountAggregateOutputType = {
   tableNumber: number
   capacity: number
   status: number
+  shape: number
+  positionX: number
+  positionY: number
+  width: number
+  height: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -68,11 +91,19 @@ export type TableCountAggregateOutputType = {
 export type TableAvgAggregateInputType = {
   tableNumber?: true
   capacity?: true
+  positionX?: true
+  positionY?: true
+  width?: true
+  height?: true
 }
 
 export type TableSumAggregateInputType = {
   tableNumber?: true
   capacity?: true
+  positionX?: true
+  positionY?: true
+  width?: true
+  height?: true
 }
 
 export type TableMinAggregateInputType = {
@@ -80,6 +111,11 @@ export type TableMinAggregateInputType = {
   tableNumber?: true
   capacity?: true
   status?: true
+  shape?: true
+  positionX?: true
+  positionY?: true
+  width?: true
+  height?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -89,6 +125,11 @@ export type TableMaxAggregateInputType = {
   tableNumber?: true
   capacity?: true
   status?: true
+  shape?: true
+  positionX?: true
+  positionY?: true
+  width?: true
+  height?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -98,6 +139,11 @@ export type TableCountAggregateInputType = {
   tableNumber?: true
   capacity?: true
   status?: true
+  shape?: true
+  positionX?: true
+  positionY?: true
+  width?: true
+  height?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -194,6 +240,11 @@ export type TableGroupByOutputType = {
   tableNumber: number
   capacity: number
   status: $Enums.TableStatus
+  shape: $Enums.TableShape
+  positionX: number
+  positionY: number
+  width: number
+  height: number
   createdAt: Date
   updatedAt: Date
   _count: TableCountAggregateOutputType | null
@@ -226,6 +277,11 @@ export type TableWhereInput = {
   tableNumber?: Prisma.IntFilter<"Table"> | number
   capacity?: Prisma.IntFilter<"Table"> | number
   status?: Prisma.EnumTableStatusFilter<"Table"> | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFilter<"Table"> | $Enums.TableShape
+  positionX?: Prisma.IntFilter<"Table"> | number
+  positionY?: Prisma.IntFilter<"Table"> | number
+  width?: Prisma.IntFilter<"Table"> | number
+  height?: Prisma.IntFilter<"Table"> | number
   createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   orders?: Prisma.OrderListRelationFilter
@@ -236,6 +292,11 @@ export type TableOrderByWithRelationInput = {
   tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shape?: Prisma.SortOrder
+  positionX?: Prisma.SortOrder
+  positionY?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   orders?: Prisma.OrderOrderByRelationAggregateInput
@@ -249,6 +310,11 @@ export type TableWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.TableWhereInput | Prisma.TableWhereInput[]
   capacity?: Prisma.IntFilter<"Table"> | number
   status?: Prisma.EnumTableStatusFilter<"Table"> | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFilter<"Table"> | $Enums.TableShape
+  positionX?: Prisma.IntFilter<"Table"> | number
+  positionY?: Prisma.IntFilter<"Table"> | number
+  width?: Prisma.IntFilter<"Table"> | number
+  height?: Prisma.IntFilter<"Table"> | number
   createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   orders?: Prisma.OrderListRelationFilter
@@ -259,6 +325,11 @@ export type TableOrderByWithAggregationInput = {
   tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shape?: Prisma.SortOrder
+  positionX?: Prisma.SortOrder
+  positionY?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TableCountOrderByAggregateInput
@@ -276,6 +347,11 @@ export type TableScalarWhereWithAggregatesInput = {
   tableNumber?: Prisma.IntWithAggregatesFilter<"Table"> | number
   capacity?: Prisma.IntWithAggregatesFilter<"Table"> | number
   status?: Prisma.EnumTableStatusWithAggregatesFilter<"Table"> | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeWithAggregatesFilter<"Table"> | $Enums.TableShape
+  positionX?: Prisma.IntWithAggregatesFilter<"Table"> | number
+  positionY?: Prisma.IntWithAggregatesFilter<"Table"> | number
+  width?: Prisma.IntWithAggregatesFilter<"Table"> | number
+  height?: Prisma.IntWithAggregatesFilter<"Table"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Table"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Table"> | Date | string
 }
@@ -285,6 +361,11 @@ export type TableCreateInput = {
   tableNumber: number
   capacity: number
   status?: $Enums.TableStatus
+  shape?: $Enums.TableShape
+  positionX?: number
+  positionY?: number
+  width?: number
+  height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutTableInput
@@ -295,6 +376,11 @@ export type TableUncheckedCreateInput = {
   tableNumber: number
   capacity: number
   status?: $Enums.TableStatus
+  shape?: $Enums.TableShape
+  positionX?: number
+  positionY?: number
+  width?: number
+  height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTableInput
@@ -305,6 +391,11 @@ export type TableUpdateInput = {
   tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutTableNestedInput
@@ -315,6 +406,11 @@ export type TableUncheckedUpdateInput = {
   tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTableNestedInput
@@ -325,6 +421,11 @@ export type TableCreateManyInput = {
   tableNumber: number
   capacity: number
   status?: $Enums.TableStatus
+  shape?: $Enums.TableShape
+  positionX?: number
+  positionY?: number
+  width?: number
+  height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -334,6 +435,11 @@ export type TableUpdateManyMutationInput = {
   tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -343,6 +449,11 @@ export type TableUncheckedUpdateManyInput = {
   tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -352,6 +463,11 @@ export type TableCountOrderByAggregateInput = {
   tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shape?: Prisma.SortOrder
+  positionX?: Prisma.SortOrder
+  positionY?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -359,6 +475,10 @@ export type TableCountOrderByAggregateInput = {
 export type TableAvgOrderByAggregateInput = {
   tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  positionX?: Prisma.SortOrder
+  positionY?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
 }
 
 export type TableMaxOrderByAggregateInput = {
@@ -366,6 +486,11 @@ export type TableMaxOrderByAggregateInput = {
   tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shape?: Prisma.SortOrder
+  positionX?: Prisma.SortOrder
+  positionY?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -375,6 +500,11 @@ export type TableMinOrderByAggregateInput = {
   tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  shape?: Prisma.SortOrder
+  positionX?: Prisma.SortOrder
+  positionY?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -382,6 +512,10 @@ export type TableMinOrderByAggregateInput = {
 export type TableSumOrderByAggregateInput = {
   tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  positionX?: Prisma.SortOrder
+  positionY?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
 }
 
 export type TableNullableScalarRelationFilter = {
@@ -399,6 +533,10 @@ export type IntFieldUpdateOperationsInput = {
 
 export type EnumTableStatusFieldUpdateOperationsInput = {
   set?: $Enums.TableStatus
+}
+
+export type EnumTableShapeFieldUpdateOperationsInput = {
+  set?: $Enums.TableShape
 }
 
 export type TableCreateNestedOneWithoutOrdersInput = {
@@ -422,6 +560,11 @@ export type TableCreateWithoutOrdersInput = {
   tableNumber: number
   capacity: number
   status?: $Enums.TableStatus
+  shape?: $Enums.TableShape
+  positionX?: number
+  positionY?: number
+  width?: number
+  height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -431,6 +574,11 @@ export type TableUncheckedCreateWithoutOrdersInput = {
   tableNumber: number
   capacity: number
   status?: $Enums.TableStatus
+  shape?: $Enums.TableShape
+  positionX?: number
+  positionY?: number
+  width?: number
+  height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -456,6 +604,11 @@ export type TableUpdateWithoutOrdersInput = {
   tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -465,6 +618,11 @@ export type TableUncheckedUpdateWithoutOrdersInput = {
   tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -505,6 +663,11 @@ export type TableSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   tableNumber?: boolean
   capacity?: boolean
   status?: boolean
+  shape?: boolean
+  positionX?: boolean
+  positionY?: boolean
+  width?: boolean
+  height?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   orders?: boolean | Prisma.Table$ordersArgs<ExtArgs>
@@ -516,6 +679,11 @@ export type TableSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   tableNumber?: boolean
   capacity?: boolean
   status?: boolean
+  shape?: boolean
+  positionX?: boolean
+  positionY?: boolean
+  width?: boolean
+  height?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["table"]>
@@ -525,6 +693,11 @@ export type TableSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   tableNumber?: boolean
   capacity?: boolean
   status?: boolean
+  shape?: boolean
+  positionX?: boolean
+  positionY?: boolean
+  width?: boolean
+  height?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["table"]>
@@ -534,11 +707,16 @@ export type TableSelectScalar = {
   tableNumber?: boolean
   capacity?: boolean
   status?: boolean
+  shape?: boolean
+  positionX?: boolean
+  positionY?: boolean
+  width?: boolean
+  height?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TableOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tableNumber" | "capacity" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["table"]>
+export type TableOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tableNumber" | "capacity" | "status" | "shape" | "positionX" | "positionY" | "width" | "height" | "createdAt" | "updatedAt", ExtArgs["result"]["table"]>
 export type TableInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.Table$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.TableCountOutputTypeDefaultArgs<ExtArgs>
@@ -556,6 +734,11 @@ export type $TablePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     tableNumber: number
     capacity: number
     status: $Enums.TableStatus
+    shape: $Enums.TableShape
+    positionX: number
+    positionY: number
+    width: number
+    height: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["table"]>
@@ -986,6 +1169,11 @@ export interface TableFieldRefs {
   readonly tableNumber: Prisma.FieldRef<"Table", 'Int'>
   readonly capacity: Prisma.FieldRef<"Table", 'Int'>
   readonly status: Prisma.FieldRef<"Table", 'TableStatus'>
+  readonly shape: Prisma.FieldRef<"Table", 'TableShape'>
+  readonly positionX: Prisma.FieldRef<"Table", 'Int'>
+  readonly positionY: Prisma.FieldRef<"Table", 'Int'>
+  readonly width: Prisma.FieldRef<"Table", 'Int'>
+  readonly height: Prisma.FieldRef<"Table", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Table", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Table", 'DateTime'>
 }

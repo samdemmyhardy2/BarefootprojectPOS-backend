@@ -1571,6 +1571,11 @@ export const TableScalarFieldEnum = {
   tableNumber: 'tableNumber',
   capacity: 'capacity',
   status: 'status',
+  shape: 'shape',
+  positionX: 'positionX',
+  positionY: 'positionY',
+  width: 'width',
+  height: 'height',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1817,6 +1822,20 @@ export type EnumTableStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'TableStatus[]'
  */
 export type ListEnumTableStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TableStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TableShape'
+ */
+export type EnumTableShapeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TableShape'>
+    
+
+
+/**
+ * Reference to a field of type 'TableShape[]'
+ */
+export type ListEnumTableShapeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TableShape[]'>
     
 
 

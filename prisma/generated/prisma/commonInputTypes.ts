@@ -200,6 +200,13 @@ export type EnumTableStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumTableStatusFilter<$PrismaModel> | $Enums.TableStatus
 }
 
+export type EnumTableShapeFilter<$PrismaModel = never> = {
+  equals?: $Enums.TableShape | Prisma.EnumTableShapeFieldRefInput<$PrismaModel>
+  in?: $Enums.TableShape[] | Prisma.ListEnumTableShapeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TableShape[] | Prisma.ListEnumTableShapeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTableShapeFilter<$PrismaModel> | $Enums.TableShape
+}
+
 export type IntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -224,6 +231,16 @@ export type EnumTableStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumTableStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumTableStatusFilter<$PrismaModel>
+}
+
+export type EnumTableShapeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TableShape | Prisma.EnumTableShapeFieldRefInput<$PrismaModel>
+  in?: $Enums.TableShape[] | Prisma.ListEnumTableShapeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TableShape[] | Prisma.ListEnumTableShapeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTableShapeWithAggregatesFilter<$PrismaModel> | $Enums.TableShape
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTableShapeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTableShapeFilter<$PrismaModel>
 }
 
 export type EnumRoomSizeFilter<$PrismaModel = never> = {
@@ -543,6 +560,13 @@ export type NestedEnumTableStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumTableStatusFilter<$PrismaModel> | $Enums.TableStatus
 }
 
+export type NestedEnumTableShapeFilter<$PrismaModel = never> = {
+  equals?: $Enums.TableShape | Prisma.EnumTableShapeFieldRefInput<$PrismaModel>
+  in?: $Enums.TableShape[] | Prisma.ListEnumTableShapeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TableShape[] | Prisma.ListEnumTableShapeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTableShapeFilter<$PrismaModel> | $Enums.TableShape
+}
+
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -578,6 +602,16 @@ export type NestedEnumTableStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumTableStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumTableStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumTableShapeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TableShape | Prisma.EnumTableShapeFieldRefInput<$PrismaModel>
+  in?: $Enums.TableShape[] | Prisma.ListEnumTableShapeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TableShape[] | Prisma.ListEnumTableShapeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTableShapeWithAggregatesFilter<$PrismaModel> | $Enums.TableShape
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTableShapeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTableShapeFilter<$PrismaModel>
 }
 
 export type NestedEnumRoomSizeFilter<$PrismaModel = never> = {

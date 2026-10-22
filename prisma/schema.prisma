@@ -24,6 +24,15 @@ enum TableStatus {
   RESERVED
 }
 
+enum TableShape {
+  ROUND
+  SQUARE
+  RECTANGLE
+  OVAL
+  BOOTH
+  BAR
+}
+
 enum OrderStatus {
   PENDING
   PREPARING
@@ -143,6 +152,11 @@ model Table {
   tableNumber Int         @unique
   capacity    Int
   status      TableStatus @default(AVAILABLE)
+  shape       TableShape  @default(RECTANGLE)
+  positionX   Int         @default(0)
+  positionY   Int         @default(0)
+  width       Int         @default(2)
+  height      Int         @default(2)
   orders      Order[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
