@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
   Delete,
+  Query,
   Sse,
   MessageEvent,
 } from '@nestjs/common';
@@ -37,6 +38,7 @@ import { JobPermissions } from 'src/common/decorators/job-permissions.decorator'
 import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { Role } from 'prisma/generated/prisma/enums';
 import { AcceptStreamToken } from 'src/common/decorators/stream-token.decorator';
+import { OrderPageQueryDto } from './dto/order-page-query.dto';
 
 @ApiTags('Orders')
 @ApiBearerAuth()
@@ -95,6 +97,15 @@ export class OrdersController {
   @ApiUnauthorizedResponse({ description: 'Authentication token missing or invalid.' })
   findAll() {
     return this.ordersService.findAll();
+  }
+
+  @JobPermissions('ORDER_VIEW')
+  @Get('page')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Get a page of orders, optionally filtered by a date range' })
+  @ApiResponse({ status: 200, description: 'Orders and pagination metadata.' })
+  findPage(@Query() query: OrderPageQueryDto) {
+    return this.ordersService.findPage(query);
   }
 
   @JobPermissions('ORDER_SERVE')

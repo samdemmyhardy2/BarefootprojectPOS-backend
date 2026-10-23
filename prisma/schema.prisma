@@ -98,6 +98,14 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model RestaurantSetting {
+  id        String   @id @default("restaurant")
+  name      String   @default("Table & Thyme")
+  logoUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Task {
   id           String     @id @default(uuid())
   title        String

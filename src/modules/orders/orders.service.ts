@@ -10,6 +10,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { TableStatus } from 'prisma/generated/prisma/enums';
 import { OrderPaymentMethod, OrderPaymentStatus, OrderStatus } from 'prisma/generated/prisma/enums';
+import { OrderPageQueryDto } from './dto/order-page-query.dto';
 
 @Injectable()
 export class OrdersService {
@@ -179,6 +180,20 @@ export class OrdersService {
       },
       include: this.orderDetails(),
     });
+  }
+
+  async findPage(query: OrderPageQueryDto) {
+    const offset = query.offset ?? 0;
+    const limit = query.limit ?? 10;
+    const from = query.from ? new Date(query.from) : undefined;
+    const to = query.to ? new Date(query.to) : undefined;
+    if (from && to && from >= to) throw new BadRequestException('The start of the date range must be before its end');
+    const where = from || to ? { createdAt: { ...(from ? { gte: from } : {}), ...(to ? { lt: to } : {}) } } : {};
+    const [items, total] = await Promise.all([
+      this.prisma.order.findMany({ where, orderBy: { createdAt: 'desc' }, skip: offset, take: limit, include: this.orderDetails() }),
+      this.prisma.order.count({ where }),
+    ]);
+    return { items, total, offset, limit, hasMore: offset + items.length < total };
   }
 
   async findOne(id: string) {
