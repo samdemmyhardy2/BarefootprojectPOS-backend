@@ -9,7 +9,7 @@ import { PrismaService } from 'src/utils/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { TableStatus } from 'prisma/generated/prisma/enums';
-import { OrderPaymentMethod, OrderPaymentStatus, OrderStatus } from 'prisma/generated/prisma/enums';
+import { OrderPaymentMethod, OrderPaymentStatus, OrderStatus, OrderType } from 'prisma/generated/prisma/enums';
 import { OrderPageQueryDto } from './dto/order-page-query.dto';
 
 @Injectable()
@@ -36,7 +36,17 @@ export class OrdersService {
       );
     }
 
-    if (!dto.tableId && !dto.roomStayId) throw new BadRequestException('Select a restaurant table or an active guest room');
+    const orderType = dto.type ?? (dto.tableId ? OrderType.DINE_IN : dto.roomStayId ? OrderType.ROOM_SERVICE : OrderType.PICKUP);
+    if (orderType === OrderType.DINE_IN && !dto.tableId) throw new BadRequestException('Select a restaurant table for a dine-in order');
+    if (orderType === OrderType.ROOM_SERVICE && (!dto.roomStayId || dto.tableId)) throw new BadRequestException('Select an active guest room for room service');
+    if (orderType === OrderType.PICKUP && (dto.tableId || dto.roomStayId)) throw new BadRequestException('Pickup orders cannot be attached to a table or room');
+    const jobTitle = creator.jobTitle.trim().toLowerCase().replace(/[^a-z]/g, '');
+    if (orderType === OrderType.PICKUP) {
+      if (creator.role !== 'ADMIN' && !['waiter', 'guestwelcomer', 'bungalowmanager'].includes(jobTitle)) {
+        throw new BadRequestException('Your job role cannot create pickup orders');
+      }
+      if (!dto.customerName?.trim()) throw new BadRequestException('Enter the customer name for a pickup order');
+    }
     const paymentMethod = dto.paymentMethod ?? OrderPaymentMethod.CASH;
     if (dto.tableId && dto.roomStayId && paymentMethod !== OrderPaymentMethod.ROOM_CHECKOUT) {
       throw new BadRequestException('A restaurant table can only be linked to a room when charging the order to the guest folio');
@@ -44,7 +54,6 @@ export class OrdersService {
     if (dto.tableId && creator.role !== 'ADMIN' && creator.jobTitle.trim().toLowerCase() !== 'waiter') {
       throw new BadRequestException('Your job role cannot place orders for restaurant tables');
     }
-    const jobTitle = creator.jobTitle.trim().toLowerCase().replace(/[^a-z]/g, '');
     const waiterTableCheckout = Boolean(dto.tableId)
       && paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT
       && jobTitle === 'waiter';
@@ -59,9 +68,10 @@ export class OrdersService {
     if (roomStay?.checkedOutAt) throw new ConflictException('Cannot add an order to a checked-out room');
 
     // Get all menu items.
-    const menuItemIds = dto.items.map(
-      (item) => item.menuItemId,
-    );
+    // Each order line is intentionally separate so each serving can carry its
+    // own allergens, removals, extras, and kitchen notes. Fetch distinct menu
+    // records once, then validate against the number of distinct IDs.
+    const menuItemIds = [...new Set(dto.items.map((item) => item.menuItemId))];
 
     const menuItems = await this.prisma.menuItem.findMany({
       where: {
@@ -134,6 +144,9 @@ export class OrdersService {
       }
       const created = await tx.order.create({
         data: {
+          type: orderType,
+          customerName: orderType === OrderType.PICKUP ? dto.customerName!.trim() : null,
+          customerPhone: orderType === OrderType.PICKUP ? dto.customerPhone?.trim() || null : null,
           tableId: dto.tableId ?? null,
           roomStayId: dto.roomStayId ?? null,
           paymentMethod,
@@ -241,7 +254,31 @@ export class OrdersService {
   }
 
   async readyOrders() {
-    return this.prisma.order.findMany({ where: { status: OrderStatus.READY }, orderBy: { readyAt: 'asc' }, include: this.orderDetails() });
+    return this.prisma.order.findMany({ where: { status: OrderStatus.READY, type: { not: OrderType.PICKUP } }, orderBy: { readyAt: 'asc' }, include: this.orderDetails() });
+  }
+
+  async pickupOrders() {
+    return this.prisma.order.findMany({
+      where: { type: OrderType.PICKUP, status: { notIn: [OrderStatus.COMPLETED, OrderStatus.CANCELLED] } },
+      orderBy: { createdAt: 'asc' },
+      include: this.orderDetails(),
+    });
+  }
+
+  async completePickup(id: string, employeeId: string) {
+    const order = await this.prisma.order.findUnique({ where: { id }, select: { id: true, type: true, status: true } });
+    if (!order) throw new NotFoundException('Pickup order not found');
+    if (order.type !== OrderType.PICKUP) throw new BadRequestException('This order is not a pickup order');
+    if (order.status !== OrderStatus.READY) throw new ConflictException('Pickup order must be ready before it can be collected');
+    const now = new Date();
+    const claim = await this.prisma.order.updateMany({
+      where: { id, type: OrderType.PICKUP, status: OrderStatus.READY },
+      data: { status: OrderStatus.COMPLETED, paymentMethod: OrderPaymentMethod.CASH, paymentStatus: OrderPaymentStatus.PAID, paidAt: now, paidById: employeeId, servedAt: now, servedById: employeeId },
+    });
+    if (!claim.count) throw new ConflictException('Pickup order was already collected or is no longer ready');
+    const completed = await this.prisma.order.findUniqueOrThrow({ where: { id }, include: this.orderDetails() });
+    this.orderEvents.next({ type: 'updated', order: completed });
+    return completed;
   }
 
   async cookStart(id: string) { return this.transition(id, OrderStatus.PENDING, OrderStatus.PREPARING); }
@@ -315,6 +352,6 @@ export class OrdersService {
   }
 
   private orderDetails() {
-    return { items: { include: { menuItem: true } }, table: true, roomStay: { include: { room: true } }, waiter: { select: { id: true, name: true } }, servedBy: { select: { id: true, name: true } } };
+    return { items: { include: { menuItem: true } }, table: true, roomStay: { include: { room: true } }, waiter: { select: { id: true, name: true } }, servedBy: { select: { id: true, name: true } }, paidBy: { select: { id: true, name: true } } };
   }
 }

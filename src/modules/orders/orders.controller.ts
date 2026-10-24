@@ -115,6 +115,23 @@ export class OrdersController {
   @ApiResponse({ status: 200, description: 'Ready orders sorted oldest first.' })
   readyOrders() { return this.ordersService.readyOrders(); }
 
+  @JobPermissions('ORDER_CREATE')
+  @Get('pickup')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'List active pickup orders for the employee pickup counter' })
+  @ApiResponse({ status: 200, description: 'Pickup orders from kitchen preparation through customer collection.' })
+  pickupOrders() { return this.ordersService.pickupOrders(); }
+
+  @JobPermissions('ORDER_CREATE')
+  @Patch(':id/pickup/complete')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Record cash payment and hand a ready pickup order to the customer' })
+  @ApiResponse({ status: 200, description: 'Pickup order marked completed and paid by cash.' })
+  @ApiNotFoundResponse({ description: 'Pickup order not found.' })
+  acknowledgePickup(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') employeeId: string) {
+    return this.ordersService.completePickup(id, employeeId);
+  }
+
   @JobPermissions('ORDER_VIEW')
   @Get('events/token')
   @Roles(Role.ADMIN, Role.EMPLOYEE)

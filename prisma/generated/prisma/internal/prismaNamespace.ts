@@ -1754,6 +1754,9 @@ export type MenuItemScalarFieldEnum = (typeof MenuItemScalarFieldEnum)[keyof typ
 
 export const OrderScalarFieldEnum = {
   id: 'id',
+  type: 'type',
+  customerName: 'customerName',
+  customerPhone: 'customerPhone',
   tableId: 'tableId',
   roomStayId: 'roomStayId',
   paymentMethod: 'paymentMethod',
@@ -1978,6 +1981,20 @@ export type EnumRoomChargeKindFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'RoomChargeKind[]'
  */
 export type ListEnumRoomChargeKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomChargeKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderType'
+ */
+export type EnumOrderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderType'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderType[]'
+ */
+export type ListEnumOrderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderType[]'>
     
 
 

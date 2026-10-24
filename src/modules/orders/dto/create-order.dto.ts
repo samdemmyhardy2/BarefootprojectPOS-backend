@@ -9,10 +9,11 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  MaxLength,
   Min,
   ValidateNested,
 } from 'class-validator';
-import { OrderPaymentMethod } from 'prisma/generated/prisma/enums';
+import { OrderPaymentMethod, OrderType } from 'prisma/generated/prisma/enums';
 
 export class CreateOrderItemDto {
   @ApiProperty({
@@ -62,6 +63,18 @@ export class CreateOrderItemDto {
 }
 
 export class CreateOrderDto {
+  @ApiPropertyOptional({ enum: OrderType, description: 'Pickup, restaurant table, or room service. Inferred for existing table and room orders when omitted.' })
+  @IsOptional() @IsEnum(OrderType)
+  type?: OrderType;
+
+  @ApiPropertyOptional({ description: 'Customer name for a pickup order', maxLength: 120 })
+  @IsOptional() @IsString() @MaxLength(120)
+  customerName?: string;
+
+  @ApiPropertyOptional({ description: 'Customer phone for a pickup order', maxLength: 40 })
+  @IsOptional() @IsString() @MaxLength(40)
+  customerPhone?: string;
+
   @ApiPropertyOptional({ description: 'Table receiving this order. Omit for room service.', example: 'b1f2c3d4-5678-90ab-cdef-1234567890ab' })
   @IsOptional() @IsUUID()
   tableId?: string;

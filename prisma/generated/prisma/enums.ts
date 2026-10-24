@@ -50,6 +50,15 @@ export const OrderStatus = {
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 
+export const OrderType = {
+  DINE_IN: 'DINE_IN',
+  ROOM_SERVICE: 'ROOM_SERVICE',
+  PICKUP: 'PICKUP'
+} as const
+
+export type OrderType = (typeof OrderType)[keyof typeof OrderType]
+
+
 export const RoomSize = {
   NORMAL: 'NORMAL',
   FAMILY: 'FAMILY'

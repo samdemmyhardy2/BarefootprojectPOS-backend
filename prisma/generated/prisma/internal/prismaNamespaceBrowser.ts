@@ -258,6 +258,9 @@ export type MenuItemScalarFieldEnum = (typeof MenuItemScalarFieldEnum)[keyof typ
 
 export const OrderScalarFieldEnum = {
   id: 'id',
+  type: 'type',
+  customerName: 'customerName',
+  customerPhone: 'customerPhone',
   tableId: 'tableId',
   roomStayId: 'roomStayId',
   paymentMethod: 'paymentMethod',
