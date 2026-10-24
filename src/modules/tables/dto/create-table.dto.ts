@@ -1,11 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Max, MaxLength, Min } from 'class-validator';
 import { TableShape, TableStatus } from 'prisma/generated/prisma/enums';
 
 export class CreateTableDto {
-  @ApiProperty({ example: 1, minimum: 1 }) @Type(() => Number) @IsInt() @Min(1)
-  tableNumber!: number;
+  @ApiProperty({ example: 'Patio A', maxLength: 40, description: 'Unique, human-readable table label. Printable text is allowed.' })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
+  @IsString() @IsNotEmpty() @MaxLength(40) @Matches(/^[^\u0000-\u001F\u007F]+$/u, { message: 'Table label cannot contain control characters' })
+  tableNumber!: string;
   @ApiProperty({ example: 4, minimum: 1 }) @Type(() => Number) @IsInt() @Min(1)
   capacity!: number;
   @ApiProperty({ enum: TableStatus, required: false, default: TableStatus.AVAILABLE }) @IsOptional() @IsEnum(TableStatus)

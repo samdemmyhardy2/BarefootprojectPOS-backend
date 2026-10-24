@@ -48,6 +48,7 @@ export class OrdersService {
       if (!dto.customerName?.trim()) throw new BadRequestException('Enter the customer name for a pickup order');
     }
     const paymentMethod = dto.paymentMethod ?? OrderPaymentMethod.CASH;
+    if (paymentMethod === OrderPaymentMethod.CARD) throw new BadRequestException('Card payments are recorded when settling a room tab');
     if (dto.tableId && dto.roomStayId && paymentMethod !== OrderPaymentMethod.ROOM_CHECKOUT) {
       throw new BadRequestException('A restaurant table can only be linked to a room when charging the order to the guest folio');
     }
@@ -63,9 +64,10 @@ export class OrdersService {
     if (paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && !dto.roomStayId) throw new BadRequestException('Choose an active room stay to charge at checkout');
     const table = dto.tableId ? await this.prisma.table.findUnique({ where: { id: dto.tableId } }) : null;
     if (dto.tableId && !table) throw new NotFoundException('Table not found');
-    const roomStay = dto.roomStayId ? await this.prisma.roomStay.findUnique({ where: { id: dto.roomStayId }, include: { room: true } }) : null;
+    const roomStay = dto.roomStayId ? await this.prisma.roomStay.findUnique({ where: { id: dto.roomStayId }, include: { room: true, charges: { where: { settledAt: null }, select: { amount: true } } } }) : null;
     if (dto.roomStayId && !roomStay) throw new NotFoundException('Room stay not found');
     if (roomStay?.checkedOutAt) throw new ConflictException('Cannot add an order to a checked-out room');
+    if (roomStay?.cashOnly && paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT) throw new ConflictException('This guest stay is set to cash only');
 
     // Get all menu items.
     // Each order line is intentionally separate so each serving can carry its
@@ -129,6 +131,11 @@ export class OrdersService {
       };
     });
 
+    if (roomStay?.chargeLimit !== null && roomStay?.chargeLimit !== undefined && paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT) {
+      const currentFolio = roomStay.charges.reduce((sum, charge) => sum + Number(charge.amount), 0);
+      if (currentFolio + totalAmount > Number(roomStay.chargeLimit)) throw new ConflictException('This guest stay charge limit would be exceeded');
+    }
+
     const order = await this.prisma.$transaction(async (tx) => {
       if (dto.roomStayId) {
         // A conditional no-op update locks the stay row so a concurrent
@@ -181,7 +188,7 @@ export class OrdersService {
   activeRoomStays() {
     return this.prisma.roomStay.findMany({
       where: { checkedOutAt: null, room: { status: 'OCCUPIED' } },
-      select: { id: true, primaryGuestName: true, room: { select: { roomNumber: true } } },
+      select: { id: true, primaryGuestName: true, occupants: { select: { id: true, name: true } }, room: { select: { roomNumber: true } } },
       orderBy: { checkedInAt: 'desc' },
     });
   }
@@ -352,6 +359,6 @@ export class OrdersService {
   }
 
   private orderDetails() {
-    return { items: { include: { menuItem: true } }, table: true, roomStay: { include: { room: true } }, waiter: { select: { id: true, name: true } }, servedBy: { select: { id: true, name: true } }, paidBy: { select: { id: true, name: true } } };
+    return { items: { include: { menuItem: true } }, table: true, roomStay: { include: { room: true, occupants: true } }, waiter: { select: { id: true, name: true } }, servedBy: { select: { id: true, name: true } }, paidBy: { select: { id: true, name: true } } };
   }
 }

@@ -12,6 +12,7 @@ import { UpdateTableStatusDto } from './dto/update-table-status.dto';
 import { CheckoutTableDto } from './dto/checkout-table.dto';
 import { GetUser } from '../../common/decorators/get-user.decorator';
 import { UpdateTableLayoutDto } from './dto/update-table-layout.dto';
+import { AssignTableRoomDto } from './dto/assign-table-room.dto';
 
 @ApiTags('Tables') @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard) @Roles(Role.ADMIN, Role.EMPLOYEE) @Controller('tables') @JobPermissions('TABLES')
 export class TablesController {
@@ -28,6 +29,8 @@ export class TablesController {
   update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateTableDto) { return this.tables.update(id, dto); }
   @Patch(':id/status') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Set table availability (admin or employee)' }) @ApiResponse({ status: 200, description: 'Table status updated.' }) @ApiNotFoundResponse({ description: 'Table not found.' })
   updateStatus(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateTableStatusDto) { return this.tables.updateStatus(id, dto); }
+  @Patch(':id/room-assignment') @ApiOperation({ summary: 'Assign or clear active guest rooms for a table' }) @ApiResponse({ status: 200, description: 'Table room assignments updated.' }) @ApiConflictResponse({ description: 'One or more selected guest stays are checked out.' })
+  assignRoom(@Param('id', ParseUUIDPipe) id: string, @Body() dto: AssignTableRoomDto) { return this.tables.assignRooms(id, dto.roomStayIds); }
   @Post(':id/checkout') @JobPermissions('ORDER_CREATE') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Settle all served orders on a table by cash or guest room folio' }) @ApiResponse({ status: 201, description: 'Orders settled, table released, and any room folio charges recorded.' }) @ApiConflictResponse({ description: 'Orders are not all served, a room stay is invalid, or an order is already settled.' })
   checkout(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') cashierId: string, @Body() dto: CheckoutTableDto) { return this.tables.checkout(id, cashierId, dto); }
   @Delete(':id') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Delete a table without order history (admin)' }) @ApiResponse({ status: 200, description: 'Table deleted.' }) @ApiConflictResponse({ description: 'Table has order history.' }) @ApiNotFoundResponse({ description: 'Table not found.' })

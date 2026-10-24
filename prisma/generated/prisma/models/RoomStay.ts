@@ -20,8 +20,18 @@ export type RoomStayModel = runtime.Types.Result.DefaultSelection<Prisma.$RoomSt
 
 export type AggregateRoomStay = {
   _count: RoomStayCountAggregateOutputType | null
+  _avg: RoomStayAvgAggregateOutputType | null
+  _sum: RoomStaySumAggregateOutputType | null
   _min: RoomStayMinAggregateOutputType | null
   _max: RoomStayMaxAggregateOutputType | null
+}
+
+export type RoomStayAvgAggregateOutputType = {
+  chargeLimit: runtime.Decimal | null
+}
+
+export type RoomStaySumAggregateOutputType = {
+  chargeLimit: runtime.Decimal | null
 }
 
 export type RoomStayMinAggregateOutputType = {
@@ -29,7 +39,11 @@ export type RoomStayMinAggregateOutputType = {
   roomId: string | null
   primaryGuestName: string | null
   checkedInAt: Date | null
+  expectedCheckoutAt: Date | null
   checkedOutAt: Date | null
+  guestNotes: string | null
+  cashOnly: boolean | null
+  chargeLimit: runtime.Decimal | null
   createdAt: Date | null
 }
 
@@ -38,7 +52,11 @@ export type RoomStayMaxAggregateOutputType = {
   roomId: string | null
   primaryGuestName: string | null
   checkedInAt: Date | null
+  expectedCheckoutAt: Date | null
   checkedOutAt: Date | null
+  guestNotes: string | null
+  cashOnly: boolean | null
+  chargeLimit: runtime.Decimal | null
   createdAt: Date | null
 }
 
@@ -47,18 +65,34 @@ export type RoomStayCountAggregateOutputType = {
   roomId: number
   primaryGuestName: number
   checkedInAt: number
+  expectedCheckoutAt: number
   checkedOutAt: number
+  guestNotes: number
+  cashOnly: number
+  chargeLimit: number
   createdAt: number
   _all: number
 }
 
+
+export type RoomStayAvgAggregateInputType = {
+  chargeLimit?: true
+}
+
+export type RoomStaySumAggregateInputType = {
+  chargeLimit?: true
+}
 
 export type RoomStayMinAggregateInputType = {
   id?: true
   roomId?: true
   primaryGuestName?: true
   checkedInAt?: true
+  expectedCheckoutAt?: true
   checkedOutAt?: true
+  guestNotes?: true
+  cashOnly?: true
+  chargeLimit?: true
   createdAt?: true
 }
 
@@ -67,7 +101,11 @@ export type RoomStayMaxAggregateInputType = {
   roomId?: true
   primaryGuestName?: true
   checkedInAt?: true
+  expectedCheckoutAt?: true
   checkedOutAt?: true
+  guestNotes?: true
+  cashOnly?: true
+  chargeLimit?: true
   createdAt?: true
 }
 
@@ -76,7 +114,11 @@ export type RoomStayCountAggregateInputType = {
   roomId?: true
   primaryGuestName?: true
   checkedInAt?: true
+  expectedCheckoutAt?: true
   checkedOutAt?: true
+  guestNotes?: true
+  cashOnly?: true
+  chargeLimit?: true
   createdAt?: true
   _all?: true
 }
@@ -119,6 +161,18 @@ export type RoomStayAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: RoomStayAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: RoomStaySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: RoomStayMinAggregateInputType
@@ -149,6 +203,8 @@ export type RoomStayGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: RoomStayCountAggregateInputType | true
+  _avg?: RoomStayAvgAggregateInputType
+  _sum?: RoomStaySumAggregateInputType
   _min?: RoomStayMinAggregateInputType
   _max?: RoomStayMaxAggregateInputType
 }
@@ -158,9 +214,15 @@ export type RoomStayGroupByOutputType = {
   roomId: string
   primaryGuestName: string
   checkedInAt: Date
+  expectedCheckoutAt: Date | null
   checkedOutAt: Date | null
+  guestNotes: string | null
+  cashOnly: boolean
+  chargeLimit: runtime.Decimal | null
   createdAt: Date
   _count: RoomStayCountAggregateOutputType | null
+  _avg: RoomStayAvgAggregateOutputType | null
+  _sum: RoomStaySumAggregateOutputType | null
   _min: RoomStayMinAggregateOutputType | null
   _max: RoomStayMaxAggregateOutputType | null
 }
@@ -188,12 +250,18 @@ export type RoomStayWhereInput = {
   roomId?: Prisma.StringFilter<"RoomStay"> | string
   primaryGuestName?: Prisma.StringFilter<"RoomStay"> | string
   checkedInAt?: Prisma.DateTimeFilter<"RoomStay"> | Date | string
+  expectedCheckoutAt?: Prisma.DateTimeNullableFilter<"RoomStay"> | Date | string | null
   checkedOutAt?: Prisma.DateTimeNullableFilter<"RoomStay"> | Date | string | null
+  guestNotes?: Prisma.StringNullableFilter<"RoomStay"> | string | null
+  cashOnly?: Prisma.BoolFilter<"RoomStay"> | boolean
+  chargeLimit?: Prisma.DecimalNullableFilter<"RoomStay"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"RoomStay"> | Date | string
   room?: Prisma.XOR<Prisma.RoomScalarRelationFilter, Prisma.RoomWhereInput>
   occupants?: Prisma.RoomOccupantListRelationFilter
   charges?: Prisma.RoomChargeListRelationFilter
+  payments?: Prisma.RoomPaymentListRelationFilter
   orders?: Prisma.OrderListRelationFilter
+  assignedTables?: Prisma.TableListRelationFilter
 }
 
 export type RoomStayOrderByWithRelationInput = {
@@ -201,12 +269,18 @@ export type RoomStayOrderByWithRelationInput = {
   roomId?: Prisma.SortOrder
   primaryGuestName?: Prisma.SortOrder
   checkedInAt?: Prisma.SortOrder
+  expectedCheckoutAt?: Prisma.SortOrderInput | Prisma.SortOrder
   checkedOutAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  guestNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  cashOnly?: Prisma.SortOrder
+  chargeLimit?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   room?: Prisma.RoomOrderByWithRelationInput
   occupants?: Prisma.RoomOccupantOrderByRelationAggregateInput
   charges?: Prisma.RoomChargeOrderByRelationAggregateInput
+  payments?: Prisma.RoomPaymentOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
+  assignedTables?: Prisma.TableOrderByRelationAggregateInput
 }
 
 export type RoomStayWhereUniqueInput = Prisma.AtLeast<{
@@ -217,12 +291,18 @@ export type RoomStayWhereUniqueInput = Prisma.AtLeast<{
   roomId?: Prisma.StringFilter<"RoomStay"> | string
   primaryGuestName?: Prisma.StringFilter<"RoomStay"> | string
   checkedInAt?: Prisma.DateTimeFilter<"RoomStay"> | Date | string
+  expectedCheckoutAt?: Prisma.DateTimeNullableFilter<"RoomStay"> | Date | string | null
   checkedOutAt?: Prisma.DateTimeNullableFilter<"RoomStay"> | Date | string | null
+  guestNotes?: Prisma.StringNullableFilter<"RoomStay"> | string | null
+  cashOnly?: Prisma.BoolFilter<"RoomStay"> | boolean
+  chargeLimit?: Prisma.DecimalNullableFilter<"RoomStay"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"RoomStay"> | Date | string
   room?: Prisma.XOR<Prisma.RoomScalarRelationFilter, Prisma.RoomWhereInput>
   occupants?: Prisma.RoomOccupantListRelationFilter
   charges?: Prisma.RoomChargeListRelationFilter
+  payments?: Prisma.RoomPaymentListRelationFilter
   orders?: Prisma.OrderListRelationFilter
+  assignedTables?: Prisma.TableListRelationFilter
 }, "id">
 
 export type RoomStayOrderByWithAggregationInput = {
@@ -230,11 +310,17 @@ export type RoomStayOrderByWithAggregationInput = {
   roomId?: Prisma.SortOrder
   primaryGuestName?: Prisma.SortOrder
   checkedInAt?: Prisma.SortOrder
+  expectedCheckoutAt?: Prisma.SortOrderInput | Prisma.SortOrder
   checkedOutAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  guestNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  cashOnly?: Prisma.SortOrder
+  chargeLimit?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.RoomStayCountOrderByAggregateInput
+  _avg?: Prisma.RoomStayAvgOrderByAggregateInput
   _max?: Prisma.RoomStayMaxOrderByAggregateInput
   _min?: Prisma.RoomStayMinOrderByAggregateInput
+  _sum?: Prisma.RoomStaySumOrderByAggregateInput
 }
 
 export type RoomStayScalarWhereWithAggregatesInput = {
@@ -245,7 +331,11 @@ export type RoomStayScalarWhereWithAggregatesInput = {
   roomId?: Prisma.StringWithAggregatesFilter<"RoomStay"> | string
   primaryGuestName?: Prisma.StringWithAggregatesFilter<"RoomStay"> | string
   checkedInAt?: Prisma.DateTimeWithAggregatesFilter<"RoomStay"> | Date | string
+  expectedCheckoutAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RoomStay"> | Date | string | null
   checkedOutAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RoomStay"> | Date | string | null
+  guestNotes?: Prisma.StringNullableWithAggregatesFilter<"RoomStay"> | string | null
+  cashOnly?: Prisma.BoolWithAggregatesFilter<"RoomStay"> | boolean
+  chargeLimit?: Prisma.DecimalNullableWithAggregatesFilter<"RoomStay"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RoomStay"> | Date | string
 }
 
@@ -253,12 +343,18 @@ export type RoomStayCreateInput = {
   id?: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   room: Prisma.RoomCreateNestedOneWithoutStaysInput
   occupants?: Prisma.RoomOccupantCreateNestedManyWithoutStayInput
   charges?: Prisma.RoomChargeCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentCreateNestedManyWithoutStayInput
   orders?: Prisma.OrderCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayUncheckedCreateInput = {
@@ -266,23 +362,35 @@ export type RoomStayUncheckedCreateInput = {
   roomId: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   occupants?: Prisma.RoomOccupantUncheckedCreateNestedManyWithoutStayInput
   charges?: Prisma.RoomChargeUncheckedCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutStayInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableUncheckedCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   room?: Prisma.RoomUpdateOneRequiredWithoutStaysNestedInput
   occupants?: Prisma.RoomOccupantUpdateManyWithoutStayNestedInput
   charges?: Prisma.RoomChargeUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUpdateManyWithoutStayNestedInput
   orders?: Prisma.OrderUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayUncheckedUpdateInput = {
@@ -290,11 +398,17 @@ export type RoomStayUncheckedUpdateInput = {
   roomId?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occupants?: Prisma.RoomOccupantUncheckedUpdateManyWithoutStayNestedInput
   charges?: Prisma.RoomChargeUncheckedUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutStayNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUncheckedUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayCreateManyInput = {
@@ -302,7 +416,11 @@ export type RoomStayCreateManyInput = {
   roomId: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
 }
 
@@ -310,7 +428,11 @@ export type RoomStayUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -319,7 +441,11 @@ export type RoomStayUncheckedUpdateManyInput = {
   roomId?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -338,8 +464,16 @@ export type RoomStayCountOrderByAggregateInput = {
   roomId?: Prisma.SortOrder
   primaryGuestName?: Prisma.SortOrder
   checkedInAt?: Prisma.SortOrder
+  expectedCheckoutAt?: Prisma.SortOrder
   checkedOutAt?: Prisma.SortOrder
+  guestNotes?: Prisma.SortOrder
+  cashOnly?: Prisma.SortOrder
+  chargeLimit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type RoomStayAvgOrderByAggregateInput = {
+  chargeLimit?: Prisma.SortOrder
 }
 
 export type RoomStayMaxOrderByAggregateInput = {
@@ -347,7 +481,11 @@ export type RoomStayMaxOrderByAggregateInput = {
   roomId?: Prisma.SortOrder
   primaryGuestName?: Prisma.SortOrder
   checkedInAt?: Prisma.SortOrder
+  expectedCheckoutAt?: Prisma.SortOrder
   checkedOutAt?: Prisma.SortOrder
+  guestNotes?: Prisma.SortOrder
+  cashOnly?: Prisma.SortOrder
+  chargeLimit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -356,8 +494,16 @@ export type RoomStayMinOrderByAggregateInput = {
   roomId?: Prisma.SortOrder
   primaryGuestName?: Prisma.SortOrder
   checkedInAt?: Prisma.SortOrder
+  expectedCheckoutAt?: Prisma.SortOrder
   checkedOutAt?: Prisma.SortOrder
+  guestNotes?: Prisma.SortOrder
+  cashOnly?: Prisma.SortOrder
+  chargeLimit?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type RoomStaySumOrderByAggregateInput = {
+  chargeLimit?: Prisma.SortOrder
 }
 
 export type RoomStayScalarRelationFilter = {
@@ -368,6 +514,44 @@ export type RoomStayScalarRelationFilter = {
 export type RoomStayNullableScalarRelationFilter = {
   is?: Prisma.RoomStayWhereInput | null
   isNot?: Prisma.RoomStayWhereInput | null
+}
+
+export type RoomStayCreateNestedManyWithoutAssignedTablesInput = {
+  create?: Prisma.XOR<Prisma.RoomStayCreateWithoutAssignedTablesInput, Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput> | Prisma.RoomStayCreateWithoutAssignedTablesInput[] | Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput[]
+  connectOrCreate?: Prisma.RoomStayCreateOrConnectWithoutAssignedTablesInput | Prisma.RoomStayCreateOrConnectWithoutAssignedTablesInput[]
+  connect?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+}
+
+export type RoomStayUncheckedCreateNestedManyWithoutAssignedTablesInput = {
+  create?: Prisma.XOR<Prisma.RoomStayCreateWithoutAssignedTablesInput, Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput> | Prisma.RoomStayCreateWithoutAssignedTablesInput[] | Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput[]
+  connectOrCreate?: Prisma.RoomStayCreateOrConnectWithoutAssignedTablesInput | Prisma.RoomStayCreateOrConnectWithoutAssignedTablesInput[]
+  connect?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+}
+
+export type RoomStayUpdateManyWithoutAssignedTablesNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomStayCreateWithoutAssignedTablesInput, Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput> | Prisma.RoomStayCreateWithoutAssignedTablesInput[] | Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput[]
+  connectOrCreate?: Prisma.RoomStayCreateOrConnectWithoutAssignedTablesInput | Prisma.RoomStayCreateOrConnectWithoutAssignedTablesInput[]
+  upsert?: Prisma.RoomStayUpsertWithWhereUniqueWithoutAssignedTablesInput | Prisma.RoomStayUpsertWithWhereUniqueWithoutAssignedTablesInput[]
+  set?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+  disconnect?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+  delete?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+  connect?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+  update?: Prisma.RoomStayUpdateWithWhereUniqueWithoutAssignedTablesInput | Prisma.RoomStayUpdateWithWhereUniqueWithoutAssignedTablesInput[]
+  updateMany?: Prisma.RoomStayUpdateManyWithWhereWithoutAssignedTablesInput | Prisma.RoomStayUpdateManyWithWhereWithoutAssignedTablesInput[]
+  deleteMany?: Prisma.RoomStayScalarWhereInput | Prisma.RoomStayScalarWhereInput[]
+}
+
+export type RoomStayUncheckedUpdateManyWithoutAssignedTablesNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomStayCreateWithoutAssignedTablesInput, Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput> | Prisma.RoomStayCreateWithoutAssignedTablesInput[] | Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput[]
+  connectOrCreate?: Prisma.RoomStayCreateOrConnectWithoutAssignedTablesInput | Prisma.RoomStayCreateOrConnectWithoutAssignedTablesInput[]
+  upsert?: Prisma.RoomStayUpsertWithWhereUniqueWithoutAssignedTablesInput | Prisma.RoomStayUpsertWithWhereUniqueWithoutAssignedTablesInput[]
+  set?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+  disconnect?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+  delete?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+  connect?: Prisma.RoomStayWhereUniqueInput | Prisma.RoomStayWhereUniqueInput[]
+  update?: Prisma.RoomStayUpdateWithWhereUniqueWithoutAssignedTablesInput | Prisma.RoomStayUpdateWithWhereUniqueWithoutAssignedTablesInput[]
+  updateMany?: Prisma.RoomStayUpdateManyWithWhereWithoutAssignedTablesInput | Prisma.RoomStayUpdateManyWithWhereWithoutAssignedTablesInput[]
+  deleteMany?: Prisma.RoomStayScalarWhereInput | Prisma.RoomStayScalarWhereInput[]
 }
 
 export type RoomStayCreateNestedManyWithoutRoomInput = {
@@ -412,6 +596,14 @@ export type RoomStayUncheckedUpdateManyWithoutRoomNestedInput = {
   deleteMany?: Prisma.RoomStayScalarWhereInput | Prisma.RoomStayScalarWhereInput[]
 }
 
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type RoomStayCreateNestedOneWithoutOccupantsInput = {
   create?: Prisma.XOR<Prisma.RoomStayCreateWithoutOccupantsInput, Prisma.RoomStayUncheckedCreateWithoutOccupantsInput>
   connectOrCreate?: Prisma.RoomStayCreateOrConnectWithoutOccupantsInput
@@ -440,6 +632,20 @@ export type RoomStayUpdateOneRequiredWithoutChargesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoomStayUpdateToOneWithWhereWithoutChargesInput, Prisma.RoomStayUpdateWithoutChargesInput>, Prisma.RoomStayUncheckedUpdateWithoutChargesInput>
 }
 
+export type RoomStayCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.RoomStayCreateWithoutPaymentsInput, Prisma.RoomStayUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.RoomStayCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.RoomStayWhereUniqueInput
+}
+
+export type RoomStayUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomStayCreateWithoutPaymentsInput, Prisma.RoomStayUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.RoomStayCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.RoomStayUpsertWithoutPaymentsInput
+  connect?: Prisma.RoomStayWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RoomStayUpdateToOneWithWhereWithoutPaymentsInput, Prisma.RoomStayUpdateWithoutPaymentsInput>, Prisma.RoomStayUncheckedUpdateWithoutPaymentsInput>
+}
+
 export type RoomStayCreateNestedOneWithoutOrdersInput = {
   create?: Prisma.XOR<Prisma.RoomStayCreateWithoutOrdersInput, Prisma.RoomStayUncheckedCreateWithoutOrdersInput>
   connectOrCreate?: Prisma.RoomStayCreateOrConnectWithoutOrdersInput
@@ -456,26 +662,109 @@ export type RoomStayUpdateOneWithoutOrdersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoomStayUpdateToOneWithWhereWithoutOrdersInput, Prisma.RoomStayUpdateWithoutOrdersInput>, Prisma.RoomStayUncheckedUpdateWithoutOrdersInput>
 }
 
+export type RoomStayCreateWithoutAssignedTablesInput = {
+  id?: string
+  primaryGuestName: string
+  checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
+  checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  room: Prisma.RoomCreateNestedOneWithoutStaysInput
+  occupants?: Prisma.RoomOccupantCreateNestedManyWithoutStayInput
+  charges?: Prisma.RoomChargeCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentCreateNestedManyWithoutStayInput
+  orders?: Prisma.OrderCreateNestedManyWithoutRoomStayInput
+}
+
+export type RoomStayUncheckedCreateWithoutAssignedTablesInput = {
+  id?: string
+  roomId: string
+  primaryGuestName: string
+  checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
+  checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  occupants?: Prisma.RoomOccupantUncheckedCreateNestedManyWithoutStayInput
+  charges?: Prisma.RoomChargeUncheckedCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutStayInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutRoomStayInput
+}
+
+export type RoomStayCreateOrConnectWithoutAssignedTablesInput = {
+  where: Prisma.RoomStayWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoomStayCreateWithoutAssignedTablesInput, Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput>
+}
+
+export type RoomStayUpsertWithWhereUniqueWithoutAssignedTablesInput = {
+  where: Prisma.RoomStayWhereUniqueInput
+  update: Prisma.XOR<Prisma.RoomStayUpdateWithoutAssignedTablesInput, Prisma.RoomStayUncheckedUpdateWithoutAssignedTablesInput>
+  create: Prisma.XOR<Prisma.RoomStayCreateWithoutAssignedTablesInput, Prisma.RoomStayUncheckedCreateWithoutAssignedTablesInput>
+}
+
+export type RoomStayUpdateWithWhereUniqueWithoutAssignedTablesInput = {
+  where: Prisma.RoomStayWhereUniqueInput
+  data: Prisma.XOR<Prisma.RoomStayUpdateWithoutAssignedTablesInput, Prisma.RoomStayUncheckedUpdateWithoutAssignedTablesInput>
+}
+
+export type RoomStayUpdateManyWithWhereWithoutAssignedTablesInput = {
+  where: Prisma.RoomStayScalarWhereInput
+  data: Prisma.XOR<Prisma.RoomStayUpdateManyMutationInput, Prisma.RoomStayUncheckedUpdateManyWithoutAssignedTablesInput>
+}
+
+export type RoomStayScalarWhereInput = {
+  AND?: Prisma.RoomStayScalarWhereInput | Prisma.RoomStayScalarWhereInput[]
+  OR?: Prisma.RoomStayScalarWhereInput[]
+  NOT?: Prisma.RoomStayScalarWhereInput | Prisma.RoomStayScalarWhereInput[]
+  id?: Prisma.StringFilter<"RoomStay"> | string
+  roomId?: Prisma.StringFilter<"RoomStay"> | string
+  primaryGuestName?: Prisma.StringFilter<"RoomStay"> | string
+  checkedInAt?: Prisma.DateTimeFilter<"RoomStay"> | Date | string
+  expectedCheckoutAt?: Prisma.DateTimeNullableFilter<"RoomStay"> | Date | string | null
+  checkedOutAt?: Prisma.DateTimeNullableFilter<"RoomStay"> | Date | string | null
+  guestNotes?: Prisma.StringNullableFilter<"RoomStay"> | string | null
+  cashOnly?: Prisma.BoolFilter<"RoomStay"> | boolean
+  chargeLimit?: Prisma.DecimalNullableFilter<"RoomStay"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFilter<"RoomStay"> | Date | string
+}
+
 export type RoomStayCreateWithoutRoomInput = {
   id?: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   occupants?: Prisma.RoomOccupantCreateNestedManyWithoutStayInput
   charges?: Prisma.RoomChargeCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentCreateNestedManyWithoutStayInput
   orders?: Prisma.OrderCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayUncheckedCreateWithoutRoomInput = {
   id?: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   occupants?: Prisma.RoomOccupantUncheckedCreateNestedManyWithoutStayInput
   charges?: Prisma.RoomChargeUncheckedCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutStayInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableUncheckedCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayCreateOrConnectWithoutRoomInput = {
@@ -504,27 +793,21 @@ export type RoomStayUpdateManyWithWhereWithoutRoomInput = {
   data: Prisma.XOR<Prisma.RoomStayUpdateManyMutationInput, Prisma.RoomStayUncheckedUpdateManyWithoutRoomInput>
 }
 
-export type RoomStayScalarWhereInput = {
-  AND?: Prisma.RoomStayScalarWhereInput | Prisma.RoomStayScalarWhereInput[]
-  OR?: Prisma.RoomStayScalarWhereInput[]
-  NOT?: Prisma.RoomStayScalarWhereInput | Prisma.RoomStayScalarWhereInput[]
-  id?: Prisma.StringFilter<"RoomStay"> | string
-  roomId?: Prisma.StringFilter<"RoomStay"> | string
-  primaryGuestName?: Prisma.StringFilter<"RoomStay"> | string
-  checkedInAt?: Prisma.DateTimeFilter<"RoomStay"> | Date | string
-  checkedOutAt?: Prisma.DateTimeNullableFilter<"RoomStay"> | Date | string | null
-  createdAt?: Prisma.DateTimeFilter<"RoomStay"> | Date | string
-}
-
 export type RoomStayCreateWithoutOccupantsInput = {
   id?: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   room: Prisma.RoomCreateNestedOneWithoutStaysInput
   charges?: Prisma.RoomChargeCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentCreateNestedManyWithoutStayInput
   orders?: Prisma.OrderCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayUncheckedCreateWithoutOccupantsInput = {
@@ -532,10 +815,16 @@ export type RoomStayUncheckedCreateWithoutOccupantsInput = {
   roomId: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   charges?: Prisma.RoomChargeUncheckedCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutStayInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableUncheckedCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayCreateOrConnectWithoutOccupantsInput = {
@@ -558,11 +847,17 @@ export type RoomStayUpdateWithoutOccupantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   room?: Prisma.RoomUpdateOneRequiredWithoutStaysNestedInput
   charges?: Prisma.RoomChargeUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUpdateManyWithoutStayNestedInput
   orders?: Prisma.OrderUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayUncheckedUpdateWithoutOccupantsInput = {
@@ -570,21 +865,33 @@ export type RoomStayUncheckedUpdateWithoutOccupantsInput = {
   roomId?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   charges?: Prisma.RoomChargeUncheckedUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutStayNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUncheckedUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayCreateWithoutChargesInput = {
   id?: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   room: Prisma.RoomCreateNestedOneWithoutStaysInput
   occupants?: Prisma.RoomOccupantCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentCreateNestedManyWithoutStayInput
   orders?: Prisma.OrderCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayUncheckedCreateWithoutChargesInput = {
@@ -592,10 +899,16 @@ export type RoomStayUncheckedCreateWithoutChargesInput = {
   roomId: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   occupants?: Prisma.RoomOccupantUncheckedCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutStayInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableUncheckedCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayCreateOrConnectWithoutChargesInput = {
@@ -618,11 +931,17 @@ export type RoomStayUpdateWithoutChargesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   room?: Prisma.RoomUpdateOneRequiredWithoutStaysNestedInput
   occupants?: Prisma.RoomOccupantUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUpdateManyWithoutStayNestedInput
   orders?: Prisma.OrderUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayUncheckedUpdateWithoutChargesInput = {
@@ -630,21 +949,117 @@ export type RoomStayUncheckedUpdateWithoutChargesInput = {
   roomId?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occupants?: Prisma.RoomOccupantUncheckedUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutStayNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUncheckedUpdateManyWithoutAssignedRoomStaysNestedInput
+}
+
+export type RoomStayCreateWithoutPaymentsInput = {
+  id?: string
+  primaryGuestName: string
+  checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
+  checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  room: Prisma.RoomCreateNestedOneWithoutStaysInput
+  occupants?: Prisma.RoomOccupantCreateNestedManyWithoutStayInput
+  charges?: Prisma.RoomChargeCreateNestedManyWithoutStayInput
+  orders?: Prisma.OrderCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableCreateNestedManyWithoutAssignedRoomStaysInput
+}
+
+export type RoomStayUncheckedCreateWithoutPaymentsInput = {
+  id?: string
+  roomId: string
+  primaryGuestName: string
+  checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
+  checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  occupants?: Prisma.RoomOccupantUncheckedCreateNestedManyWithoutStayInput
+  charges?: Prisma.RoomChargeUncheckedCreateNestedManyWithoutStayInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutRoomStayInput
+  assignedTables?: Prisma.TableUncheckedCreateNestedManyWithoutAssignedRoomStaysInput
+}
+
+export type RoomStayCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.RoomStayWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoomStayCreateWithoutPaymentsInput, Prisma.RoomStayUncheckedCreateWithoutPaymentsInput>
+}
+
+export type RoomStayUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.RoomStayUpdateWithoutPaymentsInput, Prisma.RoomStayUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.RoomStayCreateWithoutPaymentsInput, Prisma.RoomStayUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.RoomStayWhereInput
+}
+
+export type RoomStayUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.RoomStayWhereInput
+  data: Prisma.XOR<Prisma.RoomStayUpdateWithoutPaymentsInput, Prisma.RoomStayUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type RoomStayUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
+  checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  room?: Prisma.RoomUpdateOneRequiredWithoutStaysNestedInput
+  occupants?: Prisma.RoomOccupantUpdateManyWithoutStayNestedInput
+  charges?: Prisma.RoomChargeUpdateManyWithoutStayNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUpdateManyWithoutAssignedRoomStaysNestedInput
+}
+
+export type RoomStayUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  roomId?: Prisma.StringFieldUpdateOperationsInput | string
+  primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
+  checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  occupants?: Prisma.RoomOccupantUncheckedUpdateManyWithoutStayNestedInput
+  charges?: Prisma.RoomChargeUncheckedUpdateManyWithoutStayNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUncheckedUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayCreateWithoutOrdersInput = {
   id?: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   room: Prisma.RoomCreateNestedOneWithoutStaysInput
   occupants?: Prisma.RoomOccupantCreateNestedManyWithoutStayInput
   charges?: Prisma.RoomChargeCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentCreateNestedManyWithoutStayInput
+  assignedTables?: Prisma.TableCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayUncheckedCreateWithoutOrdersInput = {
@@ -652,10 +1067,16 @@ export type RoomStayUncheckedCreateWithoutOrdersInput = {
   roomId: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   occupants?: Prisma.RoomOccupantUncheckedCreateNestedManyWithoutStayInput
   charges?: Prisma.RoomChargeUncheckedCreateNestedManyWithoutStayInput
+  payments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutStayInput
+  assignedTables?: Prisma.TableUncheckedCreateNestedManyWithoutAssignedRoomStaysInput
 }
 
 export type RoomStayCreateOrConnectWithoutOrdersInput = {
@@ -678,11 +1099,17 @@ export type RoomStayUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   room?: Prisma.RoomUpdateOneRequiredWithoutStaysNestedInput
   occupants?: Prisma.RoomOccupantUpdateManyWithoutStayNestedInput
   charges?: Prisma.RoomChargeUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUpdateManyWithoutStayNestedInput
+  assignedTables?: Prisma.TableUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayUncheckedUpdateWithoutOrdersInput = {
@@ -690,17 +1117,74 @@ export type RoomStayUncheckedUpdateWithoutOrdersInput = {
   roomId?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occupants?: Prisma.RoomOccupantUncheckedUpdateManyWithoutStayNestedInput
   charges?: Prisma.RoomChargeUncheckedUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutStayNestedInput
+  assignedTables?: Prisma.TableUncheckedUpdateManyWithoutAssignedRoomStaysNestedInput
+}
+
+export type RoomStayUpdateWithoutAssignedTablesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
+  checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  room?: Prisma.RoomUpdateOneRequiredWithoutStaysNestedInput
+  occupants?: Prisma.RoomOccupantUpdateManyWithoutStayNestedInput
+  charges?: Prisma.RoomChargeUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUpdateManyWithoutStayNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutRoomStayNestedInput
+}
+
+export type RoomStayUncheckedUpdateWithoutAssignedTablesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  roomId?: Prisma.StringFieldUpdateOperationsInput | string
+  primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
+  checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  occupants?: Prisma.RoomOccupantUncheckedUpdateManyWithoutStayNestedInput
+  charges?: Prisma.RoomChargeUncheckedUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutStayNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutRoomStayNestedInput
+}
+
+export type RoomStayUncheckedUpdateManyWithoutAssignedTablesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  roomId?: Prisma.StringFieldUpdateOperationsInput | string
+  primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
+  checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RoomStayCreateManyRoomInput = {
   id?: string
   primaryGuestName: string
   checkedInAt?: Date | string
+  expectedCheckoutAt?: Date | string | null
   checkedOutAt?: Date | string | null
+  guestNotes?: string | null
+  cashOnly?: boolean
+  chargeLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
 }
 
@@ -708,29 +1192,45 @@ export type RoomStayUpdateWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occupants?: Prisma.RoomOccupantUpdateManyWithoutStayNestedInput
   charges?: Prisma.RoomChargeUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUpdateManyWithoutStayNestedInput
   orders?: Prisma.OrderUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayUncheckedUpdateWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occupants?: Prisma.RoomOccupantUncheckedUpdateManyWithoutStayNestedInput
   charges?: Prisma.RoomChargeUncheckedUpdateManyWithoutStayNestedInput
+  payments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutStayNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutRoomStayNestedInput
+  assignedTables?: Prisma.TableUncheckedUpdateManyWithoutAssignedRoomStaysNestedInput
 }
 
 export type RoomStayUncheckedUpdateManyWithoutRoomInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   primaryGuestName?: Prisma.StringFieldUpdateOperationsInput | string
   checkedInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expectedCheckoutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkedOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guestNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cashOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  chargeLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -742,13 +1242,17 @@ export type RoomStayUncheckedUpdateManyWithoutRoomInput = {
 export type RoomStayCountOutputType = {
   occupants: number
   charges: number
+  payments: number
   orders: number
+  assignedTables: number
 }
 
 export type RoomStayCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   occupants?: boolean | RoomStayCountOutputTypeCountOccupantsArgs
   charges?: boolean | RoomStayCountOutputTypeCountChargesArgs
+  payments?: boolean | RoomStayCountOutputTypeCountPaymentsArgs
   orders?: boolean | RoomStayCountOutputTypeCountOrdersArgs
+  assignedTables?: boolean | RoomStayCountOutputTypeCountAssignedTablesArgs
 }
 
 /**
@@ -778,8 +1282,22 @@ export type RoomStayCountOutputTypeCountChargesArgs<ExtArgs extends runtime.Type
 /**
  * RoomStayCountOutputType without action
  */
+export type RoomStayCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoomPaymentWhereInput
+}
+
+/**
+ * RoomStayCountOutputType without action
+ */
 export type RoomStayCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrderWhereInput
+}
+
+/**
+ * RoomStayCountOutputType without action
+ */
+export type RoomStayCountOutputTypeCountAssignedTablesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TableWhereInput
 }
 
 
@@ -788,12 +1306,18 @@ export type RoomStaySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   roomId?: boolean
   primaryGuestName?: boolean
   checkedInAt?: boolean
+  expectedCheckoutAt?: boolean
   checkedOutAt?: boolean
+  guestNotes?: boolean
+  cashOnly?: boolean
+  chargeLimit?: boolean
   createdAt?: boolean
   room?: boolean | Prisma.RoomDefaultArgs<ExtArgs>
   occupants?: boolean | Prisma.RoomStay$occupantsArgs<ExtArgs>
   charges?: boolean | Prisma.RoomStay$chargesArgs<ExtArgs>
+  payments?: boolean | Prisma.RoomStay$paymentsArgs<ExtArgs>
   orders?: boolean | Prisma.RoomStay$ordersArgs<ExtArgs>
+  assignedTables?: boolean | Prisma.RoomStay$assignedTablesArgs<ExtArgs>
   _count?: boolean | Prisma.RoomStayCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["roomStay"]>
 
@@ -802,7 +1326,11 @@ export type RoomStaySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   roomId?: boolean
   primaryGuestName?: boolean
   checkedInAt?: boolean
+  expectedCheckoutAt?: boolean
   checkedOutAt?: boolean
+  guestNotes?: boolean
+  cashOnly?: boolean
+  chargeLimit?: boolean
   createdAt?: boolean
   room?: boolean | Prisma.RoomDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["roomStay"]>
@@ -812,7 +1340,11 @@ export type RoomStaySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   roomId?: boolean
   primaryGuestName?: boolean
   checkedInAt?: boolean
+  expectedCheckoutAt?: boolean
   checkedOutAt?: boolean
+  guestNotes?: boolean
+  cashOnly?: boolean
+  chargeLimit?: boolean
   createdAt?: boolean
   room?: boolean | Prisma.RoomDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["roomStay"]>
@@ -822,16 +1354,22 @@ export type RoomStaySelectScalar = {
   roomId?: boolean
   primaryGuestName?: boolean
   checkedInAt?: boolean
+  expectedCheckoutAt?: boolean
   checkedOutAt?: boolean
+  guestNotes?: boolean
+  cashOnly?: boolean
+  chargeLimit?: boolean
   createdAt?: boolean
 }
 
-export type RoomStayOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roomId" | "primaryGuestName" | "checkedInAt" | "checkedOutAt" | "createdAt", ExtArgs["result"]["roomStay"]>
+export type RoomStayOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roomId" | "primaryGuestName" | "checkedInAt" | "expectedCheckoutAt" | "checkedOutAt" | "guestNotes" | "cashOnly" | "chargeLimit" | "createdAt", ExtArgs["result"]["roomStay"]>
 export type RoomStayInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   room?: boolean | Prisma.RoomDefaultArgs<ExtArgs>
   occupants?: boolean | Prisma.RoomStay$occupantsArgs<ExtArgs>
   charges?: boolean | Prisma.RoomStay$chargesArgs<ExtArgs>
+  payments?: boolean | Prisma.RoomStay$paymentsArgs<ExtArgs>
   orders?: boolean | Prisma.RoomStay$ordersArgs<ExtArgs>
+  assignedTables?: boolean | Prisma.RoomStay$assignedTablesArgs<ExtArgs>
   _count?: boolean | Prisma.RoomStayCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RoomStayIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -847,14 +1385,20 @@ export type $RoomStayPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     room: Prisma.$RoomPayload<ExtArgs>
     occupants: Prisma.$RoomOccupantPayload<ExtArgs>[]
     charges: Prisma.$RoomChargePayload<ExtArgs>[]
+    payments: Prisma.$RoomPaymentPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
+    assignedTables: Prisma.$TablePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     roomId: string
     primaryGuestName: string
     checkedInAt: Date
+    expectedCheckoutAt: Date | null
     checkedOutAt: Date | null
+    guestNotes: string | null
+    cashOnly: boolean
+    chargeLimit: runtime.Decimal | null
     createdAt: Date
   }, ExtArgs["result"]["roomStay"]>
   composites: {}
@@ -1253,7 +1797,9 @@ export interface Prisma__RoomStayClient<T, Null = never, ExtArgs extends runtime
   room<T extends Prisma.RoomDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomDefaultArgs<ExtArgs>>): Prisma.Prisma__RoomClient<runtime.Types.Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   occupants<T extends Prisma.RoomStay$occupantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomStay$occupantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomOccupantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   charges<T extends Prisma.RoomStay$chargesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomStay$chargesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomChargePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.RoomStay$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomStay$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.RoomStay$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomStay$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedTables<T extends Prisma.RoomStay$assignedTablesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomStay$assignedTablesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TablePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1287,7 +1833,11 @@ export interface RoomStayFieldRefs {
   readonly roomId: Prisma.FieldRef<"RoomStay", 'String'>
   readonly primaryGuestName: Prisma.FieldRef<"RoomStay", 'String'>
   readonly checkedInAt: Prisma.FieldRef<"RoomStay", 'DateTime'>
+  readonly expectedCheckoutAt: Prisma.FieldRef<"RoomStay", 'DateTime'>
   readonly checkedOutAt: Prisma.FieldRef<"RoomStay", 'DateTime'>
+  readonly guestNotes: Prisma.FieldRef<"RoomStay", 'String'>
+  readonly cashOnly: Prisma.FieldRef<"RoomStay", 'Boolean'>
+  readonly chargeLimit: Prisma.FieldRef<"RoomStay", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"RoomStay", 'DateTime'>
 }
     
@@ -1738,6 +2288,30 @@ export type RoomStay$chargesArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * RoomStay.payments
+ */
+export type RoomStay$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoomPayment
+   */
+  select?: Prisma.RoomPaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoomPayment
+   */
+  omit?: Prisma.RoomPaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoomPaymentInclude<ExtArgs> | null
+  where?: Prisma.RoomPaymentWhereInput
+  orderBy?: Prisma.RoomPaymentOrderByWithRelationInput | Prisma.RoomPaymentOrderByWithRelationInput[]
+  cursor?: Prisma.RoomPaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoomPaymentScalarFieldEnum | Prisma.RoomPaymentScalarFieldEnum[]
+}
+
+/**
  * RoomStay.orders
  */
 export type RoomStay$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1759,6 +2333,30 @@ export type RoomStay$ordersArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
+}
+
+/**
+ * RoomStay.assignedTables
+ */
+export type RoomStay$assignedTablesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Table
+   */
+  select?: Prisma.TableSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Table
+   */
+  omit?: Prisma.TableOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TableInclude<ExtArgs> | null
+  where?: Prisma.TableWhereInput
+  orderBy?: Prisma.TableOrderByWithRelationInput | Prisma.TableOrderByWithRelationInput[]
+  cursor?: Prisma.TableWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TableScalarFieldEnum | Prisma.TableScalarFieldEnum[]
 }
 
 /**

@@ -408,6 +408,7 @@ export const ModelName = {
   RoomStay: 'RoomStay',
   RoomOccupant: 'RoomOccupant',
   RoomCharge: 'RoomCharge',
+  RoomPayment: 'RoomPayment',
   Category: 'Category',
   MenuItem: 'MenuItem',
   Order: 'Order',
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "table" | "room" | "roomStay" | "roomOccupant" | "roomCharge" | "category" | "menuItem" | "order" | "orderItem"
+    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "table" | "room" | "roomStay" | "roomOccupant" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "order" | "orderItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1245,6 +1246,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RoomPayment: {
+      payload: Prisma.$RoomPaymentPayload<ExtArgs>
+      fields: Prisma.RoomPaymentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoomPaymentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoomPaymentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>
+        }
+        findFirst: {
+          args: Prisma.RoomPaymentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoomPaymentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>
+        }
+        findMany: {
+          args: Prisma.RoomPaymentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>[]
+        }
+        create: {
+          args: Prisma.RoomPaymentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>
+        }
+        createMany: {
+          args: Prisma.RoomPaymentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoomPaymentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>[]
+        }
+        delete: {
+          args: Prisma.RoomPaymentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>
+        }
+        update: {
+          args: Prisma.RoomPaymentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>
+        }
+        deleteMany: {
+          args: Prisma.RoomPaymentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoomPaymentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoomPaymentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>[]
+        }
+        upsert: {
+          args: Prisma.RoomPaymentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoomPaymentPayload>
+        }
+        aggregate: {
+          args: Prisma.RoomPaymentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoomPayment>
+        }
+        groupBy: {
+          args: Prisma.RoomPaymentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoomPaymentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoomPaymentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoomPaymentCountAggregateOutputType> | number
+        }
+      }
+    }
     Category: {
       payload: Prisma.$CategoryPayload<ExtArgs>
       fields: Prisma.CategoryFieldRefs
@@ -1688,7 +1763,11 @@ export const RoomStayScalarFieldEnum = {
   roomId: 'roomId',
   primaryGuestName: 'primaryGuestName',
   checkedInAt: 'checkedInAt',
+  expectedCheckoutAt: 'expectedCheckoutAt',
   checkedOutAt: 'checkedOutAt',
+  guestNotes: 'guestNotes',
+  cashOnly: 'cashOnly',
+  chargeLimit: 'chargeLimit',
   createdAt: 'createdAt'
 } as const
 
@@ -1715,10 +1794,25 @@ export const RoomChargeScalarFieldEnum = {
   unitPrice: 'unitPrice',
   amount: 'amount',
   occurredAt: 'occurredAt',
+  settledAt: 'settledAt',
   createdAt: 'createdAt'
 } as const
 
 export type RoomChargeScalarFieldEnum = (typeof RoomChargeScalarFieldEnum)[keyof typeof RoomChargeScalarFieldEnum]
+
+
+export const RoomPaymentScalarFieldEnum = {
+  id: 'id',
+  stayId: 'stayId',
+  amount: 'amount',
+  method: 'method',
+  note: 'note',
+  receivedById: 'receivedById',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt'
+} as const
+
+export type RoomPaymentScalarFieldEnum = (typeof RoomPaymentScalarFieldEnum)[keyof typeof RoomPaymentScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {
@@ -1759,6 +1853,7 @@ export const OrderScalarFieldEnum = {
   customerPhone: 'customerPhone',
   tableId: 'tableId',
   roomStayId: 'roomStayId',
+  roomGuestsSnapshot: 'roomGuestsSnapshot',
   paymentMethod: 'paymentMethod',
   paymentStatus: 'paymentStatus',
   paidAt: 'paidAt',
@@ -1801,6 +1896,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -1815,6 +1918,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1985,6 +2097,20 @@ export type ListEnumRoomChargeKindFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'RoomPaymentMethod'
+ */
+export type EnumRoomPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomPaymentMethod'>
+    
+
+
+/**
+ * Reference to a field of type 'RoomPaymentMethod[]'
+ */
+export type ListEnumRoomPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomPaymentMethod[]'>
+    
+
+
+/**
  * Reference to a field of type 'OrderType'
  */
 export type EnumOrderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderType'>
@@ -1995,6 +2121,20 @@ export type EnumOrderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'OrderType[]'
  */
 export type ListEnumOrderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -2215,6 +2355,7 @@ export type GlobalOmitConfig = {
   roomStay?: Prisma.RoomStayOmit
   roomOccupant?: Prisma.RoomOccupantOmit
   roomCharge?: Prisma.RoomChargeOmit
+  roomPayment?: Prisma.RoomPaymentOmit
   category?: Prisma.CategoryOmit
   menuItem?: Prisma.MenuItemOmit
   order?: Prisma.OrderOmit

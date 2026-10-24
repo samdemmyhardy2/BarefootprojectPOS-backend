@@ -3,6 +3,7 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiConflictResponse, ApiNotFoundR
 import { Role } from 'prisma/generated/prisma/enums';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JobPermissions } from '../../common/decorators/job-permissions.decorator';
+import { GetUser } from '../../common/decorators/get-user.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { CheckInRoomDto } from './dto/check-in-room.dto';
@@ -10,6 +11,8 @@ import { CreateRoomChargeDto } from './dto/create-room-charge.dto';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { UpdateRoomStatusDto } from './dto/update-room-status.dto';
+import { UpdateRoomStayDto } from './dto/update-room-stay.dto';
+import { SettleRoomStayDto } from './dto/settle-room-stay.dto';
 import { RoomsService } from './rooms.service';
 
 @ApiTags('Rooms') @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard) @Controller('rooms') @JobPermissions('ROOM_VIEW')
@@ -34,6 +37,14 @@ export class RoomsController {
   @JobPermissions('ROOM_MANAGE')
   @Post(':id/check-in') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Check guests into a room and record its usage fee' }) @ApiResponse({ status: 201, description: 'Guest stay created with occupants and room fee.' }) @ApiConflictResponse({ description: 'Room is already occupied.' })
   checkIn(@Param('id', ParseUUIDPipe) id: string, @Body() dto: CheckInRoomDto) { return this.rooms.checkIn(id, dto); }
+
+  @JobPermissions('ROOM_FOLIO')
+  @Patch('stays/:stayId') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Update active guest stay details and folio policies' }) @ApiNotFoundResponse({ description: 'Room stay not found.' })
+  updateStay(@Param('stayId', ParseUUIDPipe) stayId: string, @Body() dto: UpdateRoomStayDto) { return this.rooms.updateStay(stayId, dto); }
+
+  @JobPermissions('ROOM_FOLIO')
+  @Post('stays/:stayId/settle') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Settle the current room tab and keep the guest stay open' }) @ApiResponse({ status: 201, description: 'Paid room folio and settlement details.' }) @ApiConflictResponse({ description: 'There is no open balance or the stay is closed.' })
+  settle(@Param('stayId', ParseUUIDPipe) stayId: string, @GetUser('id') cashierId: string, @Body() dto: SettleRoomStayDto) { return this.rooms.settle(stayId, cashierId, dto); }
 
   @JobPermissions('ROOM_FOLIO')
   @Post('stays/:stayId/charges') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Record water, food, or other room usage on the guest folio' }) @ApiBadRequestResponse({ description: 'Invalid or automatically-managed charge type.' })

@@ -20,8 +20,8 @@ const occupiedSlots = (positionX: number, positionY: number, width: number, heig
 @Injectable()
 export class TablesService {
   constructor(private readonly prisma: PrismaService) {}
-  findAll() { return this.prisma.table.findMany({ orderBy: { tableNumber: 'asc' } }); }
-  async findOne(id: string) { const table = await this.prisma.table.findUnique({ where: { id } }); if (!table) throw new NotFoundException('Table not found'); return table; }
+  findAll() { return this.prisma.table.findMany({ include: { assignedRoomStays: { include: { room: true, occupants: true } } }, orderBy: { tableNumber: 'asc' } }); }
+  async findOne(id: string) { const table = await this.prisma.table.findUnique({ where: { id }, include: { assignedRoomStays: { include: { room: true, occupants: true } } } }); if (!table) throw new NotFoundException('Table not found'); return table; }
   async create(dto: CreateTableDto) {
     const existing = await this.prisma.table.findMany({ select: { positionX: true, positionY: true, width: true, height: true } });
     const shape = dto.shape ?? (dto.capacity <= 2 ? TableShape.ROUND : dto.capacity >= 8 ? TableShape.OVAL : TableShape.RECTANGLE);
@@ -69,7 +69,27 @@ export class TablesService {
   }
   async updateStatus(id: string, dto: UpdateTableStatusDto) {
     await this.findOne(id);
-    return this.prisma.table.update({ where: { id }, data: { status: dto.status } });
+    const activeOrderWhere = { tableId: id, status: { in: [OrderStatus.PENDING, OrderStatus.PREPARING, OrderStatus.READY, OrderStatus.SERVED] } };
+    const activeOrders = await this.prisma.order.count({ where: activeOrderWhere });
+    return this.prisma.table.update({
+      where: { id },
+      data: { status: activeOrders > 0 ? TableStatus.OCCUPIED : dto.status },
+      include: { assignedRoomStays: { include: { room: true, occupants: true } } },
+    });
+  }
+  async assignRooms(id: string, roomStayIds: string[]) {
+    await this.findOne(id);
+    return this.prisma.$transaction(async (tx) => {
+      if (roomStayIds.length) {
+        const lockedStays = await tx.roomStay.updateMany({ where: { id: { in: roomStayIds }, checkedOutAt: null }, data: { checkedOutAt: null } });
+        if (lockedStays.count !== roomStayIds.length) throw new ConflictException('Choose only active guest stays to assign to the table');
+      }
+      return tx.table.update({
+        where: { id },
+        data: { assignedRoomStays: { set: roomStayIds.map((stayId) => ({ id: stayId })) } },
+        include: { assignedRoomStays: { include: { room: true, occupants: true } } },
+      });
+    });
   }
   async updateLayout(dto: UpdateTableLayoutDto) {
     const current = await this.prisma.table.findMany({ select: { id: true } });
@@ -91,19 +111,23 @@ export class TablesService {
         where: { id: table.id },
         data: { positionX: table.positionX, positionY: table.positionY, width: table.width, height: table.height, shape: table.shape },
       })));
-      return tx.table.findMany({ orderBy: [{ positionY: 'asc' }, { positionX: 'asc' }] });
+      return tx.table.findMany({ include: { assignedRoomStays: { include: { room: true, occupants: true } } }, orderBy: [{ positionY: 'asc' }, { positionX: 'asc' }] });
     });
   }
   async checkout(id: string, cashierId: string, dto: CheckoutTableDto) {
-    if (dto.paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && !dto.roomStayId) {
-      throw new ConflictException('Choose the guest room to charge this bill to the room folio');
-    }
+    if (dto.paymentMethod === OrderPaymentMethod.CARD) throw new BadRequestException('Use the room folio settlement flow to record a card payment');
     if (dto.paymentMethod === OrderPaymentMethod.CASH && dto.roomStayId) {
       throw new ConflictException('A room can only be selected when charging to the room folio');
     }
     return this.prisma.$transaction(async (tx) => {
-      const table = await tx.table.findUnique({ where: { id } });
+      const table = await tx.table.findUnique({ where: { id }, include: { assignedRoomStays: { include: { room: true, occupants: true } } } });
       if (!table) throw new NotFoundException('Table not found');
+      const assignedRoomStayIds = table.assignedRoomStays.map((stay) => stay.id);
+      const roomStayId = dto.roomStayId ?? (assignedRoomStayIds.length === 1 ? assignedRoomStayIds[0] : null);
+      if (dto.roomStayId && !assignedRoomStayIds.includes(dto.roomStayId)) throw new ConflictException('Choose a guest room assigned to this table');
+      if (dto.paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && !roomStayId) {
+        throw new ConflictException(assignedRoomStayIds.length ? 'Choose which assigned guest room should receive this table bill' : 'Assign a guest room to this table before charging its bill to the room folio');
+      }
       const orders = await tx.order.findMany({
         where: { tableId: id, status: { notIn: [OrderStatus.COMPLETED, OrderStatus.CANCELLED] } },
         include: { items: { include: { menuItem: true } } },
@@ -114,16 +138,29 @@ export class TablesService {
         throw new ConflictException('All table orders must be served before checkout');
       }
 
-      let stay: { id: string; room: { roomNumber: number } } | null = null;
-      if (dto.paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && dto.roomStayId) {
-        const active = await tx.roomStay.updateMany({ where: { id: dto.roomStayId, checkedOutAt: null }, data: { checkedOutAt: null } });
+      let stay: { id: string; room: { roomNumber: number }; cashOnly: boolean; chargeLimit: Prisma.Decimal | null; charges: { amount: Prisma.Decimal }[] } | null = null;
+      if (dto.paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && roomStayId) {
+        const active = await tx.roomStay.updateMany({ where: { id: roomStayId, checkedOutAt: null }, data: { checkedOutAt: null } });
         if (!active.count) throw new ConflictException('The selected guest stay is no longer active');
-        stay = await tx.roomStay.findUnique({ where: { id: dto.roomStayId }, select: { id: true, room: { select: { roomNumber: true } } } });
+        stay = await tx.roomStay.findUnique({ where: { id: roomStayId }, select: { id: true, cashOnly: true, chargeLimit: true, charges: { where: { settledAt: null }, select: { amount: true } }, room: { select: { roomNumber: true } } } });
         if (!stay) throw new NotFoundException('Room stay not found');
+        if (stay.cashOnly) throw new ConflictException('This guest stay is set to cash only');
       }
 
       const now = new Date();
+      const receiptStays = dto.paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT
+        ? table.assignedRoomStays.filter((assignedStay) => assignedStay.id === roomStayId)
+        : table.assignedRoomStays;
+      const roomGuestsSnapshot = receiptStays.map((assignedStay) => ({
+        roomNumber: assignedStay.room.roomNumber,
+        guestName: assignedStay.primaryGuestName,
+        guestNames: [...new Set([assignedStay.primaryGuestName, ...assignedStay.occupants.map((occupant) => occupant.name)])],
+      }));
       const totalAmount = orders.reduce((sum, order) => sum + Number(order.totalAmount), 0);
+      if (stay?.chargeLimit !== null && stay?.chargeLimit !== undefined) {
+        const currentFolio = stay.charges.reduce((sum, charge) => sum + Number(charge.amount), 0);
+        if (currentFolio + totalAmount > Number(stay.chargeLimit)) throw new ConflictException('This guest stay charge limit would be exceeded');
+      }
       for (const order of orders) {
         if (dto.paymentMethod === OrderPaymentMethod.CASH) {
           if (order.paymentStatus === OrderPaymentStatus.ROOM_FOLIO) {
@@ -131,28 +168,28 @@ export class TablesService {
           }
           await tx.order.update({
             where: { id: order.id },
-            data: { status: OrderStatus.COMPLETED, paymentMethod: OrderPaymentMethod.CASH, paymentStatus: OrderPaymentStatus.PAID, paidAt: order.paidAt ?? now, paidById: cashierId },
+            data: { status: OrderStatus.COMPLETED, paymentMethod: OrderPaymentMethod.CASH, paymentStatus: OrderPaymentStatus.PAID, paidAt: order.paidAt ?? now, paidById: cashierId, ...(table.assignedRoomStays.length === 1 ? { roomStayId: table.assignedRoomStays[0].id } : {}), roomGuestsSnapshot: roomGuestsSnapshot as Prisma.InputJsonValue },
           });
         } else {
           if (order.paymentStatus === OrderPaymentStatus.PAID) {
             throw new ConflictException('An order already paid in cash cannot be charged to a room folio');
           }
-          if (order.roomStayId && order.roomStayId !== dto.roomStayId) {
+          if (order.roomStayId && order.roomStayId !== roomStayId) {
             throw new ConflictException('The table includes an order already linked to another guest room');
           }
           if (order.paymentStatus === OrderPaymentStatus.UNPAID) {
             const summary = order.items.map((line) => `${line.quantity}× ${line.menuItem.name}`).join(', ');
             await tx.roomCharge.create({
-              data: { stayId: dto.roomStayId!, orderId: order.id, kind: 'RESTAURANT_ORDER', description: `Table ${table.tableNumber} restaurant order: ${summary}`, quantity: 1, unitPrice: Number(order.totalAmount), amount: Number(order.totalAmount) },
+              data: { stayId: roomStayId!, orderId: order.id, kind: 'RESTAURANT_ORDER', description: `Table ${table.tableNumber} restaurant order: ${summary}`, quantity: 1, unitPrice: Number(order.totalAmount), amount: Number(order.totalAmount) },
             });
           }
           await tx.order.update({
             where: { id: order.id },
-            data: { status: OrderStatus.COMPLETED, paymentMethod: OrderPaymentMethod.ROOM_CHECKOUT, paymentStatus: OrderPaymentStatus.ROOM_FOLIO, roomStayId: dto.roomStayId },
+            data: { status: OrderStatus.COMPLETED, paymentMethod: OrderPaymentMethod.ROOM_CHECKOUT, paymentStatus: OrderPaymentStatus.ROOM_FOLIO, roomStayId, roomGuestsSnapshot: roomGuestsSnapshot as Prisma.InputJsonValue },
           });
         }
       }
-      await tx.table.update({ where: { id }, data: { status: TableStatus.AVAILABLE } });
+      await tx.table.update({ where: { id }, data: { status: TableStatus.AVAILABLE, assignedRoomStays: { set: [] } } });
       return { tableId: id, tableNumber: table.tableNumber, paymentMethod: dto.paymentMethod, room: stay?.room ?? null, totalAmount, orderIds: orders.map((order) => order.id), checkedOutAt: now };
     });
   }

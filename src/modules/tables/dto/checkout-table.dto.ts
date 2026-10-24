@@ -7,7 +7,7 @@ export class CheckoutTableDto {
   @IsEnum(OrderPaymentMethod)
   paymentMethod!: OrderPaymentMethod;
 
-  @ApiPropertyOptional({ format: 'uuid', description: 'Required when paymentMethod is ROOM_CHECKOUT.' })
+  @ApiPropertyOptional({ format: 'uuid', description: 'Optional override; otherwise the active room assigned to the table is charged.' })
   @IsOptional() @IsUUID()
   roomStayId?: string;
 }

@@ -73,6 +73,11 @@ export type RoomOccupant = Prisma.RoomOccupantModel
  */
 export type RoomCharge = Prisma.RoomChargeModel
 /**
+ * Model RoomPayment
+ * 
+ */
+export type RoomPayment = Prisma.RoomPaymentModel
+/**
  * Model Category
  * 
  */

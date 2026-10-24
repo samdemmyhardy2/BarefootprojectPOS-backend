@@ -90,10 +90,19 @@ export type RoomChargeKind = (typeof RoomChargeKind)[keyof typeof RoomChargeKind
 
 export const OrderPaymentMethod = {
   CASH: 'CASH',
+  CARD: 'CARD',
   ROOM_CHECKOUT: 'ROOM_CHECKOUT'
 } as const
 
 export type OrderPaymentMethod = (typeof OrderPaymentMethod)[keyof typeof OrderPaymentMethod]
+
+
+export const RoomPaymentMethod = {
+  CASH: 'CASH',
+  CARD: 'CARD'
+} as const
+
+export type RoomPaymentMethod = (typeof RoomPaymentMethod)[keyof typeof RoomPaymentMethod]
 
 
 export const OrderPaymentStatus = {

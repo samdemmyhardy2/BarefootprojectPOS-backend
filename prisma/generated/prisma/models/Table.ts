@@ -27,7 +27,6 @@ export type AggregateTable = {
 }
 
 export type TableAvgAggregateOutputType = {
-  tableNumber: number | null
   capacity: number | null
   positionX: number | null
   positionY: number | null
@@ -36,7 +35,6 @@ export type TableAvgAggregateOutputType = {
 }
 
 export type TableSumAggregateOutputType = {
-  tableNumber: number | null
   capacity: number | null
   positionX: number | null
   positionY: number | null
@@ -46,7 +44,7 @@ export type TableSumAggregateOutputType = {
 
 export type TableMinAggregateOutputType = {
   id: string | null
-  tableNumber: number | null
+  tableNumber: string | null
   capacity: number | null
   status: $Enums.TableStatus | null
   shape: $Enums.TableShape | null
@@ -60,7 +58,7 @@ export type TableMinAggregateOutputType = {
 
 export type TableMaxAggregateOutputType = {
   id: string | null
-  tableNumber: number | null
+  tableNumber: string | null
   capacity: number | null
   status: $Enums.TableStatus | null
   shape: $Enums.TableShape | null
@@ -89,7 +87,6 @@ export type TableCountAggregateOutputType = {
 
 
 export type TableAvgAggregateInputType = {
-  tableNumber?: true
   capacity?: true
   positionX?: true
   positionY?: true
@@ -98,7 +95,6 @@ export type TableAvgAggregateInputType = {
 }
 
 export type TableSumAggregateInputType = {
-  tableNumber?: true
   capacity?: true
   positionX?: true
   positionY?: true
@@ -237,7 +233,7 @@ export type TableGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type TableGroupByOutputType = {
   id: string
-  tableNumber: number
+  tableNumber: string
   capacity: number
   status: $Enums.TableStatus
   shape: $Enums.TableShape
@@ -274,7 +270,7 @@ export type TableWhereInput = {
   OR?: Prisma.TableWhereInput[]
   NOT?: Prisma.TableWhereInput | Prisma.TableWhereInput[]
   id?: Prisma.StringFilter<"Table"> | string
-  tableNumber?: Prisma.IntFilter<"Table"> | number
+  tableNumber?: Prisma.StringFilter<"Table"> | string
   capacity?: Prisma.IntFilter<"Table"> | number
   status?: Prisma.EnumTableStatusFilter<"Table"> | $Enums.TableStatus
   shape?: Prisma.EnumTableShapeFilter<"Table"> | $Enums.TableShape
@@ -284,6 +280,7 @@ export type TableWhereInput = {
   height?: Prisma.IntFilter<"Table"> | number
   createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Table"> | Date | string
+  assignedRoomStays?: Prisma.RoomStayListRelationFilter
   orders?: Prisma.OrderListRelationFilter
 }
 
@@ -299,12 +296,13 @@ export type TableOrderByWithRelationInput = {
   height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  assignedRoomStays?: Prisma.RoomStayOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
 }
 
 export type TableWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  tableNumber?: number
+  tableNumber?: string
   AND?: Prisma.TableWhereInput | Prisma.TableWhereInput[]
   OR?: Prisma.TableWhereInput[]
   NOT?: Prisma.TableWhereInput | Prisma.TableWhereInput[]
@@ -317,6 +315,7 @@ export type TableWhereUniqueInput = Prisma.AtLeast<{
   height?: Prisma.IntFilter<"Table"> | number
   createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Table"> | Date | string
+  assignedRoomStays?: Prisma.RoomStayListRelationFilter
   orders?: Prisma.OrderListRelationFilter
 }, "id" | "tableNumber">
 
@@ -344,7 +343,7 @@ export type TableScalarWhereWithAggregatesInput = {
   OR?: Prisma.TableScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TableScalarWhereWithAggregatesInput | Prisma.TableScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Table"> | string
-  tableNumber?: Prisma.IntWithAggregatesFilter<"Table"> | number
+  tableNumber?: Prisma.StringWithAggregatesFilter<"Table"> | string
   capacity?: Prisma.IntWithAggregatesFilter<"Table"> | number
   status?: Prisma.EnumTableStatusWithAggregatesFilter<"Table"> | $Enums.TableStatus
   shape?: Prisma.EnumTableShapeWithAggregatesFilter<"Table"> | $Enums.TableShape
@@ -358,7 +357,7 @@ export type TableScalarWhereWithAggregatesInput = {
 
 export type TableCreateInput = {
   id?: string
-  tableNumber: number
+  tableNumber: string
   capacity: number
   status?: $Enums.TableStatus
   shape?: $Enums.TableShape
@@ -368,12 +367,13 @@ export type TableCreateInput = {
   height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignedRoomStays?: Prisma.RoomStayCreateNestedManyWithoutAssignedTablesInput
   orders?: Prisma.OrderCreateNestedManyWithoutTableInput
 }
 
 export type TableUncheckedCreateInput = {
   id?: string
-  tableNumber: number
+  tableNumber: string
   capacity: number
   status?: $Enums.TableStatus
   shape?: $Enums.TableShape
@@ -383,12 +383,13 @@ export type TableUncheckedCreateInput = {
   height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignedRoomStays?: Prisma.RoomStayUncheckedCreateNestedManyWithoutAssignedTablesInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTableInput
 }
 
 export type TableUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
   shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
@@ -398,12 +399,13 @@ export type TableUpdateInput = {
   height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedRoomStays?: Prisma.RoomStayUpdateManyWithoutAssignedTablesNestedInput
   orders?: Prisma.OrderUpdateManyWithoutTableNestedInput
 }
 
 export type TableUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
   shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
@@ -413,12 +415,13 @@ export type TableUncheckedUpdateInput = {
   height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedRoomStays?: Prisma.RoomStayUncheckedUpdateManyWithoutAssignedTablesNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTableNestedInput
 }
 
 export type TableCreateManyInput = {
   id?: string
-  tableNumber: number
+  tableNumber: string
   capacity: number
   status?: $Enums.TableStatus
   shape?: $Enums.TableShape
@@ -432,7 +435,7 @@ export type TableCreateManyInput = {
 
 export type TableUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
   shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
@@ -446,7 +449,7 @@ export type TableUpdateManyMutationInput = {
 
 export type TableUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
   shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
@@ -473,7 +476,6 @@ export type TableCountOrderByAggregateInput = {
 }
 
 export type TableAvgOrderByAggregateInput = {
-  tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   positionX?: Prisma.SortOrder
   positionY?: Prisma.SortOrder
@@ -510,12 +512,21 @@ export type TableMinOrderByAggregateInput = {
 }
 
 export type TableSumOrderByAggregateInput = {
-  tableNumber?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   positionX?: Prisma.SortOrder
   positionY?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
+}
+
+export type TableListRelationFilter = {
+  every?: Prisma.TableWhereInput
+  some?: Prisma.TableWhereInput
+  none?: Prisma.TableWhereInput
+}
+
+export type TableOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type TableNullableScalarRelationFilter = {
@@ -539,6 +550,44 @@ export type EnumTableShapeFieldUpdateOperationsInput = {
   set?: $Enums.TableShape
 }
 
+export type TableCreateNestedManyWithoutAssignedRoomStaysInput = {
+  create?: Prisma.XOR<Prisma.TableCreateWithoutAssignedRoomStaysInput, Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput> | Prisma.TableCreateWithoutAssignedRoomStaysInput[] | Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput[]
+  connectOrCreate?: Prisma.TableCreateOrConnectWithoutAssignedRoomStaysInput | Prisma.TableCreateOrConnectWithoutAssignedRoomStaysInput[]
+  connect?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+}
+
+export type TableUncheckedCreateNestedManyWithoutAssignedRoomStaysInput = {
+  create?: Prisma.XOR<Prisma.TableCreateWithoutAssignedRoomStaysInput, Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput> | Prisma.TableCreateWithoutAssignedRoomStaysInput[] | Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput[]
+  connectOrCreate?: Prisma.TableCreateOrConnectWithoutAssignedRoomStaysInput | Prisma.TableCreateOrConnectWithoutAssignedRoomStaysInput[]
+  connect?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+}
+
+export type TableUpdateManyWithoutAssignedRoomStaysNestedInput = {
+  create?: Prisma.XOR<Prisma.TableCreateWithoutAssignedRoomStaysInput, Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput> | Prisma.TableCreateWithoutAssignedRoomStaysInput[] | Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput[]
+  connectOrCreate?: Prisma.TableCreateOrConnectWithoutAssignedRoomStaysInput | Prisma.TableCreateOrConnectWithoutAssignedRoomStaysInput[]
+  upsert?: Prisma.TableUpsertWithWhereUniqueWithoutAssignedRoomStaysInput | Prisma.TableUpsertWithWhereUniqueWithoutAssignedRoomStaysInput[]
+  set?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+  disconnect?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+  delete?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+  connect?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+  update?: Prisma.TableUpdateWithWhereUniqueWithoutAssignedRoomStaysInput | Prisma.TableUpdateWithWhereUniqueWithoutAssignedRoomStaysInput[]
+  updateMany?: Prisma.TableUpdateManyWithWhereWithoutAssignedRoomStaysInput | Prisma.TableUpdateManyWithWhereWithoutAssignedRoomStaysInput[]
+  deleteMany?: Prisma.TableScalarWhereInput | Prisma.TableScalarWhereInput[]
+}
+
+export type TableUncheckedUpdateManyWithoutAssignedRoomStaysNestedInput = {
+  create?: Prisma.XOR<Prisma.TableCreateWithoutAssignedRoomStaysInput, Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput> | Prisma.TableCreateWithoutAssignedRoomStaysInput[] | Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput[]
+  connectOrCreate?: Prisma.TableCreateOrConnectWithoutAssignedRoomStaysInput | Prisma.TableCreateOrConnectWithoutAssignedRoomStaysInput[]
+  upsert?: Prisma.TableUpsertWithWhereUniqueWithoutAssignedRoomStaysInput | Prisma.TableUpsertWithWhereUniqueWithoutAssignedRoomStaysInput[]
+  set?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+  disconnect?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+  delete?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+  connect?: Prisma.TableWhereUniqueInput | Prisma.TableWhereUniqueInput[]
+  update?: Prisma.TableUpdateWithWhereUniqueWithoutAssignedRoomStaysInput | Prisma.TableUpdateWithWhereUniqueWithoutAssignedRoomStaysInput[]
+  updateMany?: Prisma.TableUpdateManyWithWhereWithoutAssignedRoomStaysInput | Prisma.TableUpdateManyWithWhereWithoutAssignedRoomStaysInput[]
+  deleteMany?: Prisma.TableScalarWhereInput | Prisma.TableScalarWhereInput[]
+}
+
 export type TableCreateNestedOneWithoutOrdersInput = {
   create?: Prisma.XOR<Prisma.TableCreateWithoutOrdersInput, Prisma.TableUncheckedCreateWithoutOrdersInput>
   connectOrCreate?: Prisma.TableCreateOrConnectWithoutOrdersInput
@@ -555,9 +604,9 @@ export type TableUpdateOneWithoutOrdersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TableUpdateToOneWithWhereWithoutOrdersInput, Prisma.TableUpdateWithoutOrdersInput>, Prisma.TableUncheckedUpdateWithoutOrdersInput>
 }
 
-export type TableCreateWithoutOrdersInput = {
+export type TableCreateWithoutAssignedRoomStaysInput = {
   id?: string
-  tableNumber: number
+  tableNumber: string
   capacity: number
   status?: $Enums.TableStatus
   shape?: $Enums.TableShape
@@ -567,11 +616,80 @@ export type TableCreateWithoutOrdersInput = {
   height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  orders?: Prisma.OrderCreateNestedManyWithoutTableInput
+}
+
+export type TableUncheckedCreateWithoutAssignedRoomStaysInput = {
+  id?: string
+  tableNumber: string
+  capacity: number
+  status?: $Enums.TableStatus
+  shape?: $Enums.TableShape
+  positionX?: number
+  positionY?: number
+  width?: number
+  height?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTableInput
+}
+
+export type TableCreateOrConnectWithoutAssignedRoomStaysInput = {
+  where: Prisma.TableWhereUniqueInput
+  create: Prisma.XOR<Prisma.TableCreateWithoutAssignedRoomStaysInput, Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput>
+}
+
+export type TableUpsertWithWhereUniqueWithoutAssignedRoomStaysInput = {
+  where: Prisma.TableWhereUniqueInput
+  update: Prisma.XOR<Prisma.TableUpdateWithoutAssignedRoomStaysInput, Prisma.TableUncheckedUpdateWithoutAssignedRoomStaysInput>
+  create: Prisma.XOR<Prisma.TableCreateWithoutAssignedRoomStaysInput, Prisma.TableUncheckedCreateWithoutAssignedRoomStaysInput>
+}
+
+export type TableUpdateWithWhereUniqueWithoutAssignedRoomStaysInput = {
+  where: Prisma.TableWhereUniqueInput
+  data: Prisma.XOR<Prisma.TableUpdateWithoutAssignedRoomStaysInput, Prisma.TableUncheckedUpdateWithoutAssignedRoomStaysInput>
+}
+
+export type TableUpdateManyWithWhereWithoutAssignedRoomStaysInput = {
+  where: Prisma.TableScalarWhereInput
+  data: Prisma.XOR<Prisma.TableUpdateManyMutationInput, Prisma.TableUncheckedUpdateManyWithoutAssignedRoomStaysInput>
+}
+
+export type TableScalarWhereInput = {
+  AND?: Prisma.TableScalarWhereInput | Prisma.TableScalarWhereInput[]
+  OR?: Prisma.TableScalarWhereInput[]
+  NOT?: Prisma.TableScalarWhereInput | Prisma.TableScalarWhereInput[]
+  id?: Prisma.StringFilter<"Table"> | string
+  tableNumber?: Prisma.StringFilter<"Table"> | string
+  capacity?: Prisma.IntFilter<"Table"> | number
+  status?: Prisma.EnumTableStatusFilter<"Table"> | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFilter<"Table"> | $Enums.TableShape
+  positionX?: Prisma.IntFilter<"Table"> | number
+  positionY?: Prisma.IntFilter<"Table"> | number
+  width?: Prisma.IntFilter<"Table"> | number
+  height?: Prisma.IntFilter<"Table"> | number
+  createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Table"> | Date | string
+}
+
+export type TableCreateWithoutOrdersInput = {
+  id?: string
+  tableNumber: string
+  capacity: number
+  status?: $Enums.TableStatus
+  shape?: $Enums.TableShape
+  positionX?: number
+  positionY?: number
+  width?: number
+  height?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignedRoomStays?: Prisma.RoomStayCreateNestedManyWithoutAssignedTablesInput
 }
 
 export type TableUncheckedCreateWithoutOrdersInput = {
   id?: string
-  tableNumber: number
+  tableNumber: string
   capacity: number
   status?: $Enums.TableStatus
   shape?: $Enums.TableShape
@@ -581,6 +699,7 @@ export type TableUncheckedCreateWithoutOrdersInput = {
   height?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignedRoomStays?: Prisma.RoomStayUncheckedCreateNestedManyWithoutAssignedTablesInput
 }
 
 export type TableCreateOrConnectWithoutOrdersInput = {
@@ -601,7 +720,7 @@ export type TableUpdateToOneWithWhereWithoutOrdersInput = {
 
 export type TableUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
   shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
@@ -611,11 +730,57 @@ export type TableUpdateWithoutOrdersInput = {
   height?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedRoomStays?: Prisma.RoomStayUpdateManyWithoutAssignedTablesNestedInput
 }
 
 export type TableUncheckedUpdateWithoutOrdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tableNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedRoomStays?: Prisma.RoomStayUncheckedUpdateManyWithoutAssignedTablesNestedInput
+}
+
+export type TableUpdateWithoutAssignedRoomStaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUpdateManyWithoutTableNestedInput
+}
+
+export type TableUncheckedUpdateWithoutAssignedRoomStaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
+  shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
+  positionX?: Prisma.IntFieldUpdateOperationsInput | number
+  positionY?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.IntFieldUpdateOperationsInput | number
+  height?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutTableNestedInput
+}
+
+export type TableUncheckedUpdateManyWithoutAssignedRoomStaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tableNumber?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTableStatusFieldUpdateOperationsInput | $Enums.TableStatus
   shape?: Prisma.EnumTableShapeFieldUpdateOperationsInput | $Enums.TableShape
@@ -633,10 +798,12 @@ export type TableUncheckedUpdateWithoutOrdersInput = {
  */
 
 export type TableCountOutputType = {
+  assignedRoomStays: number
   orders: number
 }
 
 export type TableCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignedRoomStays?: boolean | TableCountOutputTypeCountAssignedRoomStaysArgs
   orders?: boolean | TableCountOutputTypeCountOrdersArgs
 }
 
@@ -648,6 +815,13 @@ export type TableCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
    * Select specific fields to fetch from the TableCountOutputType
    */
   select?: Prisma.TableCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TableCountOutputType without action
+ */
+export type TableCountOutputTypeCountAssignedRoomStaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoomStayWhereInput
 }
 
 /**
@@ -670,6 +844,7 @@ export type TableSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   height?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  assignedRoomStays?: boolean | Prisma.Table$assignedRoomStaysArgs<ExtArgs>
   orders?: boolean | Prisma.Table$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.TableCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["table"]>
@@ -718,6 +893,7 @@ export type TableSelectScalar = {
 
 export type TableOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tableNumber" | "capacity" | "status" | "shape" | "positionX" | "positionY" | "width" | "height" | "createdAt" | "updatedAt", ExtArgs["result"]["table"]>
 export type TableInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assignedRoomStays?: boolean | Prisma.Table$assignedRoomStaysArgs<ExtArgs>
   orders?: boolean | Prisma.Table$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.TableCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -727,11 +903,12 @@ export type TableIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type $TablePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Table"
   objects: {
+    assignedRoomStays: Prisma.$RoomStayPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    tableNumber: number
+    tableNumber: string
     capacity: number
     status: $Enums.TableStatus
     shape: $Enums.TableShape
@@ -1135,6 +1312,7 @@ readonly fields: TableFieldRefs;
  */
 export interface Prisma__TableClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  assignedRoomStays<T extends Prisma.Table$assignedRoomStaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Table$assignedRoomStaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomStayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.Table$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Table$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1166,7 +1344,7 @@ export interface Prisma__TableClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface TableFieldRefs {
   readonly id: Prisma.FieldRef<"Table", 'String'>
-  readonly tableNumber: Prisma.FieldRef<"Table", 'Int'>
+  readonly tableNumber: Prisma.FieldRef<"Table", 'String'>
   readonly capacity: Prisma.FieldRef<"Table", 'Int'>
   readonly status: Prisma.FieldRef<"Table", 'TableStatus'>
   readonly shape: Prisma.FieldRef<"Table", 'TableShape'>
@@ -1566,6 +1744,30 @@ export type TableDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Tables to delete.
    */
   limit?: number
+}
+
+/**
+ * Table.assignedRoomStays
+ */
+export type Table$assignedRoomStaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoomStay
+   */
+  select?: Prisma.RoomStaySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoomStay
+   */
+  omit?: Prisma.RoomStayOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoomStayInclude<ExtArgs> | null
+  where?: Prisma.RoomStayWhereInput
+  orderBy?: Prisma.RoomStayOrderByWithRelationInput | Prisma.RoomStayOrderByWithRelationInput[]
+  cursor?: Prisma.RoomStayWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoomStayScalarFieldEnum | Prisma.RoomStayScalarFieldEnum[]
 }
 
 /**

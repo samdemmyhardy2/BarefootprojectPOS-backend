@@ -225,6 +225,7 @@ export type UserWhereInput = {
   orders?: Prisma.OrderListRelationFilter
   servedOrders?: Prisma.OrderListRelationFilter
   paidOrders?: Prisma.OrderListRelationFilter
+  roomPayments?: Prisma.RoomPaymentListRelationFilter
   shifts?: Prisma.EmployeeShiftListRelationFilter
   tasksAssigned?: Prisma.TaskAssignmentListRelationFilter
   tasksCreated?: Prisma.TaskListRelationFilter
@@ -244,6 +245,7 @@ export type UserOrderByWithRelationInput = {
   orders?: Prisma.OrderOrderByRelationAggregateInput
   servedOrders?: Prisma.OrderOrderByRelationAggregateInput
   paidOrders?: Prisma.OrderOrderByRelationAggregateInput
+  roomPayments?: Prisma.RoomPaymentOrderByRelationAggregateInput
   shifts?: Prisma.EmployeeShiftOrderByRelationAggregateInput
   tasksAssigned?: Prisma.TaskAssignmentOrderByRelationAggregateInput
   tasksCreated?: Prisma.TaskOrderByRelationAggregateInput
@@ -266,6 +268,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   orders?: Prisma.OrderListRelationFilter
   servedOrders?: Prisma.OrderListRelationFilter
   paidOrders?: Prisma.OrderListRelationFilter
+  roomPayments?: Prisma.RoomPaymentListRelationFilter
   shifts?: Prisma.EmployeeShiftListRelationFilter
   tasksAssigned?: Prisma.TaskAssignmentListRelationFilter
   tasksCreated?: Prisma.TaskListRelationFilter
@@ -317,6 +320,7 @@ export type UserCreateInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
@@ -336,6 +340,7 @@ export type UserUncheckedCreateInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftUncheckedCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -355,6 +360,7 @@ export type UserUpdateInput = {
   orders?: Prisma.OrderUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
@@ -374,6 +380,7 @@ export type UserUncheckedUpdateInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUncheckedUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUncheckedUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -531,6 +538,22 @@ export type UserUpdateOneRequiredWithoutShiftsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutShiftsInput, Prisma.UserUpdateWithoutShiftsInput>, Prisma.UserUncheckedUpdateWithoutShiftsInput>
 }
 
+export type UserCreateNestedOneWithoutRoomPaymentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoomPaymentsInput, Prisma.UserUncheckedCreateWithoutRoomPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoomPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutRoomPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoomPaymentsInput, Prisma.UserUncheckedCreateWithoutRoomPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoomPaymentsInput
+  upsert?: Prisma.UserUpsertWithoutRoomPaymentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRoomPaymentsInput, Prisma.UserUpdateWithoutRoomPaymentsInput>, Prisma.UserUncheckedUpdateWithoutRoomPaymentsInput>
+}
+
 export type UserCreateNestedOneWithoutPaidOrdersInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutPaidOrdersInput, Prisma.UserUncheckedCreateWithoutPaidOrdersInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaidOrdersInput
@@ -591,6 +614,7 @@ export type UserCreateWithoutTasksCreatedInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentCreateNestedManyWithoutEmployeeInput
 }
@@ -609,6 +633,7 @@ export type UserUncheckedCreateWithoutTasksCreatedInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftUncheckedCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
 }
@@ -643,6 +668,7 @@ export type UserUpdateWithoutTasksCreatedInput = {
   orders?: Prisma.OrderUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUpdateManyWithoutEmployeeNestedInput
 }
@@ -661,6 +687,7 @@ export type UserUncheckedUpdateWithoutTasksCreatedInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUncheckedUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUncheckedUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
 }
@@ -679,6 +706,7 @@ export type UserCreateWithoutTasksAssignedInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
 }
@@ -697,6 +725,7 @@ export type UserUncheckedCreateWithoutTasksAssignedInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftUncheckedCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -731,6 +760,7 @@ export type UserUpdateWithoutTasksAssignedInput = {
   orders?: Prisma.OrderUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
 }
@@ -749,6 +779,7 @@ export type UserUncheckedUpdateWithoutTasksAssignedInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUncheckedUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUncheckedUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -767,6 +798,7 @@ export type UserCreateWithoutShiftsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentCreateNestedManyWithoutReceivedByInput
   tasksAssigned?: Prisma.TaskAssignmentCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
 }
@@ -785,6 +817,7 @@ export type UserUncheckedCreateWithoutShiftsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutReceivedByInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -819,6 +852,7 @@ export type UserUpdateWithoutShiftsInput = {
   orders?: Prisma.OrderUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUpdateManyWithoutReceivedByNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
 }
@@ -837,6 +871,99 @@ export type UserUncheckedUpdateWithoutShiftsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUncheckedUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUncheckedUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutReceivedByNestedInput
+  tasksAssigned?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+  tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutRoomPaymentsInput = {
+  id?: string
+  name: string
+  jobTitle?: string
+  email: string
+  password: string
+  avatarUrl?: string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderCreateNestedManyWithoutWaiterInput
+  servedOrders?: Prisma.OrderCreateNestedManyWithoutServedByInput
+  paidOrders?: Prisma.OrderCreateNestedManyWithoutPaidByInput
+  shifts?: Prisma.EmployeeShiftCreateNestedManyWithoutEmployeeInput
+  tasksAssigned?: Prisma.TaskAssignmentCreateNestedManyWithoutEmployeeInput
+  tasksCreated?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutRoomPaymentsInput = {
+  id?: string
+  name: string
+  jobTitle?: string
+  email: string
+  password: string
+  avatarUrl?: string | null
+  role?: $Enums.Role
+  isOnline?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutWaiterInput
+  servedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutServedByInput
+  paidOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutPaidByInput
+  shifts?: Prisma.EmployeeShiftUncheckedCreateNestedManyWithoutEmployeeInput
+  tasksAssigned?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+  tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutRoomPaymentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoomPaymentsInput, Prisma.UserUncheckedCreateWithoutRoomPaymentsInput>
+}
+
+export type UserUpsertWithoutRoomPaymentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRoomPaymentsInput, Prisma.UserUncheckedUpdateWithoutRoomPaymentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoomPaymentsInput, Prisma.UserUncheckedCreateWithoutRoomPaymentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRoomPaymentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRoomPaymentsInput, Prisma.UserUncheckedUpdateWithoutRoomPaymentsInput>
+}
+
+export type UserUpdateWithoutRoomPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUpdateManyWithoutWaiterNestedInput
+  servedOrders?: Prisma.OrderUpdateManyWithoutServedByNestedInput
+  paidOrders?: Prisma.OrderUpdateManyWithoutPaidByNestedInput
+  shifts?: Prisma.EmployeeShiftUpdateManyWithoutEmployeeNestedInput
+  tasksAssigned?: Prisma.TaskAssignmentUpdateManyWithoutEmployeeNestedInput
+  tasksCreated?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRoomPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutWaiterNestedInput
+  servedOrders?: Prisma.OrderUncheckedUpdateManyWithoutServedByNestedInput
+  paidOrders?: Prisma.OrderUncheckedUpdateManyWithoutPaidByNestedInput
+  shifts?: Prisma.EmployeeShiftUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -854,6 +981,7 @@ export type UserCreateWithoutPaidOrdersInput = {
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderCreateNestedManyWithoutServedByInput
+  roomPayments?: Prisma.RoomPaymentCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
@@ -872,6 +1000,7 @@ export type UserUncheckedCreateWithoutPaidOrdersInput = {
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutWaiterInput
   servedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutServedByInput
+  roomPayments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftUncheckedCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -895,6 +1024,7 @@ export type UserCreateWithoutOrdersInput = {
   updatedAt?: Date | string
   servedOrders?: Prisma.OrderCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
@@ -913,6 +1043,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   updatedAt?: Date | string
   servedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutServedByInput
   paidOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftUncheckedCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -936,6 +1067,7 @@ export type UserCreateWithoutServedOrdersInput = {
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutWaiterInput
   paidOrders?: Prisma.OrderCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
@@ -954,6 +1086,7 @@ export type UserUncheckedCreateWithoutServedOrdersInput = {
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutWaiterInput
   paidOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutPaidByInput
+  roomPayments?: Prisma.RoomPaymentUncheckedCreateNestedManyWithoutReceivedByInput
   shifts?: Prisma.EmployeeShiftUncheckedCreateNestedManyWithoutEmployeeInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -988,6 +1121,7 @@ export type UserUpdateWithoutPaidOrdersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUpdateManyWithoutServedByNestedInput
+  roomPayments?: Prisma.RoomPaymentUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
@@ -1006,6 +1140,7 @@ export type UserUncheckedUpdateWithoutPaidOrdersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutWaiterNestedInput
   servedOrders?: Prisma.OrderUncheckedUpdateManyWithoutServedByNestedInput
+  roomPayments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1035,6 +1170,7 @@ export type UserUpdateWithoutOrdersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servedOrders?: Prisma.OrderUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
@@ -1053,6 +1189,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servedOrders?: Prisma.OrderUncheckedUpdateManyWithoutServedByNestedInput
   paidOrders?: Prisma.OrderUncheckedUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1082,6 +1219,7 @@ export type UserUpdateWithoutServedOrdersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutWaiterNestedInput
   paidOrders?: Prisma.OrderUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
@@ -1100,6 +1238,7 @@ export type UserUncheckedUpdateWithoutServedOrdersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutWaiterNestedInput
   paidOrders?: Prisma.OrderUncheckedUpdateManyWithoutPaidByNestedInput
+  roomPayments?: Prisma.RoomPaymentUncheckedUpdateManyWithoutReceivedByNestedInput
   shifts?: Prisma.EmployeeShiftUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksAssigned?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1114,6 +1253,7 @@ export type UserCountOutputType = {
   orders: number
   servedOrders: number
   paidOrders: number
+  roomPayments: number
   shifts: number
   tasksAssigned: number
   tasksCreated: number
@@ -1123,6 +1263,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   orders?: boolean | UserCountOutputTypeCountOrdersArgs
   servedOrders?: boolean | UserCountOutputTypeCountServedOrdersArgs
   paidOrders?: boolean | UserCountOutputTypeCountPaidOrdersArgs
+  roomPayments?: boolean | UserCountOutputTypeCountRoomPaymentsArgs
   shifts?: boolean | UserCountOutputTypeCountShiftsArgs
   tasksAssigned?: boolean | UserCountOutputTypeCountTasksAssignedArgs
   tasksCreated?: boolean | UserCountOutputTypeCountTasksCreatedArgs
@@ -1162,6 +1303,13 @@ export type UserCountOutputTypeCountPaidOrdersArgs<ExtArgs extends runtime.Types
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountRoomPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoomPaymentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountShiftsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EmployeeShiftWhereInput
 }
@@ -1195,6 +1343,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   servedOrders?: boolean | Prisma.User$servedOrdersArgs<ExtArgs>
   paidOrders?: boolean | Prisma.User$paidOrdersArgs<ExtArgs>
+  roomPayments?: boolean | Prisma.User$roomPaymentsArgs<ExtArgs>
   shifts?: boolean | Prisma.User$shiftsArgs<ExtArgs>
   tasksAssigned?: boolean | Prisma.User$tasksAssignedArgs<ExtArgs>
   tasksCreated?: boolean | Prisma.User$tasksCreatedArgs<ExtArgs>
@@ -1245,6 +1394,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   servedOrders?: boolean | Prisma.User$servedOrdersArgs<ExtArgs>
   paidOrders?: boolean | Prisma.User$paidOrdersArgs<ExtArgs>
+  roomPayments?: boolean | Prisma.User$roomPaymentsArgs<ExtArgs>
   shifts?: boolean | Prisma.User$shiftsArgs<ExtArgs>
   tasksAssigned?: boolean | Prisma.User$tasksAssignedArgs<ExtArgs>
   tasksCreated?: boolean | Prisma.User$tasksCreatedArgs<ExtArgs>
@@ -1259,6 +1409,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     orders: Prisma.$OrderPayload<ExtArgs>[]
     servedOrders: Prisma.$OrderPayload<ExtArgs>[]
     paidOrders: Prisma.$OrderPayload<ExtArgs>[]
+    roomPayments: Prisma.$RoomPaymentPayload<ExtArgs>[]
     shifts: Prisma.$EmployeeShiftPayload<ExtArgs>[]
     tasksAssigned: Prisma.$TaskAssignmentPayload<ExtArgs>[]
     tasksCreated: Prisma.$TaskPayload<ExtArgs>[]
@@ -1671,6 +1822,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   servedOrders<T extends Prisma.User$servedOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$servedOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   paidOrders<T extends Prisma.User$paidOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paidOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roomPayments<T extends Prisma.User$roomPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roomPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoomPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shifts<T extends Prisma.User$shiftsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$shiftsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeeShiftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tasksAssigned<T extends Prisma.User$tasksAssignedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tasksAssignedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tasksCreated<T extends Prisma.User$tasksCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tasksCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2175,6 +2327,30 @@ export type User$paidOrdersArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
+}
+
+/**
+ * User.roomPayments
+ */
+export type User$roomPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoomPayment
+   */
+  select?: Prisma.RoomPaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoomPayment
+   */
+  omit?: Prisma.RoomPaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoomPaymentInclude<ExtArgs> | null
+  where?: Prisma.RoomPaymentWhereInput
+  orderBy?: Prisma.RoomPaymentOrderByWithRelationInput | Prisma.RoomPaymentOrderByWithRelationInput[]
+  cursor?: Prisma.RoomPaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoomPaymentScalarFieldEnum | Prisma.RoomPaymentScalarFieldEnum[]
 }
 
 /**

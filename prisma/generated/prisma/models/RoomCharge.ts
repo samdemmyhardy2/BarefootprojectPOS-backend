@@ -48,6 +48,7 @@ export type RoomChargeMinAggregateOutputType = {
   unitPrice: runtime.Decimal | null
   amount: runtime.Decimal | null
   occurredAt: Date | null
+  settledAt: Date | null
   createdAt: Date | null
 }
 
@@ -61,6 +62,7 @@ export type RoomChargeMaxAggregateOutputType = {
   unitPrice: runtime.Decimal | null
   amount: runtime.Decimal | null
   occurredAt: Date | null
+  settledAt: Date | null
   createdAt: Date | null
 }
 
@@ -74,6 +76,7 @@ export type RoomChargeCountAggregateOutputType = {
   unitPrice: number
   amount: number
   occurredAt: number
+  settledAt: number
   createdAt: number
   _all: number
 }
@@ -101,6 +104,7 @@ export type RoomChargeMinAggregateInputType = {
   unitPrice?: true
   amount?: true
   occurredAt?: true
+  settledAt?: true
   createdAt?: true
 }
 
@@ -114,6 +118,7 @@ export type RoomChargeMaxAggregateInputType = {
   unitPrice?: true
   amount?: true
   occurredAt?: true
+  settledAt?: true
   createdAt?: true
 }
 
@@ -127,6 +132,7 @@ export type RoomChargeCountAggregateInputType = {
   unitPrice?: true
   amount?: true
   occurredAt?: true
+  settledAt?: true
   createdAt?: true
   _all?: true
 }
@@ -227,6 +233,7 @@ export type RoomChargeGroupByOutputType = {
   unitPrice: runtime.Decimal
   amount: runtime.Decimal
   occurredAt: Date
+  settledAt: Date | null
   createdAt: Date
   _count: RoomChargeCountAggregateOutputType | null
   _avg: RoomChargeAvgAggregateOutputType | null
@@ -263,6 +270,7 @@ export type RoomChargeWhereInput = {
   unitPrice?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
+  settledAt?: Prisma.DateTimeNullableFilter<"RoomCharge"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
   stay?: Prisma.XOR<Prisma.RoomStayScalarRelationFilter, Prisma.RoomStayWhereInput>
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
@@ -278,6 +286,7 @@ export type RoomChargeOrderByWithRelationInput = {
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
+  settledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   stay?: Prisma.RoomStayOrderByWithRelationInput
   order?: Prisma.OrderOrderByWithRelationInput
@@ -296,6 +305,7 @@ export type RoomChargeWhereUniqueInput = Prisma.AtLeast<{
   unitPrice?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
+  settledAt?: Prisma.DateTimeNullableFilter<"RoomCharge"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
   stay?: Prisma.XOR<Prisma.RoomStayScalarRelationFilter, Prisma.RoomStayWhereInput>
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
@@ -311,6 +321,7 @@ export type RoomChargeOrderByWithAggregationInput = {
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
+  settledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.RoomChargeCountOrderByAggregateInput
   _avg?: Prisma.RoomChargeAvgOrderByAggregateInput
@@ -332,6 +343,7 @@ export type RoomChargeScalarWhereWithAggregatesInput = {
   unitPrice?: Prisma.DecimalWithAggregatesFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalWithAggregatesFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeWithAggregatesFilter<"RoomCharge"> | Date | string
+  settledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RoomCharge"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RoomCharge"> | Date | string
 }
 
@@ -343,6 +355,7 @@ export type RoomChargeCreateInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Date | string
+  settledAt?: Date | string | null
   createdAt?: Date | string
   stay: Prisma.RoomStayCreateNestedOneWithoutChargesInput
   order?: Prisma.OrderCreateNestedOneWithoutRoomChargeInput
@@ -358,6 +371,7 @@ export type RoomChargeUncheckedCreateInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Date | string
+  settledAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -369,6 +383,7 @@ export type RoomChargeUpdateInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stay?: Prisma.RoomStayUpdateOneRequiredWithoutChargesNestedInput
   order?: Prisma.OrderUpdateOneWithoutRoomChargeNestedInput
@@ -384,6 +399,7 @@ export type RoomChargeUncheckedUpdateInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -397,6 +413,7 @@ export type RoomChargeCreateManyInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Date | string
+  settledAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -408,6 +425,7 @@ export type RoomChargeUpdateManyMutationInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -421,6 +439,7 @@ export type RoomChargeUncheckedUpdateManyInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -444,6 +463,7 @@ export type RoomChargeCountOrderByAggregateInput = {
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
+  settledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -463,6 +483,7 @@ export type RoomChargeMaxOrderByAggregateInput = {
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
+  settledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -476,6 +497,7 @@ export type RoomChargeMinOrderByAggregateInput = {
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
+  settledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -576,6 +598,7 @@ export type RoomChargeCreateWithoutStayInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Date | string
+  settledAt?: Date | string | null
   createdAt?: Date | string
   order?: Prisma.OrderCreateNestedOneWithoutRoomChargeInput
 }
@@ -589,6 +612,7 @@ export type RoomChargeUncheckedCreateWithoutStayInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Date | string
+  settledAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -631,6 +655,7 @@ export type RoomChargeScalarWhereInput = {
   unitPrice?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
+  settledAt?: Prisma.DateTimeNullableFilter<"RoomCharge"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
 }
 
@@ -642,6 +667,7 @@ export type RoomChargeCreateWithoutOrderInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Date | string
+  settledAt?: Date | string | null
   createdAt?: Date | string
   stay: Prisma.RoomStayCreateNestedOneWithoutChargesInput
 }
@@ -655,6 +681,7 @@ export type RoomChargeUncheckedCreateWithoutOrderInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Date | string
+  settledAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -682,6 +709,7 @@ export type RoomChargeUpdateWithoutOrderInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stay?: Prisma.RoomStayUpdateOneRequiredWithoutChargesNestedInput
 }
@@ -695,6 +723,7 @@ export type RoomChargeUncheckedUpdateWithoutOrderInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -707,6 +736,7 @@ export type RoomChargeCreateManyStayInput = {
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Date | string
+  settledAt?: Date | string | null
   createdAt?: Date | string
 }
 
@@ -718,6 +748,7 @@ export type RoomChargeUpdateWithoutStayInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneWithoutRoomChargeNestedInput
 }
@@ -731,6 +762,7 @@ export type RoomChargeUncheckedUpdateWithoutStayInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -743,6 +775,7 @@ export type RoomChargeUncheckedUpdateManyWithoutStayInput = {
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -758,6 +791,7 @@ export type RoomChargeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   unitPrice?: boolean
   amount?: boolean
   occurredAt?: boolean
+  settledAt?: boolean
   createdAt?: boolean
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
@@ -773,6 +807,7 @@ export type RoomChargeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   unitPrice?: boolean
   amount?: boolean
   occurredAt?: boolean
+  settledAt?: boolean
   createdAt?: boolean
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
@@ -788,6 +823,7 @@ export type RoomChargeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   unitPrice?: boolean
   amount?: boolean
   occurredAt?: boolean
+  settledAt?: boolean
   createdAt?: boolean
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
@@ -803,10 +839,11 @@ export type RoomChargeSelectScalar = {
   unitPrice?: boolean
   amount?: boolean
   occurredAt?: boolean
+  settledAt?: boolean
   createdAt?: boolean
 }
 
-export type RoomChargeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "stayId" | "orderId" | "kind" | "description" | "quantity" | "unitPrice" | "amount" | "occurredAt" | "createdAt", ExtArgs["result"]["roomCharge"]>
+export type RoomChargeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "stayId" | "orderId" | "kind" | "description" | "quantity" | "unitPrice" | "amount" | "occurredAt" | "settledAt" | "createdAt", ExtArgs["result"]["roomCharge"]>
 export type RoomChargeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
@@ -836,6 +873,7 @@ export type $RoomChargePayload<ExtArgs extends runtime.Types.Extensions.Internal
     unitPrice: runtime.Decimal
     amount: runtime.Decimal
     occurredAt: Date
+    settledAt: Date | null
     createdAt: Date
   }, ExtArgs["result"]["roomCharge"]>
   composites: {}
@@ -1271,6 +1309,7 @@ export interface RoomChargeFieldRefs {
   readonly unitPrice: Prisma.FieldRef<"RoomCharge", 'Decimal'>
   readonly amount: Prisma.FieldRef<"RoomCharge", 'Decimal'>
   readonly occurredAt: Prisma.FieldRef<"RoomCharge", 'DateTime'>
+  readonly settledAt: Prisma.FieldRef<"RoomCharge", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"RoomCharge", 'DateTime'>
 }
     

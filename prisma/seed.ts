@@ -54,7 +54,7 @@ async function seed(): Promise<void> {
   }
 
   await prisma.table.createMany({ data: [2, 4, 2, 4, 4, 8, 2, 4, 8, 4].map((capacity, index) => ({
-    tableNumber: index + 1, capacity, status: TableStatus.AVAILABLE,
+    tableNumber: String(index + 1), capacity, status: TableStatus.AVAILABLE,
   })) });
   console.info('Seed complete. Admin: admin@restaurant.com; employees: waiter1@restaurant.com and waiter2@restaurant.com. Set SEED_ADMIN_PASSWORD and SEED_EMPLOYEE_PASSWORD to override development passwords.');
 }

@@ -70,7 +70,13 @@ enum RoomChargeKind {
 
 enum OrderPaymentMethod {
   CASH
+  CARD
   ROOM_CHECKOUT
+}
+
+enum RoomPaymentMethod {
+  CASH
+  CARD
 }
 
 enum OrderPaymentStatus {
@@ -97,6 +103,7 @@ model User {
   orders    Order[]  @relation("WaiterOrders")
   servedOrders Order[] @relation("ServedOrders")
   paidOrders Order[] @relation("OrderPaidBy")
+  roomPayments RoomPayment[] @relation("RoomPaymentReceiver")
   shifts    EmployeeShift[]
   tasksAssigned TaskAssignment[] @relation("TaskAssignmentEmployee")
   tasksCreated  Task[] @relation("TaskCreator")
@@ -163,7 +170,7 @@ model ShiftBreak {
 
 model Table {
   id          String      @id @default(uuid())
-  tableNumber Int         @unique
+  tableNumber String      @unique
   capacity    Int
   status      TableStatus @default(AVAILABLE)
   shape       TableShape  @default(RECTANGLE)
@@ -171,6 +178,7 @@ model Table {
   positionY   Int         @default(0)
   width       Int         @default(2)
   height      Int         @default(2)
+  assignedRoomStays  RoomStay[]  @relation("TableRoomAssignments")
   orders      Order[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -195,9 +203,15 @@ model RoomStay {
   primaryGuestName String
   occupants       RoomOccupant[]
   checkedInAt     DateTime      @default(now())
+  expectedCheckoutAt DateTime?
   checkedOutAt    DateTime?
+  guestNotes      String?
+  cashOnly        Boolean       @default(false)
+  chargeLimit     Decimal?      @db.Decimal(10, 2)
   charges         RoomCharge[]
+  payments        RoomPayment[]
   orders          Order[]
+  assignedTables  Table[]       @relation("TableRoomAssignments")
   createdAt       DateTime      @default(now())
 
   @@index([roomId, checkedOutAt])
@@ -223,9 +237,25 @@ model RoomCharge {
   unitPrice   Decimal        @db.Decimal(10, 2)
   amount      Decimal        @db.Decimal(10, 2)
   occurredAt  DateTime       @default(now())
+  settledAt   DateTime?
   createdAt   DateTime       @default(now())
 
   @@index([stayId, occurredAt])
+}
+
+model RoomPayment {
+  id         String            @id @default(uuid())
+  stayId     String
+  stay       RoomStay          @relation(fields: [stayId], references: [id], onDelete: Cascade)
+  amount     Decimal           @db.Decimal(10, 2)
+  method     RoomPaymentMethod
+  note       String?
+  receivedById String?
+  receivedBy User?             @relation("RoomPaymentReceiver", fields: [receivedById], references: [id], onDelete: SetNull)
+  paidAt     DateTime          @default(now())
+  createdAt  DateTime          @default(now())
+
+  @@index([stayId, paidAt])
 }
 
 model Category {
@@ -265,6 +295,7 @@ model Order {
   table       Table?      @relation(fields: [tableId], references: [id])
   roomStayId  String?
   roomStay    RoomStay?   @relation(fields: [roomStayId], references: [id], onDelete: SetNull)
+  roomGuestsSnapshot Json?
   paymentMethod OrderPaymentMethod @default(CASH)
   paymentStatus OrderPaymentStatus @default(UNPAID)
   paidAt        DateTime?
