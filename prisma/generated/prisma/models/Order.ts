@@ -339,6 +339,7 @@ export type OrderWhereInput = {
   waiter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   servedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
+  prepTickets?: Prisma.OrderPrepTicketListRelationFilter
 }
 
 export type OrderOrderByWithRelationInput = {
@@ -369,6 +370,7 @@ export type OrderOrderByWithRelationInput = {
   waiter?: Prisma.UserOrderByWithRelationInput
   servedBy?: Prisma.UserOrderByWithRelationInput
   items?: Prisma.OrderItemOrderByRelationAggregateInput
+  prepTickets?: Prisma.OrderPrepTicketOrderByRelationAggregateInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -402,6 +404,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   waiter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   servedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
+  prepTickets?: Prisma.OrderPrepTicketListRelationFilter
 }, "id">
 
 export type OrderOrderByWithAggregationInput = {
@@ -481,6 +484,7 @@ export type OrderCreateInput = {
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateInput = {
@@ -506,6 +510,7 @@ export type OrderUncheckedCreateInput = {
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
@@ -531,6 +536,7 @@ export type OrderUpdateInput = {
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
@@ -556,6 +562,7 @@ export type OrderUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyInput = {
@@ -959,6 +966,20 @@ export type EnumOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.OrderStatus
 }
 
+export type OrderCreateNestedOneWithoutPrepTicketsInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutPrepTicketsInput, Prisma.OrderUncheckedCreateWithoutPrepTicketsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutPrepTicketsInput
+  connect?: Prisma.OrderWhereUniqueInput
+}
+
+export type OrderUpdateOneRequiredWithoutPrepTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutPrepTicketsInput, Prisma.OrderUncheckedCreateWithoutPrepTicketsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutPrepTicketsInput
+  upsert?: Prisma.OrderUpsertWithoutPrepTicketsInput
+  connect?: Prisma.OrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutPrepTicketsInput, Prisma.OrderUpdateWithoutPrepTicketsInput>, Prisma.OrderUncheckedUpdateWithoutPrepTicketsInput>
+}
+
 export type OrderCreateNestedOneWithoutItemsInput = {
   create?: Prisma.XOR<Prisma.OrderCreateWithoutItemsInput, Prisma.OrderUncheckedCreateWithoutItemsInput>
   connectOrCreate?: Prisma.OrderCreateOrConnectWithoutItemsInput
@@ -995,6 +1016,7 @@ export type OrderCreateWithoutWaiterInput = {
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutWaiterInput = {
@@ -1019,6 +1041,7 @@ export type OrderUncheckedCreateWithoutWaiterInput = {
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutWaiterInput = {
@@ -1053,6 +1076,7 @@ export type OrderCreateWithoutServedByInput = {
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutServedByInput = {
@@ -1077,6 +1101,7 @@ export type OrderUncheckedCreateWithoutServedByInput = {
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutServedByInput = {
@@ -1111,6 +1136,7 @@ export type OrderCreateWithoutPaidByInput = {
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutPaidByInput = {
@@ -1135,6 +1161,7 @@ export type OrderUncheckedCreateWithoutPaidByInput = {
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutPaidByInput = {
@@ -1243,6 +1270,7 @@ export type OrderCreateWithoutTableInput = {
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutTableInput = {
@@ -1267,6 +1295,7 @@ export type OrderUncheckedCreateWithoutTableInput = {
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutTableInput = {
@@ -1317,6 +1346,7 @@ export type OrderCreateWithoutRoomStayInput = {
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutRoomStayInput = {
@@ -1341,6 +1371,7 @@ export type OrderUncheckedCreateWithoutRoomStayInput = {
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutRoomStayInput = {
@@ -1391,6 +1422,7 @@ export type OrderCreateWithoutRoomChargeInput = {
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutRoomChargeInput = {
@@ -1415,6 +1447,7 @@ export type OrderUncheckedCreateWithoutRoomChargeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutRoomChargeInput = {
@@ -1455,6 +1488,7 @@ export type OrderUpdateWithoutRoomChargeInput = {
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutRoomChargeInput = {
@@ -1478,6 +1512,123 @@ export type OrderUncheckedUpdateWithoutRoomChargeInput = {
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderCreateWithoutPrepTicketsInput = {
+  id?: string
+  type?: $Enums.OrderType
+  customerName?: string | null
+  customerPhone?: string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: $Enums.OrderPaymentMethod
+  paymentStatus?: $Enums.OrderPaymentStatus
+  paidAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  servedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
+  paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
+  roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
+  waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
+  servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+}
+
+export type OrderUncheckedCreateWithoutPrepTicketsInput = {
+  id?: string
+  type?: $Enums.OrderType
+  customerName?: string | null
+  customerPhone?: string | null
+  tableId?: string | null
+  roomStayId?: string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: $Enums.OrderPaymentMethod
+  paymentStatus?: $Enums.OrderPaymentStatus
+  paidAt?: Date | string | null
+  paidById?: string | null
+  waiterId: string
+  servedById?: string | null
+  status?: $Enums.OrderStatus
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  servedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type OrderCreateOrConnectWithoutPrepTicketsInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutPrepTicketsInput, Prisma.OrderUncheckedCreateWithoutPrepTicketsInput>
+}
+
+export type OrderUpsertWithoutPrepTicketsInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutPrepTicketsInput, Prisma.OrderUncheckedUpdateWithoutPrepTicketsInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutPrepTicketsInput, Prisma.OrderUncheckedCreateWithoutPrepTicketsInput>
+  where?: Prisma.OrderWhereInput
+}
+
+export type OrderUpdateToOneWithWhereWithoutPrepTicketsInput = {
+  where?: Prisma.OrderWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutPrepTicketsInput, Prisma.OrderUncheckedUpdateWithoutPrepTicketsInput>
+}
+
+export type OrderUpdateWithoutPrepTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
+  paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
+  paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
+  roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
+  waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutPrepTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
+  paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  waiterId?: Prisma.StringFieldUpdateOperationsInput | string
+  servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
 }
 
@@ -1503,6 +1654,7 @@ export type OrderCreateWithoutItemsInput = {
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutItemsInput = {
@@ -1527,6 +1679,7 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutItemsInput = {
@@ -1567,6 +1720,7 @@ export type OrderUpdateWithoutItemsInput = {
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutItemsInput = {
@@ -1591,6 +1745,7 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyWaiterInput = {
@@ -1681,6 +1836,7 @@ export type OrderUpdateWithoutWaiterInput = {
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutWaiterInput = {
@@ -1705,6 +1861,7 @@ export type OrderUncheckedUpdateWithoutWaiterInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutWaiterInput = {
@@ -1751,6 +1908,7 @@ export type OrderUpdateWithoutServedByInput = {
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutServedByInput = {
@@ -1775,6 +1933,7 @@ export type OrderUncheckedUpdateWithoutServedByInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutServedByInput = {
@@ -1821,6 +1980,7 @@ export type OrderUpdateWithoutPaidByInput = {
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutPaidByInput = {
@@ -1845,6 +2005,7 @@ export type OrderUncheckedUpdateWithoutPaidByInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutPaidByInput = {
@@ -1913,6 +2074,7 @@ export type OrderUpdateWithoutTableInput = {
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutTableInput = {
@@ -1937,6 +2099,7 @@ export type OrderUncheckedUpdateWithoutTableInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutTableInput = {
@@ -2005,6 +2168,7 @@ export type OrderUpdateWithoutRoomStayInput = {
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutRoomStayInput = {
@@ -2029,6 +2193,7 @@ export type OrderUncheckedUpdateWithoutRoomStayInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutRoomStayInput = {
@@ -2060,10 +2225,12 @@ export type OrderUncheckedUpdateManyWithoutRoomStayInput = {
 
 export type OrderCountOutputType = {
   items: number
+  prepTickets: number
 }
 
 export type OrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | OrderCountOutputTypeCountItemsArgs
+  prepTickets?: boolean | OrderCountOutputTypeCountPrepTicketsArgs
 }
 
 /**
@@ -2081,6 +2248,13 @@ export type OrderCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  */
 export type OrderCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrderItemWhereInput
+}
+
+/**
+ * OrderCountOutputType without action
+ */
+export type OrderCountOutputTypeCountPrepTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderPrepTicketWhereInput
 }
 
 
@@ -2112,6 +2286,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   waiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   servedBy?: boolean | Prisma.Order$servedByArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
+  prepTickets?: boolean | Prisma.Order$prepTicketsArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
@@ -2203,6 +2378,7 @@ export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   waiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   servedBy?: boolean | Prisma.Order$servedByArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
+  prepTickets?: boolean | Prisma.Order$prepTicketsArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2230,6 +2406,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     waiter: Prisma.$UserPayload<ExtArgs>
     servedBy: Prisma.$UserPayload<ExtArgs> | null
     items: Prisma.$OrderItemPayload<ExtArgs>[]
+    prepTickets: Prisma.$OrderPrepTicketPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2653,6 +2830,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
   waiter<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   servedBy<T extends Prisma.Order$servedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$servedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Order$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  prepTickets<T extends Prisma.Order$prepTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$prepTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPrepTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3219,6 +3397,30 @@ export type Order$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.OrderItemScalarFieldEnum | Prisma.OrderItemScalarFieldEnum[]
+}
+
+/**
+ * Order.prepTickets
+ */
+export type Order$prepTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderPrepTicket
+   */
+  select?: Prisma.OrderPrepTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderPrepTicket
+   */
+  omit?: Prisma.OrderPrepTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderPrepTicketInclude<ExtArgs> | null
+  where?: Prisma.OrderPrepTicketWhereInput
+  orderBy?: Prisma.OrderPrepTicketOrderByWithRelationInput | Prisma.OrderPrepTicketOrderByWithRelationInput[]
+  cursor?: Prisma.OrderPrepTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderPrepTicketScalarFieldEnum | Prisma.OrderPrepTicketScalarFieldEnum[]
 }
 
 /**

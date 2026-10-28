@@ -11,7 +11,7 @@ export class EmployeesService {
   constructor(private readonly prisma: PrismaService) {}
   async positions() {
     const existing = await this.prisma.user.findMany({ where: { role: Role.EMPLOYEE }, select: { jobTitle: true }, distinct: ['jobTitle'] });
-    return [...new Set(['Waiter', 'Chef', 'Chief Accountant', 'Bungalow Manager', 'Guest Welcomer', 'Gardener', 'Cashier', 'Housekeeping', ...existing.map((user) => user.jobTitle.trim()).filter(Boolean)])].sort((a, b) => a.localeCompare(b));
+    return [...new Set(['Waiter', 'Chef', 'Bartender', 'Barista', 'Chief Accountant', 'Bungalow Manager', 'Guest Welcomer', 'Gardener', 'Cashier', 'Housekeeping', ...existing.map((user) => user.jobTitle.trim()).filter(Boolean)])].sort((a, b) => a.localeCompare(b));
   }
   list() { return this.prisma.user.findMany({ where: { role: Role.EMPLOYEE }, select: this.employeeSelect(), orderBy: { name: 'asc' } }); }
   async get(id: string) { const user = await this.prisma.user.findFirst({ where: { id, role: Role.EMPLOYEE }, select: this.employeeSelect() }); if (!user) throw new NotFoundException('Employee not found'); return user; }

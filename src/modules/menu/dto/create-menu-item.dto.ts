@@ -1,9 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { ArrayMaxSize, IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, IsUUID, MaxLength, Min, ValidateIf } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, IsUUID, MaxLength, Min, ValidateIf } from 'class-validator';
+import { PrepStation } from 'prisma/generated/prisma/enums';
 import { MatchesFoodLabelLanguages } from './food-label-languages.validator';
 
 export class CreateMenuItemDto {
+  @ApiPropertyOptional({ enum: PrepStation, default: PrepStation.KITCHEN })
+  @IsOptional() @IsEnum(PrepStation)
+  prepStation?: PrepStation;
   @ApiProperty({ example: 'Crispy Calamari' })
   @IsString() @IsNotEmpty() @MaxLength(120)
   name!: string;
@@ -76,4 +80,12 @@ export class CreateMenuItemDto {
   @ApiProperty({ format: 'uuid' })
   @IsUUID()
   categoryId!: string;
+
+  @ApiPropertyOptional({ type: [String], description: 'Modifier groups attached to this menu item.' })
+  @IsOptional() @IsArray() @ArrayMaxSize(50) @IsUUID(undefined, { each: true })
+  modifierGroupIds?: string[];
+
+  @ApiPropertyOptional({ minimum: 0 })
+  @IsOptional() @IsInt() @Min(0)
+  position?: number;
 }

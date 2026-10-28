@@ -88,10 +88,30 @@ export type Category = Prisma.CategoryModel
  */
 export type MenuItem = Prisma.MenuItemModel
 /**
+ * Model ModifierGroup
+ * 
+ */
+export type ModifierGroup = Prisma.ModifierGroupModel
+/**
+ * Model ModifierOption
+ * 
+ */
+export type ModifierOption = Prisma.ModifierOptionModel
+/**
+ * Model MenuItemModifierGroup
+ * 
+ */
+export type MenuItemModifierGroup = Prisma.MenuItemModifierGroupModel
+/**
  * Model Order
  * 
  */
 export type Order = Prisma.OrderModel
+/**
+ * Model OrderPrepTicket
+ * 
+ */
+export type OrderPrepTicket = Prisma.OrderPrepTicketModel
 /**
  * Model OrderItem
  * 

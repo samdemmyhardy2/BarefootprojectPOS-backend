@@ -71,6 +71,7 @@ enum RoomChargeKind {
 enum OrderPaymentMethod {
   CASH
   CARD
+  PROMPTPAY
   ROOM_CHECKOUT
 }
 
@@ -182,6 +183,7 @@ model Table {
   orders      Order[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
 }
 
 model Room {
@@ -236,6 +238,8 @@ model RoomCharge {
   quantity    Int            @default(1)
   unitPrice   Decimal        @db.Decimal(10, 2)
   amount      Decimal        @db.Decimal(10, 2)
+  signedByName String?
+  signatureData String?      @db.Text
   occurredAt  DateTime       @default(now())
   settledAt   DateTime?
   createdAt   DateTime       @default(now())
@@ -279,11 +283,94 @@ model MenuItem {
   availableExtras String[] @default([])
   availableExtrasMy String[] @default([])
   availableExtrasTh String[] @default([])
+  position    Int         @default(0)
   categoryId  String
+  prepStation PrepStation @default(KITCHEN)
   category    Category    @relation(fields: [categoryId], references: [id])
+  modifierGroups MenuItemModifierGroup[]
   orderItems  OrderItem[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  @@index([categoryId, position])
+}
+
+enum ModifierSelectionType {
+  SINGLE
+  MULTIPLE
+}
+
+enum PrepStation {
+  KITCHEN
+  BAR
+}
+
+enum ModifierMadeAt {
+  SAME_AS_DISH
+  KITCHEN
+  BAR
+}
+
+enum PrepTicketStatus {
+  PENDING
+  PREPARING
+  READY
+}
+
+model ModifierGroup {
+  id             String                  @id @default(uuid())
+  name           String
+  nameMy         String                  @default("")
+  nameTh         String                  @default("")
+  category       String                  @default("General")
+  icon           String                  @default("Utensils")
+  appearance     String                  @default("CHECKBOX")
+  madeAt         ModifierMadeAt          @default(SAME_AS_DISH)
+  required       Boolean                 @default(false)
+  selectionType  ModifierSelectionType   @default(MULTIPLE)
+  minPicks       Int                     @default(0)
+  maxPicks       Int                     @default(1)
+  includedPicks  Int                     @default(0)
+  extraPickPrice Decimal                 @default(0) @db.Decimal(10, 2)
+  allowDuplicates Boolean                @default(false)
+  position       Int                     @default(0)
+  options        ModifierOption[]
+  openedByOptions ModifierOption[] @relation("ModifierOptionOpensGroup")
+  menuItems      MenuItemModifierGroup[]
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  @@index([category, position])
+}
+
+model ModifierOption {
+  id              String          @id @default(uuid())
+  groupId         String
+  group           ModifierGroup   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  name            String
+  nameMy          String          @default("")
+  nameTh          String          @default("")
+  priceAdjustment Decimal         @default(0) @db.Decimal(10, 2)
+  defaultSelected Boolean         @default(false)
+  active          Boolean         @default(true)
+  position        Int             @default(0)
+  opensGroupId    String?
+  opensGroup      ModifierGroup?  @relation("ModifierOptionOpensGroup", fields: [opensGroupId], references: [id], onDelete: SetNull)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([groupId, position])
+}
+
+model MenuItemModifierGroup {
+  menuItemId String
+  menuItem   MenuItem     @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  groupId    String
+  group      ModifierGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  position   Int          @default(0)
+
+  @@id([menuItemId, groupId])
+  @@index([groupId, position])
 }
 
 model Order {
@@ -312,10 +399,27 @@ model Order {
   readyAt     DateTime?
   servedAt    DateTime?
   items       OrderItem[]
+  prepTickets OrderPrepTicket[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   @@index([type, status, createdAt])
+}
+
+model OrderPrepTicket {
+  id          String           @id @default(uuid())
+  orderId     String
+  order       Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  station     PrepStation
+  status      PrepTicketStatus @default(PENDING)
+  items       Json
+  preparingAt DateTime?
+  readyAt     DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([orderId, station])
+  @@index([station, status, createdAt])
 }
 
 model OrderItem {
@@ -329,6 +433,7 @@ model OrderItem {
   removeIngredients String? // e.g. "No peanuts, No onions"
   addExtras         String? // e.g. "Extra garlic sauce, Extra side salad"
   selectedAllergens String[] @default([])
+  modifierSelections Json     @default("[]")
   specialNotes      String?
   subtotal          Decimal  @db.Decimal(10, 2)
 }

@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiNotFoundResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsUUID, Max, MaxLength, Min } from 'class-validator';
+import { Type } from 'class-transformer';
 import { Role } from 'prisma/generated/prisma/enums';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -12,13 +13,15 @@ import { MenuItemsService } from './menu-items.service';
 class MenuItemQueryDto {
   @IsOptional() @IsUUID() categoryId?: string;
   @IsOptional() @IsString() @MaxLength(100) keyword?: string;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) page?: number;
+  @IsOptional() @Type(() => Number) @IsInt() @Min(1) @Max(10) limit?: number;
 }
 @ApiTags('Menu items')
 @Controller('menu-items')
 export class MenuItemsController {
   constructor(private readonly items: MenuItemsService) {}
   @Get() @ApiOperation({ summary: 'List and search menu items' }) @ApiQuery({ name: 'categoryId', required: false }) @ApiQuery({ name: 'keyword', required: false }) @ApiResponse({ status: 200, description: 'Menu items returned.' })
-  findAll(@Query() query: MenuItemQueryDto) { return this.items.findAll(query.categoryId, query.keyword); }
+  findAll(@Query() query: MenuItemQueryDto) { return this.items.findAll(query.categoryId, query.keyword, query.page, query.limit); }
   @Get(':id') @ApiOperation({ summary: 'Get menu item by ID' }) @ApiResponse({ status: 200, description: 'Menu item returned.' }) @ApiNotFoundResponse({ description: 'Menu item not found.' })
   findOne(@Param('id', ParseUUIDPipe) id: string) { return this.items.findOne(id); }
   @Post() @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard) @Roles(Role.ADMIN) @ApiOperation({ summary: 'Create a menu item (admin)' }) @ApiResponse({ status: 201, description: 'Menu item created.' }) @ApiBadRequestResponse({ description: 'Invalid menu item.' }) @ApiNotFoundResponse({ description: 'Category not found.' })

@@ -1,0 +1,5 @@
+ALTER TYPE "OrderPaymentMethod" ADD VALUE IF NOT EXISTS 'PROMPTPAY';
+
+ALTER TABLE "RoomCharge"
+ADD COLUMN "signedByName" TEXT,
+ADD COLUMN "signatureData" TEXT;

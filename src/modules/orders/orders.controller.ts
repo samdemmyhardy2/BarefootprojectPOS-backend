@@ -36,9 +36,10 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { JobPermissions } from 'src/common/decorators/job-permissions.decorator';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
-import { Role } from 'prisma/generated/prisma/enums';
+import { PrepStation, Role } from 'prisma/generated/prisma/enums';
 import { AcceptStreamToken } from 'src/common/decorators/stream-token.decorator';
 import { OrderPageQueryDto } from './dto/order-page-query.dto';
+import { RedirectPrepTicketDto } from './dto/redirect-prep-ticket.dto';
 
 @ApiTags('Orders')
 @ApiBearerAuth()
@@ -227,6 +228,44 @@ export class OrdersController {
   ) {
     return this.ordersService.updateStatus(id, updateOrderStatusDto, actorId);
   }
+
+  @JobPermissions('KITCHEN')
+  @Get('kitchen/prep-queue')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  prepKitchenQueue() { return this.ordersService.prepQueue(PrepStation.KITCHEN); }
+
+  @JobPermissions('BAR')
+  @Get('bar/prep-queue')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  prepBarQueue() { return this.ordersService.prepQueue(PrepStation.BAR); }
+
+  @JobPermissions('ORDER_VIEW')
+  @Patch('prep-tickets/:ticketId/redirect')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Redirect a pending prep ticket to the other station' })
+  redirectPrepTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string, @Body() dto: RedirectPrepTicketDto) {
+    return this.ordersService.redirectPrepTicket(ticketId, dto.station);
+  }
+
+  @JobPermissions('KITCHEN')
+  @Patch('kitchen/tickets/:ticketId/prepare')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  prepareKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string) { return this.ordersService.updatePrepTicket(ticketId, PrepStation.KITCHEN, 'prepare'); }
+
+  @JobPermissions('KITCHEN')
+  @Patch('kitchen/tickets/:ticketId/ready')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  readyKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string) { return this.ordersService.updatePrepTicket(ticketId, PrepStation.KITCHEN, 'ready'); }
+
+  @JobPermissions('BAR')
+  @Patch('bar/tickets/:ticketId/prepare')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  prepareBarTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string) { return this.ordersService.updatePrepTicket(ticketId, PrepStation.BAR, 'prepare'); }
+
+  @JobPermissions('BAR')
+  @Patch('bar/tickets/:ticketId/ready')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  readyBarTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string) { return this.ordersService.updatePrepTicket(ticketId, PrepStation.BAR, 'ready'); }
 
   @JobPermissions('KITCHEN')
   @Get('cook/queue')

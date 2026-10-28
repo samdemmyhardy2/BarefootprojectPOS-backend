@@ -5,11 +5,12 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { Subject } from 'rxjs';
+import { Prisma } from 'prisma/generated/prisma/client';
 import { PrismaService } from 'src/utils/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { TableStatus } from 'prisma/generated/prisma/enums';
-import { OrderPaymentMethod, OrderPaymentStatus, OrderStatus, OrderType } from 'prisma/generated/prisma/enums';
+import { ModifierMadeAt, OrderPaymentMethod, OrderPaymentStatus, OrderStatus, OrderType, PrepStation, PrepTicketStatus } from 'prisma/generated/prisma/enums';
 import { OrderPageQueryDto } from './dto/order-page-query.dto';
 
 @Injectable()
@@ -49,21 +50,17 @@ export class OrdersService {
     }
     const paymentMethod = dto.paymentMethod ?? OrderPaymentMethod.CASH;
     if (paymentMethod === OrderPaymentMethod.CARD) throw new BadRequestException('Card payments are recorded when settling a room tab');
-    if (dto.tableId && dto.roomStayId && paymentMethod !== OrderPaymentMethod.ROOM_CHECKOUT) {
-      throw new BadRequestException('A restaurant table can only be linked to a room when charging the order to the guest folio');
-    }
     if (dto.tableId && creator.role !== 'ADMIN' && creator.jobTitle.trim().toLowerCase() !== 'waiter') {
       throw new BadRequestException('Your job role cannot place orders for restaurant tables');
     }
-    const waiterTableCheckout = Boolean(dto.tableId)
-      && paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT
-      && jobTitle === 'waiter';
+    const waiterTableCheckout = Boolean(dto.tableId) && jobTitle === 'waiter';
     if (dto.roomStayId && creator.role !== 'ADMIN' && !waiterTableCheckout && !['guestwelcomer', 'bungalowmanager'].includes(jobTitle)) {
       throw new BadRequestException('Your job role cannot place orders against guest room stays');
     }
     if (paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && !dto.roomStayId) throw new BadRequestException('Choose an active room stay to charge at checkout');
-    const table = dto.tableId ? await this.prisma.table.findUnique({ where: { id: dto.tableId } }) : null;
+    const table = dto.tableId ? await this.prisma.table.findUnique({ where: { id: dto.tableId }, include: { assignedRoomStays: { select: { id: true } } } }) : null;
     if (dto.tableId && !table) throw new NotFoundException('Table not found');
+    if (dto.tableId && dto.roomStayId && !table?.assignedRoomStays.some((stay) => stay.id === dto.roomStayId)) throw new ConflictException('Choose a guest room assigned to this table');
     const roomStay = dto.roomStayId ? await this.prisma.roomStay.findUnique({ where: { id: dto.roomStayId }, include: { room: true, charges: { where: { settledAt: null }, select: { amount: true } } } }) : null;
     if (dto.roomStayId && !roomStay) throw new NotFoundException('Room stay not found');
     if (roomStay?.checkedOutAt) throw new ConflictException('Cannot add an order to a checked-out room');
@@ -81,6 +78,7 @@ export class OrdersService {
           in: menuItemIds,
         },
       },
+      include: { modifierGroups: { orderBy: { position: 'asc' }, include: { group: { include: { options: { where: { active: true }, orderBy: { position: 'asc' } } } } } } },
     });
 
     if (menuItems.length !== menuItemIds.length) {
@@ -89,31 +87,68 @@ export class OrdersService {
       );
     }
 
-    const priceMap = new Map<string, number>(
-      menuItems.map((item) => [
-        item.id,
-        Number(item.price),
-      ]),
-    );
+    const followUpGroupIds = [...new Set(menuItems.flatMap((menuItem) => menuItem.modifierGroups.flatMap((link) => link.group.options.flatMap((option) => option.opensGroupId ? [option.opensGroupId] : []))))];
+    const followUpGroups = followUpGroupIds.length
+      ? await this.prisma.modifierGroup.findMany({ where: { id: { in: followUpGroupIds } }, include: { options: { where: { active: true }, orderBy: { position: 'asc' } } } })
+      : [];
 
     let totalAmount = 0;
 
     const orderItemsData = dto.items.map((item) => {
-      const unitPrice = priceMap.get(item.menuItemId);
-
-      if (unitPrice === undefined) {
-        throw new NotFoundException(
-          `Menu item ${item.menuItemId} not found`,
-        );
-      }
-
-      const subtotal = unitPrice * item.quantity;
-
       const menuItem = menuItems.find((candidate) => candidate.id === item.menuItemId);
-      const validAllergens = new Set(menuItem?.allergens ?? []);
+      if (!menuItem) throw new NotFoundException(`Menu item ${item.menuItemId} not found`);
+      const validAllergens = new Set(menuItem.allergens ?? []);
       if (item.selectedAllergens?.some((allergen) => !validAllergens.has(allergen))) {
         throw new BadRequestException('Selected allergens must match the allergens configured for the menu item');
       }
+
+      const directGroups = menuItem.modifierGroups.map((link) => link.group);
+      const linkedFollowUpIds = new Set(directGroups.flatMap((group) => group.options.flatMap((option) => option.opensGroupId ? [option.opensGroupId] : [])));
+      const groups = [...directGroups, ...followUpGroups.filter((group) => linkedFollowUpIds.has(group.id))];
+      const groupsById = new Map(groups.map((group) => [group.id, group]));
+      const requested = item.modifierSelections ?? [];
+      if (new Set(requested.map((selection) => selection.groupId)).size !== requested.length) {
+        throw new BadRequestException('Each modifier group can be submitted only once per menu item.');
+      }
+      const optionMap = new Map<string, { id: string; name: string; priceAdjustment: number; groupId: string }>();
+      for (const group of groups) for (const option of group.options) optionMap.set(option.id, { id: option.id, name: option.name, priceAdjustment: Number(option.priceAdjustment), groupId: group.id });
+      const selectedIds = new Set(requested.flatMap((selection) => selection.optionIds));
+      const openableGroups = new Set(directGroups.map((group) => group.id));
+      let changed = true;
+      while (changed) {
+        changed = false;
+        for (const optionId of selectedIds) {
+          const option = optionMap.get(optionId);
+          const sourceGroup = option ? groupsById.get(option.groupId) : undefined;
+          if (!option || !sourceGroup || !openableGroups.has(sourceGroup.id)) continue;
+          const targetId = sourceGroup.options.find((candidate) => candidate.id === optionId)?.opensGroupId;
+          if (targetId && groupsById.has(targetId) && !openableGroups.has(targetId)) { openableGroups.add(targetId); changed = true; }
+        }
+      }
+      let modifierPrice = 0;
+      const modifierSnapshots: { groupId: string; groupName: string; station: PrepStation; options: { id: string; name: string; price: number }[] }[] = [];
+      for (const selection of requested) {
+        const group = groupsById.get(selection.groupId);
+        if (!group || !openableGroups.has(group.id)) throw new BadRequestException('A selected modifier group is not available for this menu item.');
+        const ids = selection.optionIds;
+        if (new Set(ids).size !== ids.length && !group.allowDuplicates) throw new BadRequestException(`${group.name} does not allow the same option more than once.`);
+        if (ids.length < group.minPicks || ids.length > group.maxPicks) throw new BadRequestException(`${group.name} requires ${group.minPicks}–${group.maxPicks} picks.`);
+        if (group.required && ids.length < 1) throw new BadRequestException(`${group.name} requires a selection.`);
+        const options = ids.map((id, index) => {
+          const option = optionMap.get(id);
+          if (!option || option.groupId !== group.id) throw new BadRequestException(`An option is not part of ${group.name}.`);
+          const charged = index < group.includedPicks ? 0 : option.priceAdjustment + Number(group.extraPickPrice);
+          modifierPrice += charged;
+          return { id: option.id, name: option.name, price: charged };
+        });
+        modifierSnapshots.push({ groupId: group.id, groupName: group.name, station: group.madeAt === ModifierMadeAt.SAME_AS_DISH ? (item.prepStation ?? menuItem.prepStation) : group.madeAt, options });
+      }
+      for (const group of groups.filter((candidate) => openableGroups.has(candidate.id))) {
+        if (group.required && !requested.some((selection) => selection.groupId === group.id)) throw new BadRequestException(`${group.name} requires a selection.`);
+      }
+
+      const unitPrice = Number(menuItem.price) + modifierPrice;
+      const subtotal = unitPrice * item.quantity;
 
       totalAmount += subtotal;
 
@@ -126,6 +161,7 @@ export class OrdersService {
           item.removeIngredients || null,
         addExtras: item.addExtras || null,
         selectedAllergens: item.selectedAllergens ?? [],
+        modifierSelections: modifierSnapshots,
         specialNotes:
           item.specialNotes || null,
       };
@@ -135,6 +171,26 @@ export class OrdersService {
       const currentFolio = roomStay.charges.reduce((sum, charge) => sum + Number(charge.amount), 0);
       if (currentFolio + totalAmount > Number(roomStay.chargeLimit)) throw new ConflictException('This guest stay charge limit would be exceeded');
     }
+
+    const stationTicketItems = new Map<PrepStation, Prisma.InputJsonObject[]>();
+    const addTicketLine = (station: PrepStation, line: Prisma.InputJsonObject) => stationTicketItems.set(station, [...(stationTicketItems.get(station) ?? []), line]);
+    orderItemsData.forEach((line, index) => {
+      const requestedLine = dto.items[index];
+      const menuItem = menuItems.find((candidate) => candidate.id === requestedLine.menuItemId)!;
+      const modifiers = line.modifierSelections as { groupId: string; groupName: string; station: PrepStation; options: { id: string; name: string; price: number }[] }[];
+      const sameStationModifiers = modifiers.filter((selection) => selection.station === menuItem.prepStation);
+      const itemStation = requestedLine.prepStation ?? menuItem.prepStation;
+      addTicketLine(itemStation, {
+        menuItemName: menuItem.name, quantity: line.quantity, modifierSelections: sameStationModifiers,
+        removeIngredients: line.removeIngredients, addExtras: line.addExtras, specialNotes: line.specialNotes, selectedAllergens: line.selectedAllergens,
+      });
+      const otherStations = [...new Set(modifiers.map((selection) => selection.station).filter((station) => station !== itemStation))];
+      for (const station of otherStations) addTicketLine(station, {
+        menuItemName: menuItem.name, quantity: line.quantity,
+        modifierSelections: modifiers.filter((selection) => selection.station === station),
+        specialNotes: line.specialNotes,
+      });
+    });
 
     const order = await this.prisma.$transaction(async (tx) => {
       if (dto.roomStayId) {
@@ -163,6 +219,9 @@ export class OrdersService {
           items: {
             create: orderItemsData,
           },
+          prepTickets: {
+            create: [...stationTicketItems.entries()].map(([station, items]) => ({ station, items })),
+          },
         },
         include: {
           items: {
@@ -173,6 +232,7 @@ export class OrdersService {
           table: true,
           waiter: { select: { id: true, name: true, email: true } },
           roomStay: { include: { room: true } },
+          prepTickets: true,
         },
       });
       if (paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && dto.roomStayId) {
@@ -188,7 +248,7 @@ export class OrdersService {
   activeRoomStays() {
     return this.prisma.roomStay.findMany({
       where: { checkedOutAt: null, room: { status: 'OCCUPIED' } },
-      select: { id: true, primaryGuestName: true, occupants: { select: { id: true, name: true } }, room: { select: { roomNumber: true } } },
+      select: { id: true, primaryGuestName: true, guestNotes: true, expectedCheckoutAt: true, occupants: { select: { id: true, name: true } }, room: { select: { roomNumber: true } } },
       orderBy: { checkedInAt: 'desc' },
     });
   }
@@ -258,6 +318,66 @@ export class OrdersService {
 
   async cookQueue() {
     return this.prisma.order.findMany({ where: { status: { in: [OrderStatus.PENDING, OrderStatus.PREPARING] } }, orderBy: { createdAt: 'asc' }, include: this.orderDetails() });
+  }
+
+  async prepQueue(station: PrepStation) {
+    return this.prisma.order.findMany({
+      where: { status: { in: [OrderStatus.PENDING, OrderStatus.PREPARING] }, prepTickets: { some: { station, status: { in: [PrepTicketStatus.PENDING, PrepTicketStatus.PREPARING] } } } },
+      orderBy: { createdAt: 'asc' }, include: this.orderDetails(),
+    });
+  }
+
+  async updatePrepTicket(ticketId: string, station: PrepStation, action: 'prepare' | 'ready') {
+    const ticket = await this.prisma.orderPrepTicket.findUnique({ where: { id: ticketId } });
+    if (!ticket || ticket.station !== station) throw new NotFoundException('Prep ticket not found');
+    const expected = action === 'prepare' ? PrepTicketStatus.PENDING : PrepTicketStatus.PREPARING;
+    if (ticket.status !== expected) throw new ConflictException('This prep ticket has already changed; refresh and retry');
+    const now = new Date();
+    const updated = await this.prisma.$transaction(async (tx) => {
+      const changed = await tx.orderPrepTicket.updateMany({
+        where: { id: ticketId, station, status: expected },
+        data: action === 'prepare' ? { status: PrepTicketStatus.PREPARING, preparingAt: now } : { status: PrepTicketStatus.READY, readyAt: now },
+      });
+      if (!changed.count) throw new ConflictException('This prep ticket has already changed; refresh and retry');
+      const remaining = await tx.orderPrepTicket.count({ where: { orderId: ticket.orderId, status: { not: PrepTicketStatus.READY } } });
+      const order = await tx.order.findUniqueOrThrow({ where: { id: ticket.orderId }, select: { id: true, status: true, preparingAt: true } });
+      const nextStatus = remaining === 0 ? OrderStatus.READY : OrderStatus.PREPARING;
+      return tx.order.update({
+        where: { id: ticket.orderId },
+        data: {
+          ...(order.status !== nextStatus && order.status !== OrderStatus.SERVED && order.status !== OrderStatus.COMPLETED ? { status: nextStatus } : {}),
+          ...(nextStatus === OrderStatus.PREPARING && !order.preparingAt ? { preparingAt: now } : {}),
+          ...(nextStatus === OrderStatus.READY && order.status !== OrderStatus.READY ? { readyAt: now } : {}),
+        },
+        include: this.orderDetails(),
+      });
+    });
+    this.orderEvents.next({ type: 'updated', order: updated });
+    return updated;
+  }
+
+  async redirectPrepTicket(ticketId: string, station: PrepStation) {
+    const ticket = await this.prisma.orderPrepTicket.findUnique({ where: { id: ticketId } });
+    if (!ticket) throw new NotFoundException('Prep ticket not found');
+    if (ticket.station === station) throw new BadRequestException('This ticket is already assigned to that station');
+    if (ticket.status !== PrepTicketStatus.PENDING) throw new ConflictException('Only tickets that have not started preparation can be redirected');
+    const order = await this.prisma.$transaction(async (tx) => {
+      const destination = await tx.orderPrepTicket.findUnique({ where: { orderId_station: { orderId: ticket.orderId, station } } });
+      if (destination && destination.status !== PrepTicketStatus.PENDING) {
+        throw new ConflictException('The destination station already has a ticket in progress');
+      }
+      const moved = await tx.orderPrepTicket.updateMany({
+        where: { id: ticket.id, station: ticket.station, status: PrepTicketStatus.PENDING },
+        data: destination
+          ? { items: [...(destination.items as Prisma.InputJsonArray), ...(ticket.items as Prisma.InputJsonArray)] }
+          : { station },
+      });
+      if (!moved.count) throw new ConflictException('This prep ticket has already changed; refresh and retry');
+      if (destination) await tx.orderPrepTicket.delete({ where: { id: ticket.id } });
+      return tx.order.findUniqueOrThrow({ where: { id: ticket.orderId }, include: this.orderDetails() });
+    });
+    this.orderEvents.next({ type: 'updated', order });
+    return order;
   }
 
   async readyOrders() {
@@ -359,6 +479,6 @@ export class OrdersService {
   }
 
   private orderDetails() {
-    return { items: { include: { menuItem: true } }, table: true, roomStay: { include: { room: true, occupants: true } }, waiter: { select: { id: true, name: true } }, servedBy: { select: { id: true, name: true } }, paidBy: { select: { id: true, name: true } } };
+    return { items: { include: { menuItem: true } }, prepTickets: true, table: true, roomStay: { include: { room: true, occupants: true } }, waiter: { select: { id: true, name: true } }, servedBy: { select: { id: true, name: true } }, paidBy: { select: { id: true, name: true } } };
   }
 }

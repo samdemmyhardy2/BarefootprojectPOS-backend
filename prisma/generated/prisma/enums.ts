@@ -91,6 +91,7 @@ export type RoomChargeKind = (typeof RoomChargeKind)[keyof typeof RoomChargeKind
 export const OrderPaymentMethod = {
   CASH: 'CASH',
   CARD: 'CARD',
+  PROMPTPAY: 'PROMPTPAY',
   ROOM_CHECKOUT: 'ROOM_CHECKOUT'
 } as const
 
@@ -121,3 +122,37 @@ export const TaskStatus = {
 } as const
 
 export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
+
+
+export const ModifierSelectionType = {
+  SINGLE: 'SINGLE',
+  MULTIPLE: 'MULTIPLE'
+} as const
+
+export type ModifierSelectionType = (typeof ModifierSelectionType)[keyof typeof ModifierSelectionType]
+
+
+export const PrepStation = {
+  KITCHEN: 'KITCHEN',
+  BAR: 'BAR'
+} as const
+
+export type PrepStation = (typeof PrepStation)[keyof typeof PrepStation]
+
+
+export const ModifierMadeAt = {
+  SAME_AS_DISH: 'SAME_AS_DISH',
+  KITCHEN: 'KITCHEN',
+  BAR: 'BAR'
+} as const
+
+export type ModifierMadeAt = (typeof ModifierMadeAt)[keyof typeof ModifierMadeAt]
+
+
+export const PrepTicketStatus = {
+  PENDING: 'PENDING',
+  PREPARING: 'PREPARING',
+  READY: 'READY'
+} as const
+
+export type PrepTicketStatus = (typeof PrepTicketStatus)[keyof typeof PrepTicketStatus]

@@ -65,7 +65,11 @@ export const ModelName = {
   RoomPayment: 'RoomPayment',
   Category: 'Category',
   MenuItem: 'MenuItem',
+  ModifierGroup: 'ModifierGroup',
+  ModifierOption: 'ModifierOption',
+  MenuItemModifierGroup: 'MenuItemModifierGroup',
   Order: 'Order',
+  OrderPrepTicket: 'OrderPrepTicket',
   OrderItem: 'OrderItem'
 } as const
 
@@ -223,6 +227,8 @@ export const RoomChargeScalarFieldEnum = {
   quantity: 'quantity',
   unitPrice: 'unitPrice',
   amount: 'amount',
+  signedByName: 'signedByName',
+  signatureData: 'signatureData',
   occurredAt: 'occurredAt',
   settledAt: 'settledAt',
   createdAt: 'createdAt'
@@ -268,12 +274,65 @@ export const MenuItemScalarFieldEnum = {
   availableExtras: 'availableExtras',
   availableExtrasMy: 'availableExtrasMy',
   availableExtrasTh: 'availableExtrasTh',
+  position: 'position',
   categoryId: 'categoryId',
+  prepStation: 'prepStation',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MenuItemScalarFieldEnum = (typeof MenuItemScalarFieldEnum)[keyof typeof MenuItemScalarFieldEnum]
+
+
+export const ModifierGroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  nameMy: 'nameMy',
+  nameTh: 'nameTh',
+  category: 'category',
+  icon: 'icon',
+  appearance: 'appearance',
+  madeAt: 'madeAt',
+  required: 'required',
+  selectionType: 'selectionType',
+  minPicks: 'minPicks',
+  maxPicks: 'maxPicks',
+  includedPicks: 'includedPicks',
+  extraPickPrice: 'extraPickPrice',
+  allowDuplicates: 'allowDuplicates',
+  position: 'position',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ModifierGroupScalarFieldEnum = (typeof ModifierGroupScalarFieldEnum)[keyof typeof ModifierGroupScalarFieldEnum]
+
+
+export const ModifierOptionScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  name: 'name',
+  nameMy: 'nameMy',
+  nameTh: 'nameTh',
+  priceAdjustment: 'priceAdjustment',
+  defaultSelected: 'defaultSelected',
+  active: 'active',
+  position: 'position',
+  opensGroupId: 'opensGroupId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ModifierOptionScalarFieldEnum = (typeof ModifierOptionScalarFieldEnum)[keyof typeof ModifierOptionScalarFieldEnum]
+
+
+export const MenuItemModifierGroupScalarFieldEnum = {
+  menuItemId: 'menuItemId',
+  groupId: 'groupId',
+  position: 'position'
+} as const
+
+export type MenuItemModifierGroupScalarFieldEnum = (typeof MenuItemModifierGroupScalarFieldEnum)[keyof typeof MenuItemModifierGroupScalarFieldEnum]
 
 
 export const OrderScalarFieldEnum = {
@@ -302,6 +361,21 @@ export const OrderScalarFieldEnum = {
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
+export const OrderPrepTicketScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  station: 'station',
+  status: 'status',
+  items: 'items',
+  preparingAt: 'preparingAt',
+  readyAt: 'readyAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderPrepTicketScalarFieldEnum = (typeof OrderPrepTicketScalarFieldEnum)[keyof typeof OrderPrepTicketScalarFieldEnum]
+
+
 export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
@@ -311,6 +385,7 @@ export const OrderItemScalarFieldEnum = {
   removeIngredients: 'removeIngredients',
   addExtras: 'addExtras',
   selectedAllergens: 'selectedAllergens',
+  modifierSelections: 'modifierSelections',
   specialNotes: 'specialNotes',
   subtotal: 'subtotal'
 } as const
@@ -332,6 +407,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

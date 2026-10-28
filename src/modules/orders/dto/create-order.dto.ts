@@ -13,7 +13,12 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { OrderPaymentMethod, OrderType } from 'prisma/generated/prisma/enums';
+import { OrderPaymentMethod, OrderType, PrepStation } from 'prisma/generated/prisma/enums';
+
+export class ModifierSelectionDto {
+  @ApiProperty({ format: 'uuid' }) @IsUUID() groupId: string;
+  @ApiProperty({ type: [String], format: 'uuid' }) @IsArray() @ArrayMaxSize(40) @IsUUID(undefined, { each: true }) optionIds: string[];
+}
 
 export class CreateOrderItemDto {
   @ApiProperty({
@@ -32,6 +37,10 @@ export class CreateOrderItemDto {
   @IsInt()
   @Min(1)
   quantity: number;
+
+  @ApiPropertyOptional({ enum: PrepStation, description: 'Preparation station for this order line. Defaults to the menu item station.' })
+  @IsOptional() @IsEnum(PrepStation)
+  prepStation?: PrepStation;
 
   @ApiPropertyOptional({
     description: 'Ingredients to exclude for allergy or preference reasons',
@@ -60,6 +69,10 @@ export class CreateOrderItemDto {
   @ApiPropertyOptional({ type: [String], description: 'Canonical English allergen labels selected from this menu item. Localized by each kitchen employee.' })
   @IsOptional() @IsArray() @ArrayMaxSize(40) @IsString({ each: true })
   selectedAllergens?: string[];
+
+  @ApiPropertyOptional({ type: [ModifierSelectionDto], description: 'Structured selections from the modifier groups attached to this menu item.' })
+  @IsOptional() @IsArray() @ArrayMaxSize(50) @ValidateNested({ each: true }) @Type(() => ModifierSelectionDto)
+  modifierSelections?: ModifierSelectionDto[];
 }
 
 export class CreateOrderDto {

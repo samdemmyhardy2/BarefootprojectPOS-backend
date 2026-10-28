@@ -411,7 +411,11 @@ export const ModelName = {
   RoomPayment: 'RoomPayment',
   Category: 'Category',
   MenuItem: 'MenuItem',
+  ModifierGroup: 'ModifierGroup',
+  ModifierOption: 'ModifierOption',
+  MenuItemModifierGroup: 'MenuItemModifierGroup',
   Order: 'Order',
+  OrderPrepTicket: 'OrderPrepTicket',
   OrderItem: 'OrderItem'
 } as const
 
@@ -428,7 +432,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "table" | "room" | "roomStay" | "roomOccupant" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "order" | "orderItem"
+    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "table" | "room" | "roomStay" | "roomOccupant" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "modifierGroup" | "modifierOption" | "menuItemModifierGroup" | "order" | "orderPrepTicket" | "orderItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1468,6 +1472,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ModifierGroup: {
+      payload: Prisma.$ModifierGroupPayload<ExtArgs>
+      fields: Prisma.ModifierGroupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ModifierGroupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ModifierGroupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>
+        }
+        findFirst: {
+          args: Prisma.ModifierGroupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ModifierGroupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>
+        }
+        findMany: {
+          args: Prisma.ModifierGroupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>[]
+        }
+        create: {
+          args: Prisma.ModifierGroupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>
+        }
+        createMany: {
+          args: Prisma.ModifierGroupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ModifierGroupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>[]
+        }
+        delete: {
+          args: Prisma.ModifierGroupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>
+        }
+        update: {
+          args: Prisma.ModifierGroupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>
+        }
+        deleteMany: {
+          args: Prisma.ModifierGroupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ModifierGroupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ModifierGroupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>[]
+        }
+        upsert: {
+          args: Prisma.ModifierGroupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierGroupPayload>
+        }
+        aggregate: {
+          args: Prisma.ModifierGroupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateModifierGroup>
+        }
+        groupBy: {
+          args: Prisma.ModifierGroupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ModifierGroupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ModifierGroupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ModifierGroupCountAggregateOutputType> | number
+        }
+      }
+    }
+    ModifierOption: {
+      payload: Prisma.$ModifierOptionPayload<ExtArgs>
+      fields: Prisma.ModifierOptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ModifierOptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ModifierOptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>
+        }
+        findFirst: {
+          args: Prisma.ModifierOptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ModifierOptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>
+        }
+        findMany: {
+          args: Prisma.ModifierOptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>[]
+        }
+        create: {
+          args: Prisma.ModifierOptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>
+        }
+        createMany: {
+          args: Prisma.ModifierOptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ModifierOptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>[]
+        }
+        delete: {
+          args: Prisma.ModifierOptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>
+        }
+        update: {
+          args: Prisma.ModifierOptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ModifierOptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ModifierOptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ModifierOptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ModifierOptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModifierOptionPayload>
+        }
+        aggregate: {
+          args: Prisma.ModifierOptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateModifierOption>
+        }
+        groupBy: {
+          args: Prisma.ModifierOptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ModifierOptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ModifierOptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ModifierOptionCountAggregateOutputType> | number
+        }
+      }
+    }
+    MenuItemModifierGroup: {
+      payload: Prisma.$MenuItemModifierGroupPayload<ExtArgs>
+      fields: Prisma.MenuItemModifierGroupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MenuItemModifierGroupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MenuItemModifierGroupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>
+        }
+        findFirst: {
+          args: Prisma.MenuItemModifierGroupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MenuItemModifierGroupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>
+        }
+        findMany: {
+          args: Prisma.MenuItemModifierGroupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>[]
+        }
+        create: {
+          args: Prisma.MenuItemModifierGroupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>
+        }
+        createMany: {
+          args: Prisma.MenuItemModifierGroupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MenuItemModifierGroupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>[]
+        }
+        delete: {
+          args: Prisma.MenuItemModifierGroupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>
+        }
+        update: {
+          args: Prisma.MenuItemModifierGroupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>
+        }
+        deleteMany: {
+          args: Prisma.MenuItemModifierGroupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MenuItemModifierGroupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MenuItemModifierGroupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>[]
+        }
+        upsert: {
+          args: Prisma.MenuItemModifierGroupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MenuItemModifierGroupPayload>
+        }
+        aggregate: {
+          args: Prisma.MenuItemModifierGroupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMenuItemModifierGroup>
+        }
+        groupBy: {
+          args: Prisma.MenuItemModifierGroupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MenuItemModifierGroupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MenuItemModifierGroupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MenuItemModifierGroupCountAggregateOutputType> | number
+        }
+      }
+    }
     Order: {
       payload: Prisma.$OrderPayload<ExtArgs>
       fields: Prisma.OrderFieldRefs
@@ -1539,6 +1765,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.OrderCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.OrderCountAggregateOutputType> | number
+        }
+      }
+    }
+    OrderPrepTicket: {
+      payload: Prisma.$OrderPrepTicketPayload<ExtArgs>
+      fields: Prisma.OrderPrepTicketFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderPrepTicketFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderPrepTicketFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderPrepTicketFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderPrepTicketFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>
+        }
+        findMany: {
+          args: Prisma.OrderPrepTicketFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>[]
+        }
+        create: {
+          args: Prisma.OrderPrepTicketCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>
+        }
+        createMany: {
+          args: Prisma.OrderPrepTicketCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderPrepTicketCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderPrepTicketDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>
+        }
+        update: {
+          args: Prisma.OrderPrepTicketUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderPrepTicketDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderPrepTicketUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderPrepTicketUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderPrepTicketUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPrepTicketPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderPrepTicketAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderPrepTicket>
+        }
+        groupBy: {
+          args: Prisma.OrderPrepTicketGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderPrepTicketGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderPrepTicketCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderPrepTicketCountAggregateOutputType> | number
         }
       }
     }
@@ -1793,6 +2093,8 @@ export const RoomChargeScalarFieldEnum = {
   quantity: 'quantity',
   unitPrice: 'unitPrice',
   amount: 'amount',
+  signedByName: 'signedByName',
+  signatureData: 'signatureData',
   occurredAt: 'occurredAt',
   settledAt: 'settledAt',
   createdAt: 'createdAt'
@@ -1838,12 +2140,65 @@ export const MenuItemScalarFieldEnum = {
   availableExtras: 'availableExtras',
   availableExtrasMy: 'availableExtrasMy',
   availableExtrasTh: 'availableExtrasTh',
+  position: 'position',
   categoryId: 'categoryId',
+  prepStation: 'prepStation',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MenuItemScalarFieldEnum = (typeof MenuItemScalarFieldEnum)[keyof typeof MenuItemScalarFieldEnum]
+
+
+export const ModifierGroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  nameMy: 'nameMy',
+  nameTh: 'nameTh',
+  category: 'category',
+  icon: 'icon',
+  appearance: 'appearance',
+  madeAt: 'madeAt',
+  required: 'required',
+  selectionType: 'selectionType',
+  minPicks: 'minPicks',
+  maxPicks: 'maxPicks',
+  includedPicks: 'includedPicks',
+  extraPickPrice: 'extraPickPrice',
+  allowDuplicates: 'allowDuplicates',
+  position: 'position',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ModifierGroupScalarFieldEnum = (typeof ModifierGroupScalarFieldEnum)[keyof typeof ModifierGroupScalarFieldEnum]
+
+
+export const ModifierOptionScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  name: 'name',
+  nameMy: 'nameMy',
+  nameTh: 'nameTh',
+  priceAdjustment: 'priceAdjustment',
+  defaultSelected: 'defaultSelected',
+  active: 'active',
+  position: 'position',
+  opensGroupId: 'opensGroupId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ModifierOptionScalarFieldEnum = (typeof ModifierOptionScalarFieldEnum)[keyof typeof ModifierOptionScalarFieldEnum]
+
+
+export const MenuItemModifierGroupScalarFieldEnum = {
+  menuItemId: 'menuItemId',
+  groupId: 'groupId',
+  position: 'position'
+} as const
+
+export type MenuItemModifierGroupScalarFieldEnum = (typeof MenuItemModifierGroupScalarFieldEnum)[keyof typeof MenuItemModifierGroupScalarFieldEnum]
 
 
 export const OrderScalarFieldEnum = {
@@ -1872,6 +2227,21 @@ export const OrderScalarFieldEnum = {
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
+export const OrderPrepTicketScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  station: 'station',
+  status: 'status',
+  items: 'items',
+  preparingAt: 'preparingAt',
+  readyAt: 'readyAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderPrepTicketScalarFieldEnum = (typeof OrderPrepTicketScalarFieldEnum)[keyof typeof OrderPrepTicketScalarFieldEnum]
+
+
 export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
@@ -1881,6 +2251,7 @@ export const OrderItemScalarFieldEnum = {
   removeIngredients: 'removeIngredients',
   addExtras: 'addExtras',
   selectedAllergens: 'selectedAllergens',
+  modifierSelections: 'modifierSelections',
   specialNotes: 'specialNotes',
   subtotal: 'subtotal'
 } as const
@@ -1902,6 +2273,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -2111,6 +2489,48 @@ export type ListEnumRoomPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'PrepStation'
+ */
+export type EnumPrepStationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrepStation'>
+    
+
+
+/**
+ * Reference to a field of type 'PrepStation[]'
+ */
+export type ListEnumPrepStationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrepStation[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ModifierMadeAt'
+ */
+export type EnumModifierMadeAtFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModifierMadeAt'>
+    
+
+
+/**
+ * Reference to a field of type 'ModifierMadeAt[]'
+ */
+export type ListEnumModifierMadeAtFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModifierMadeAt[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ModifierSelectionType'
+ */
+export type EnumModifierSelectionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModifierSelectionType'>
+    
+
+
+/**
+ * Reference to a field of type 'ModifierSelectionType[]'
+ */
+export type ListEnumModifierSelectionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ModifierSelectionType[]'>
+    
+
+
+/**
  * Reference to a field of type 'OrderType'
  */
 export type EnumOrderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderType'>
@@ -2177,6 +2597,20 @@ export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'OrderStatus[]'
  */
 export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PrepTicketStatus'
+ */
+export type EnumPrepTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrepTicketStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PrepTicketStatus[]'
+ */
+export type ListEnumPrepTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PrepTicketStatus[]'>
     
 
 
@@ -2358,7 +2792,11 @@ export type GlobalOmitConfig = {
   roomPayment?: Prisma.RoomPaymentOmit
   category?: Prisma.CategoryOmit
   menuItem?: Prisma.MenuItemOmit
+  modifierGroup?: Prisma.ModifierGroupOmit
+  modifierOption?: Prisma.ModifierOptionOmit
+  menuItemModifierGroup?: Prisma.MenuItemModifierGroupOmit
   order?: Prisma.OrderOmit
+  orderPrepTicket?: Prisma.OrderPrepTicketOmit
   orderItem?: Prisma.OrderItemOmit
 }
 

@@ -7,6 +7,7 @@ import { UpdateTableStatusDto } from './dto/update-table-status.dto';
 import { CheckoutTableDto } from './dto/checkout-table.dto';
 import { OrderPaymentMethod, OrderPaymentStatus, OrderStatus, TableShape, TableStatus } from 'prisma/generated/prisma/enums';
 import { UpdateTableLayoutDto } from './dto/update-table-layout.dto';
+import { SettlePartyDto } from './dto/settle-party.dto';
 
 const tableSpan = (table: { width: number; height: number }) => ({ columns: table.width, rows: table.height });
 const occupiedSlots = (positionX: number, positionY: number, width: number, height: number) => {
@@ -116,6 +117,7 @@ export class TablesService {
   }
   async checkout(id: string, cashierId: string, dto: CheckoutTableDto) {
     if (dto.paymentMethod === OrderPaymentMethod.CARD) throw new BadRequestException('Use the room folio settlement flow to record a card payment');
+    if (dto.paymentMethod !== OrderPaymentMethod.CASH) throw new BadRequestException('Use the signed per-payer settlement flow for room folio or PromptPay payments');
     if (dto.paymentMethod === OrderPaymentMethod.CASH && dto.roomStayId) {
       throw new ConflictException('A room can only be selected when charging to the room folio');
     }
@@ -191,6 +193,43 @@ export class TablesService {
       }
       await tx.table.update({ where: { id }, data: { status: TableStatus.AVAILABLE, assignedRoomStays: { set: [] } } });
       return { tableId: id, tableNumber: table.tableNumber, paymentMethod: dto.paymentMethod, room: stay?.room ?? null, totalAmount, orderIds: orders.map((order) => order.id), checkedOutAt: now };
+    });
+  }
+  async settleParty(id: string, cashierId: string, dto: SettlePartyDto) {
+    const folio = dto.paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT;
+    if (folio && (!dto.signedByName?.trim() || !dto.signatureData?.trim())) throw new BadRequestException('A guest name and signature are required to add this bill to a room tab');
+    if (![OrderPaymentMethod.CASH, OrderPaymentMethod.CARD, OrderPaymentMethod.PROMPTPAY, OrderPaymentMethod.ROOM_CHECKOUT].includes(dto.paymentMethod)) throw new BadRequestException('Choose cash, card, PromptPay QR, or a room tab');
+    return this.prisma.$transaction(async (tx) => {
+      const table = await tx.table.findUnique({ where: { id }, include: { assignedRoomStays: { include: { room: true, occupants: true } } } });
+      if (!table) throw new NotFoundException('Table not found');
+      const orders = await tx.order.findMany({ where: { id: { in: [...new Set(dto.orderIds)] }, tableId: id }, include: { items: { include: { menuItem: true } } } });
+      if (orders.length !== new Set(dto.orderIds).size) throw new ConflictException('One or more selected orders do not belong to this table');
+      if (orders.some((order) => order.status !== OrderStatus.SERVED || order.paymentStatus !== OrderPaymentStatus.UNPAID)) throw new ConflictException('Selected orders must be served and unsettled');
+      const payerStayId = orders[0]?.roomStayId ?? null;
+      if (orders.some((order) => (order.roomStayId ?? null) !== payerStayId)) throw new ConflictException('Settle orders for one payer at a time');
+      const now = new Date();
+      let stay: { id: string; cashOnly: boolean; chargeLimit: Prisma.Decimal | null; charges: { amount: Prisma.Decimal }[]; room: { roomNumber: number } } | null = null;
+      if (folio) {
+        if (!payerStayId || !table.assignedRoomStays.some((entry) => entry.id === payerStayId)) throw new ConflictException('This payer does not have an active room assigned to this table');
+        stay = await tx.roomStay.findUnique({ where: { id: payerStayId }, select: { id: true, cashOnly: true, chargeLimit: true, charges: { where: { settledAt: null }, select: { amount: true } }, room: { select: { roomNumber: true } } } });
+        if (!stay) throw new NotFoundException('Room stay not found');
+        if (stay.cashOnly) throw new ConflictException('This guest stay is set to cash only');
+        const amount = orders.reduce((sum, order) => sum + Number(order.totalAmount), 0);
+        const currentFolio = stay.charges.reduce((sum, charge) => sum + Number(charge.amount), 0);
+        if (stay.chargeLimit !== null && currentFolio + amount > Number(stay.chargeLimit)) throw new ConflictException('This guest stay charge limit would be exceeded');
+      }
+      const assignedStay = payerStayId ? table.assignedRoomStays.find((entry) => entry.id === payerStayId) : null;
+      const roomGuestsSnapshot = assignedStay ? [{ roomNumber: assignedStay.room.roomNumber, guestName: assignedStay.primaryGuestName, guestNames: [...new Set([assignedStay.primaryGuestName, ...assignedStay.occupants.map((occupant) => occupant.name)])] }] : [];
+      for (const order of orders) {
+        if (folio) {
+          const summary = order.items.map((line) => `${line.quantity}× ${line.menuItem.name}`).join(', ');
+          await tx.roomCharge.create({ data: { stayId: payerStayId!, orderId: order.id, kind: 'RESTAURANT_ORDER', description: `Table ${table.tableNumber} restaurant order: ${summary}`, quantity: 1, unitPrice: Number(order.totalAmount), amount: Number(order.totalAmount), signedByName: dto.signedByName!.trim(), signatureData: dto.signatureData! } });
+        }
+        await tx.order.update({ where: { id: order.id }, data: { status: OrderStatus.COMPLETED, paymentMethod: dto.paymentMethod, paymentStatus: folio ? OrderPaymentStatus.ROOM_FOLIO : OrderPaymentStatus.PAID, ...(folio ? {} : { paidAt: now, paidById: cashierId }), roomGuestsSnapshot: roomGuestsSnapshot as Prisma.InputJsonValue } });
+      }
+      const remaining = await tx.order.count({ where: { tableId: id, status: { notIn: [OrderStatus.COMPLETED, OrderStatus.CANCELLED] } } });
+      if (remaining === 0) await tx.table.update({ where: { id }, data: { status: TableStatus.AVAILABLE, assignedRoomStays: { set: [] } } });
+      return { tableId: id, tableNumber: table.tableNumber, paymentMethod: dto.paymentMethod, room: stay?.room ?? null, orderIds: orders.map((order) => order.id), totalAmount: orders.reduce((sum, order) => sum + Number(order.totalAmount), 0), signedByName: folio ? dto.signedByName!.trim() : null, checkedOutAt: now, tableCleared: remaining === 0 };
     });
   }
   async remove(id: string) {

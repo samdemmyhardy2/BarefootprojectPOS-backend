@@ -33,8 +33,8 @@ export class RolesGuard implements CanActivate {
     if (currentUser.role === Role.ADMIN) return true;
     const jobTitle = currentUser.jobTitle.trim().toLowerCase().replace(/[^a-z]/g, '');
     const permissions: Record<JobPermission, string[]> = {
-      ORDER_CREATE: ['waiter', 'guestwelcomer', 'bungalowmanager'], ORDER_VIEW: ['waiter', 'chef'], ORDER_SERVE: ['waiter'],
-      KITCHEN: ['chef'], TABLES: ['waiter'],
+      ORDER_CREATE: ['waiter', 'guestwelcomer', 'bungalowmanager'], ORDER_VIEW: ['waiter', 'chef', 'bartender', 'barista', 'barman'], ORDER_SERVE: ['waiter'],
+      KITCHEN: ['chef'], BAR: ['bartender', 'barista', 'barman'], TABLES: ['waiter'],
       ROOM_VIEW: ['bungalowmanager', 'guestwelcomer', 'chiefaccountant', 'cashier'],
       ROOM_MANAGE: ['bungalowmanager', 'guestwelcomer'],
       ROOM_FOLIO: ['bungalowmanager', 'guestwelcomer', 'chiefaccountant', 'cashier'],

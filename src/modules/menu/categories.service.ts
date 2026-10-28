@@ -8,9 +8,29 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() { return this.prisma.category.findMany({ orderBy: { name: 'asc' }, include: { items: true } }); }
+  private readonly categoryInclude = {
+    items: {
+      orderBy: [{ position: 'asc' as const }, { name: 'asc' as const }],
+      include: {
+        modifierGroups: {
+          orderBy: { position: 'asc' as const },
+          include: {
+            group: {
+              include: {
+                options: { where: { active: true }, orderBy: { position: 'asc' as const }, include: { opensGroup: { include: { options: { where: { active: true }, orderBy: { position: 'asc' as const } } } } } },
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  findAll(includeItems = true) {
+    return this.prisma.category.findMany({ orderBy: { name: 'asc' }, ...(includeItems ? { include: this.categoryInclude } : {}) });
+  }
   async findOne(id: string) {
-    const category = await this.prisma.category.findUnique({ where: { id }, include: { items: true } });
+    const category = await this.prisma.category.findUnique({ where: { id }, include: this.categoryInclude });
     if (!category) throw new NotFoundException('Category not found');
     return category;
   }
