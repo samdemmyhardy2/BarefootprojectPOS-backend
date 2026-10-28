@@ -298,6 +298,14 @@ export class OrdersController {
   @ApiNotFoundResponse({ description: 'Order not found.' })
   acknowledgeReady(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') servedById: string) { return this.ordersService.acknowledgeReady(id, servedById); }
 
+  @JobPermissions('ORDER_SERVE')
+  @Patch(':id/revert')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Undo pickup and return a served order to ready' })
+  @ApiResponse({ status: 200, description: 'Order moved from SERVED back to READY.' })
+  @ApiNotFoundResponse({ description: 'Order not found.' })
+  revertReady(@Param('id', ParseUUIDPipe) id: string) { return this.ordersService.revertReady(id); }
+
   @Delete(':id')
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Delete an order (admin)' })

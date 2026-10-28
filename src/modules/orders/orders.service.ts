@@ -412,6 +412,21 @@ export class OrdersService {
   async cookReady(id: string) { return this.transition(id, OrderStatus.PREPARING, OrderStatus.READY); }
   async acknowledgeReady(id: string, servedById: string) { return this.transition(id, OrderStatus.READY, OrderStatus.SERVED, servedById); }
 
+  async revertReady(id: string) {
+    const changed = await this.prisma.order.updateMany({
+      where: { id, status: OrderStatus.SERVED },
+      data: { status: OrderStatus.READY, servedAt: null, servedById: null },
+    });
+    if (!changed.count) {
+      const order = await this.prisma.order.findUnique({ where: { id }, select: { id: true } });
+      if (!order) throw new NotFoundException('Order not found');
+      throw new ConflictException('Only a picked-up order can be reverted');
+    }
+    const updated = await this.prisma.order.findUniqueOrThrow({ where: { id }, include: this.orderDetails() });
+    this.orderEvents.next({ type: 'updated', order: updated });
+    return updated;
+  }
+
   async remove(id: string) {
     const order = await this.prisma.order.findUnique({ where: { id }, include: { roomCharge: true } });
     if (!order) throw new NotFoundException('Order not found');
