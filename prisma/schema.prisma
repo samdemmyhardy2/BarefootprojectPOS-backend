@@ -48,11 +48,6 @@ enum OrderType {
   PICKUP
 }
 
-enum RoomSize {
-  NORMAL
-  FAMILY
-}
-
 enum RoomStatus {
   AVAILABLE
   OCCUPIED
@@ -169,6 +164,17 @@ model ShiftBreak {
   @@index([employeeShiftId, endedAt])
 }
 
+model FloorSection {
+  id        String   @id @default(uuid())
+  name      String
+  position  Int
+  tables    Table[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([position])
+}
+
 model Table {
   id          String      @id @default(uuid())
   tableNumber String      @unique
@@ -179,19 +185,19 @@ model Table {
   positionY   Int         @default(0)
   width       Int         @default(2)
   height      Int         @default(2)
+  sectionId   String
+  section     FloorSection @relation(fields: [sectionId], references: [id])
   assignedRoomStays  RoomStay[]  @relation("TableRoomAssignments")
   orders      Order[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
+  @@index([sectionId])
 }
 
 model Room {
   id         String     @id @default(uuid())
-  roomNumber Int        @unique
-  size       RoomSize   @default(NORMAL)
-  usageFee   Decimal    @default(0) @db.Decimal(10, 2)
-  facilities String[]   @default([])
+  roomNumber String     @unique
   status     RoomStatus @default(AVAILABLE)
   stays      RoomStay[]
   createdAt  DateTime   @default(now())

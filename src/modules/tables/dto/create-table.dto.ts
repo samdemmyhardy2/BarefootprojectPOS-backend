@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Max, MaxLength, Min } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, Max, MaxLength, Min } from 'class-validator';
 import { TableShape, TableStatus } from 'prisma/generated/prisma/enums';
 
 export class CreateTableDto {
@@ -21,4 +21,7 @@ export class CreateTableDto {
 
   @ApiProperty({ minimum: 0, required: false, description: 'Row slot in the floor layout.' }) @IsOptional() @Type(() => Number) @IsInt() @Min(0)
   positionY?: number;
+
+  @ApiProperty({ format: 'uuid', required: false, description: 'Floor section that owns this table.' }) @IsOptional() @IsUUID()
+  sectionId?: string;
 }

@@ -70,6 +70,11 @@ export type EmployeeShift = Prisma.EmployeeShiftModel
  */
 export type ShiftBreak = Prisma.ShiftBreakModel
 /**
+ * Model FloorSection
+ * 
+ */
+export type FloorSection = Prisma.FloorSectionModel
+/**
  * Model Table
  * 
  */

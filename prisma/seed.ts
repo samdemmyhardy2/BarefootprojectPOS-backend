@@ -53,8 +53,9 @@ async function seed(): Promise<void> {
     })) });
   }
 
+  const section = await prisma.floorSection.upsert({ where: { position: 0 }, update: {}, create: { name: 'Main floor', position: 0 } });
   await prisma.table.createMany({ data: [2, 4, 2, 4, 4, 8, 2, 4, 8, 4].map((capacity, index) => ({
-    tableNumber: String(index + 1), capacity, status: TableStatus.AVAILABLE,
+    tableNumber: String(index + 1), capacity, status: TableStatus.AVAILABLE, sectionId: section.id,
   })) });
   console.info('Seed complete. Admin: admin@restaurant.com; employees: waiter1@restaurant.com and waiter2@restaurant.com. Set SEED_ADMIN_PASSWORD and SEED_EMPLOYEE_PASSWORD to override development passwords.');
 }

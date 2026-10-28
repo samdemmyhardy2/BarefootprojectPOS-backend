@@ -22,9 +22,27 @@ const occupiedSlots = (positionX: number, positionY: number, width: number, heig
 export class TablesService {
   constructor(private readonly prisma: PrismaService) {}
   findAll() { return this.prisma.table.findMany({ include: { assignedRoomStays: { include: { room: true, occupants: true } } }, orderBy: { tableNumber: 'asc' } }); }
+  findSections() {
+    return this.prisma.floorSection.findMany({ orderBy: { position: 'asc' } });
+  }
+  async createSection(name: string) {
+    const last = await this.prisma.floorSection.findFirst({ orderBy: { position: 'desc' }, select: { position: true } });
+    return this.prisma.floorSection.create({ data: { name, position: (last?.position ?? -1) + 1 } });
+  }
+  private async sectionForNewTable(sectionId?: string) {
+    if (sectionId) {
+      const section = await this.prisma.floorSection.findUnique({ where: { id: sectionId }, select: { id: true } });
+      if (!section) throw new NotFoundException('Floor section not found');
+      return section.id;
+    }
+    const first = await this.prisma.floorSection.findFirst({ orderBy: { position: 'asc' }, select: { id: true } });
+    if (!first) throw new NotFoundException('Floor section not found');
+    return first.id;
+  }
   async findOne(id: string) { const table = await this.prisma.table.findUnique({ where: { id }, include: { assignedRoomStays: { include: { room: true, occupants: true } } } }); if (!table) throw new NotFoundException('Table not found'); return table; }
   async create(dto: CreateTableDto) {
-    const existing = await this.prisma.table.findMany({ select: { positionX: true, positionY: true, width: true, height: true } });
+    const sectionId = await this.sectionForNewTable(dto.sectionId);
+    const existing = await this.prisma.table.findMany({ where: { sectionId }, select: { positionX: true, positionY: true, width: true, height: true } });
     const shape = dto.shape ?? (dto.capacity <= 2 ? TableShape.ROUND : dto.capacity >= 8 ? TableShape.OVAL : TableShape.RECTANGLE);
     const width = shape === TableShape.BAR ? 4 : 2;
     const height = 2;
@@ -60,6 +78,7 @@ export class TablesService {
       positionY,
       width,
       height,
+      sectionId,
     } }); }
     catch (error) { if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') throw new ConflictException('Table number already exists'); throw error; }
   }
@@ -93,19 +112,23 @@ export class TablesService {
     });
   }
   async updateLayout(dto: UpdateTableLayoutDto) {
-    const current = await this.prisma.table.findMany({ select: { id: true } });
+    const current = await this.prisma.table.findMany({ select: { id: true, sectionId: true } });
     const currentIds = new Set(current.map((table) => table.id));
+    const sectionById = new Map(current.map((table) => [table.id, table.sectionId]));
     const submittedIds = new Set(dto.tables.map((table) => table.id));
     if (dto.tables.length !== current.length || submittedIds.size !== dto.tables.length || dto.tables.some((table) => !currentIds.has(table.id))) {
       throw new BadRequestException('Layout must include every existing table exactly once');
     }
-    const slots = new Set<string>();
+    const slotsBySection = new Map<string, Set<string>>();
     for (const table of dto.tables) {
       const span = tableSpan(table);
       const tableSlots = occupiedSlots(table.positionX, table.positionY, span.columns, span.rows);
       if (table.positionX + span.columns > 12) throw new BadRequestException('A table shape extends beyond the floor boundary');
+      const sectionId = sectionById.get(table.id) ?? '';
+      const slots = slotsBySection.get(sectionId) ?? new Set<string>();
       if (tableSlots.some((slot) => slots.has(slot))) throw new BadRequestException('Table shapes cannot overlap on the floor');
       tableSlots.forEach((slot) => slots.add(slot));
+      slotsBySection.set(sectionId, slots);
     }
     return this.prisma.$transaction(async (tx) => {
       await Promise.all(dto.tables.map((table) => tx.table.update({
@@ -140,7 +163,7 @@ export class TablesService {
         throw new ConflictException('All table orders must be served before checkout');
       }
 
-      let stay: { id: string; room: { roomNumber: number }; cashOnly: boolean; chargeLimit: Prisma.Decimal | null; charges: { amount: Prisma.Decimal }[] } | null = null;
+      let stay: { id: string; room: { roomNumber: string }; cashOnly: boolean; chargeLimit: Prisma.Decimal | null; charges: { amount: Prisma.Decimal }[] } | null = null;
       if (dto.paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT && roomStayId) {
         const active = await tx.roomStay.updateMany({ where: { id: roomStayId, checkedOutAt: null }, data: { checkedOutAt: null } });
         if (!active.count) throw new ConflictException('The selected guest stay is no longer active');
@@ -208,7 +231,7 @@ export class TablesService {
       const payerStayId = orders[0]?.roomStayId ?? null;
       if (orders.some((order) => (order.roomStayId ?? null) !== payerStayId)) throw new ConflictException('Settle orders for one payer at a time');
       const now = new Date();
-      let stay: { id: string; cashOnly: boolean; chargeLimit: Prisma.Decimal | null; charges: { amount: Prisma.Decimal }[]; room: { roomNumber: number } } | null = null;
+      let stay: { id: string; cashOnly: boolean; chargeLimit: Prisma.Decimal | null; charges: { amount: Prisma.Decimal }[]; room: { roomNumber: string } } | null = null;
       if (folio) {
         if (!payerStayId || !table.assignedRoomStays.some((entry) => entry.id === payerStayId)) throw new ConflictException('This payer does not have an active room assigned to this table');
         stay = await tx.roomStay.findUnique({ where: { id: payerStayId }, select: { id: true, cashOnly: true, chargeLimit: true, charges: { where: { settledAt: null }, select: { amount: true } }, room: { select: { roomNumber: true } } } });

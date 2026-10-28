@@ -59,14 +59,6 @@ export const OrderType = {
 export type OrderType = (typeof OrderType)[keyof typeof OrderType]
 
 
-export const RoomSize = {
-  NORMAL: 'NORMAL',
-  FAMILY: 'FAMILY'
-} as const
-
-export type RoomSize = (typeof RoomSize)[keyof typeof RoomSize]
-
-
 export const RoomStatus = {
   AVAILABLE: 'AVAILABLE',
   OCCUPIED: 'OCCUPIED',

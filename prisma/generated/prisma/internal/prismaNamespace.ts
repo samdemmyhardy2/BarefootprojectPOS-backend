@@ -403,6 +403,7 @@ export const ModelName = {
   TaskAssignment: 'TaskAssignment',
   EmployeeShift: 'EmployeeShift',
   ShiftBreak: 'ShiftBreak',
+  FloorSection: 'FloorSection',
   Table: 'Table',
   Room: 'Room',
   RoomStay: 'RoomStay',
@@ -432,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "table" | "room" | "roomStay" | "roomOccupant" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "modifierGroup" | "modifierOption" | "menuItemModifierGroup" | "order" | "orderPrepTicket" | "orderItem"
+    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "floorSection" | "table" | "room" | "roomStay" | "roomOccupant" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "modifierGroup" | "modifierOption" | "menuItemModifierGroup" | "order" | "orderPrepTicket" | "orderItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -877,6 +878,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ShiftBreakCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ShiftBreakCountAggregateOutputType> | number
+        }
+      }
+    }
+    FloorSection: {
+      payload: Prisma.$FloorSectionPayload<ExtArgs>
+      fields: Prisma.FloorSectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FloorSectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FloorSectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>
+        }
+        findFirst: {
+          args: Prisma.FloorSectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FloorSectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>
+        }
+        findMany: {
+          args: Prisma.FloorSectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>[]
+        }
+        create: {
+          args: Prisma.FloorSectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>
+        }
+        createMany: {
+          args: Prisma.FloorSectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FloorSectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>[]
+        }
+        delete: {
+          args: Prisma.FloorSectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>
+        }
+        update: {
+          args: Prisma.FloorSectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.FloorSectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FloorSectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FloorSectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.FloorSectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FloorSectionPayload>
+        }
+        aggregate: {
+          args: Prisma.FloorSectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFloorSection>
+        }
+        groupBy: {
+          args: Prisma.FloorSectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FloorSectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FloorSectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FloorSectionCountAggregateOutputType> | number
         }
       }
     }
@@ -2027,6 +2102,17 @@ export const ShiftBreakScalarFieldEnum = {
 export type ShiftBreakScalarFieldEnum = (typeof ShiftBreakScalarFieldEnum)[keyof typeof ShiftBreakScalarFieldEnum]
 
 
+export const FloorSectionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  position: 'position',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FloorSectionScalarFieldEnum = (typeof FloorSectionScalarFieldEnum)[keyof typeof FloorSectionScalarFieldEnum]
+
+
 export const TableScalarFieldEnum = {
   id: 'id',
   tableNumber: 'tableNumber',
@@ -2037,6 +2123,7 @@ export const TableScalarFieldEnum = {
   positionY: 'positionY',
   width: 'width',
   height: 'height',
+  sectionId: 'sectionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2047,9 +2134,6 @@ export type TableScalarFieldEnum = (typeof TableScalarFieldEnum)[keyof typeof Ta
 export const RoomScalarFieldEnum = {
   id: 'id',
   roomNumber: 'roomNumber',
-  size: 'size',
-  usageFee: 'usageFee',
-  facilities: 'facilities',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2419,16 +2503,16 @@ export type ListEnumTableShapeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
- * Reference to a field of type 'RoomSize'
+ * Reference to a field of type 'RoomStatus'
  */
-export type EnumRoomSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomSize'>
+export type EnumRoomStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomStatus'>
     
 
 
 /**
- * Reference to a field of type 'RoomSize[]'
+ * Reference to a field of type 'RoomStatus[]'
  */
-export type ListEnumRoomSizeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomSize[]'>
+export type ListEnumRoomStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomStatus[]'>
     
 
 
@@ -2443,20 +2527,6 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-/**
- * Reference to a field of type 'RoomStatus'
- */
-export type EnumRoomStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomStatus'>
-    
-
-
-/**
- * Reference to a field of type 'RoomStatus[]'
- */
-export type ListEnumRoomStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoomStatus[]'>
     
 
 
@@ -2784,6 +2854,7 @@ export type GlobalOmitConfig = {
   taskAssignment?: Prisma.TaskAssignmentOmit
   employeeShift?: Prisma.EmployeeShiftOmit
   shiftBreak?: Prisma.ShiftBreakOmit
+  floorSection?: Prisma.FloorSectionOmit
   table?: Prisma.TableOmit
   room?: Prisma.RoomOmit
   roomStay?: Prisma.RoomStayOmit

@@ -602,6 +602,14 @@ export type EnumRoomChargeKindFieldUpdateOperationsInput = {
   set?: $Enums.RoomChargeKind
 }
 
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type RoomChargeCreateNestedOneWithoutOrderInput = {
   create?: Prisma.XOR<Prisma.RoomChargeCreateWithoutOrderInput, Prisma.RoomChargeUncheckedCreateWithoutOrderInput>
   connectOrCreate?: Prisma.RoomChargeCreateOrConnectWithoutOrderInput

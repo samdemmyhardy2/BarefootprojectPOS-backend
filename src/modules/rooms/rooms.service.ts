@@ -22,15 +22,13 @@ export class RoomsService {
   }
 
   async create(dto: CreateRoomDto) {
-    const facilities = this.cleanFacilities(dto.facilities);
-    try { return await this.prisma.room.create({ data: { ...dto, facilities, usageFee: dto.usageFee ?? 0 } }); }
+    try { return await this.prisma.room.create({ data: { roomNumber: dto.roomNumber } }); }
     catch (error) { if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') throw new ConflictException('Room number already exists'); throw error; }
   }
 
   async update(id: string, dto: UpdateRoomDto) {
     await this.findRoom(id);
-    const data = { ...dto, ...(dto.facilities !== undefined ? { facilities: this.cleanFacilities(dto.facilities) } : {}) };
-    try { return await this.prisma.room.update({ where: { id }, data }); }
+    try { return await this.prisma.room.update({ where: { id }, data: dto }); }
     catch (error) { if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') throw new ConflictException('Room number already exists'); throw error; }
   }
 
@@ -60,7 +58,7 @@ export class RoomsService {
   }
 
   async checkIn(roomId: string, dto: CheckInRoomDto) {
-    const room = await this.findRoom(roomId);
+    await this.findRoom(roomId);
     const names = [...new Set([dto.primaryGuestName, ...(dto.occupants ?? [])].map((name) => name.trim()).filter(Boolean))];
     if (!names.length) throw new BadRequestException('Enter at least one guest name');
     return this.prisma.$transaction(async (tx) => {
@@ -77,9 +75,6 @@ export class RoomsService {
           ...(dto.chargeLimit !== undefined ? { chargeLimit: dto.chargeLimit === null ? null : new Prisma.Decimal(dto.chargeLimit) } : {}),
         },
       });
-      if (Number(room.usageFee) > 0) {
-        await tx.roomCharge.create({ data: { stayId: stay.id, kind: RoomChargeKind.ROOM_FEE, description: 'Room usage fee', quantity: 1, unitPrice: room.usageFee, amount: room.usageFee } });
-      }
       return tx.roomStay.findUniqueOrThrow({ where: { id: stay.id }, include: this.stayDetails() });
     });
   }
@@ -180,12 +175,6 @@ export class RoomsService {
       }
       const changed = await tx.roomStay.updateMany({ where: { id: stayId, checkedOutAt: null }, data: { checkedOutAt: new Date() } });
       if (!changed.count) throw new ConflictException('This guest has already checked out');
-      // Backfill a room fee at checkout if this stay was created before the
-      // automatic check-in fee posting was in place. Never double-charge it.
-      const hasRoomFee = await tx.roomCharge.findFirst({ where: { stayId, kind: RoomChargeKind.ROOM_FEE }, select: { id: true } });
-      if (!hasRoomFee && Number(stay.room.usageFee) > 0) {
-        await tx.roomCharge.create({ data: { stayId, kind: RoomChargeKind.ROOM_FEE, description: 'Room usage fee', quantity: 1, unitPrice: stay.room.usageFee, amount: stay.room.usageFee } });
-      }
       const currentStay = await tx.roomStay.count({ where: { roomId: stay.roomId, checkedOutAt: null } });
       if (currentStay === 0) await tx.room.update({ where: { id: stay.roomId }, data: { status: RoomStatus.AVAILABLE } });
       const result = await tx.roomStay.findUniqueOrThrow({ where: { id: stayId }, include: this.stayDetails() });
@@ -201,10 +190,6 @@ export class RoomsService {
     return room;
   }
 
-  private cleanFacilities(facilities?: string[]) {
-    return [...new Set((facilities ?? []).map((facility) => facility.trim()).filter(Boolean))];
-  }
-
   private stayDetails() {
     return {
       room: true,
@@ -215,3 +200,4 @@ export class RoomsService {
     };
   }
 }
+

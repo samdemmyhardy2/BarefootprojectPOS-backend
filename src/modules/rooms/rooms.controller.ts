@@ -25,7 +25,7 @@ export class RoomsController {
   @Post() @Roles(Role.ADMIN) @ApiOperation({ summary: 'Create a room' }) @ApiResponse({ status: 201, description: 'Room created.' }) @ApiConflictResponse({ description: 'Room number already exists.' })
   create(@Body() dto: CreateRoomDto) { return this.rooms.create(dto); }
 
-  @Patch(':id') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Update room size, number, or usage fee' }) @ApiNotFoundResponse({ description: 'Room not found.' })
+  @Patch(':id') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Update a room number' }) @ApiNotFoundResponse({ description: 'Room not found.' })
   update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateRoomDto) { return this.rooms.update(id, dto); }
 
   @Patch(':id/status') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Set a room available, under maintenance, or archived' }) @ApiBadRequestResponse({ description: 'Room status cannot be set to OCCUPIED manually.' }) @ApiConflictResponse({ description: 'Check out active guests before changing room status.' })
@@ -35,7 +35,7 @@ export class RoomsController {
   remove(@Param('id', ParseUUIDPipe) id: string, @Query('deleteHistory') deleteHistory?: string) { return this.rooms.remove(id, deleteHistory === 'true'); }
 
   @JobPermissions('ROOM_MANAGE')
-  @Post(':id/check-in') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Check guests into a room and record its usage fee' }) @ApiResponse({ status: 201, description: 'Guest stay created with occupants and room fee.' }) @ApiConflictResponse({ description: 'Room is already occupied.' })
+  @Post(':id/check-in') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Check guests into a room' }) @ApiResponse({ status: 201, description: 'Guest stay created with occupants.' }) @ApiConflictResponse({ description: 'Room is already occupied.' })
   checkIn(@Param('id', ParseUUIDPipe) id: string, @Body() dto: CheckInRoomDto) { return this.rooms.checkIn(id, dto); }
 
   @JobPermissions('ROOM_FOLIO')

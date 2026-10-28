@@ -57,6 +57,7 @@ export const ModelName = {
   TaskAssignment: 'TaskAssignment',
   EmployeeShift: 'EmployeeShift',
   ShiftBreak: 'ShiftBreak',
+  FloorSection: 'FloorSection',
   Table: 'Table',
   Room: 'Room',
   RoomStay: 'RoomStay',
@@ -161,6 +162,17 @@ export const ShiftBreakScalarFieldEnum = {
 export type ShiftBreakScalarFieldEnum = (typeof ShiftBreakScalarFieldEnum)[keyof typeof ShiftBreakScalarFieldEnum]
 
 
+export const FloorSectionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  position: 'position',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FloorSectionScalarFieldEnum = (typeof FloorSectionScalarFieldEnum)[keyof typeof FloorSectionScalarFieldEnum]
+
+
 export const TableScalarFieldEnum = {
   id: 'id',
   tableNumber: 'tableNumber',
@@ -171,6 +183,7 @@ export const TableScalarFieldEnum = {
   positionY: 'positionY',
   width: 'width',
   height: 'height',
+  sectionId: 'sectionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -181,9 +194,6 @@ export type TableScalarFieldEnum = (typeof TableScalarFieldEnum)[keyof typeof Ta
 export const RoomScalarFieldEnum = {
   id: 'id',
   roomNumber: 'roomNumber',
-  size: 'size',
-  usageFee: 'usageFee',
-  facilities: 'facilities',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

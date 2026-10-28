@@ -14,12 +14,17 @@ import { GetUser } from '../../common/decorators/get-user.decorator';
 import { UpdateTableLayoutDto } from './dto/update-table-layout.dto';
 import { AssignTableRoomDto } from './dto/assign-table-room.dto';
 import { SettlePartyDto } from './dto/settle-party.dto';
+import { CreateFloorSectionDto } from './dto/create-floor-section.dto';
 
 @ApiTags('Tables') @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard) @Roles(Role.ADMIN, Role.EMPLOYEE) @Controller('tables') @JobPermissions('TABLES')
 export class TablesController {
   constructor(private readonly tables: TablesService) {}
   @Get() @ApiOperation({ summary: 'Get table grid and availability' }) @ApiResponse({ status: 200, description: 'Tables ordered by table number, including AVAILABLE, OCCUPIED, or RESERVED status.' })
   findAll() { return this.tables.findAll(); }
+  @Get('sections') @ApiOperation({ summary: 'List floor sections in display order' }) @ApiResponse({ status: 200, description: 'Named floor sections.' })
+  findSections() { return this.tables.findSections(); }
+  @Post('sections') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Add a named floor section (admin)' }) @ApiResponse({ status: 201, description: 'Floor section created.' })
+  createSection(@Body() dto: CreateFloorSectionDto) { return this.tables.createSection(dto.name); }
   @Get(':id') @ApiOperation({ summary: 'Get table by ID' }) @ApiResponse({ status: 200, description: 'Table returned.' }) @ApiNotFoundResponse({ description: 'Table not found.' })
   findOne(@Param('id', ParseUUIDPipe) id: string) { return this.tables.findOne(id); }
   @Patch('layout') @Roles(Role.ADMIN) @ApiOperation({ summary: 'Save all table floor positions and shapes (admin)' }) @ApiResponse({ status: 200, description: 'Floor layout saved atomically.' })
