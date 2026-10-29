@@ -100,6 +100,10 @@ export class CreateOrderDto {
   @IsOptional() @IsEnum(OrderPaymentMethod)
   paymentMethod?: OrderPaymentMethod;
 
+  @ApiPropertyOptional({ format: 'uuid', description: 'Client id for this send. Repeating it returns the original order instead of creating another.' })
+  @IsOptional() @IsUUID()
+  clientRequestId?: string;
+
   @ApiProperty({
     type: [CreateOrderItemDto],
     description: 'List of menu items included in this order',

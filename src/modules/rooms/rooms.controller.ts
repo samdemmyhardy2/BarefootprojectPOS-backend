@@ -43,7 +43,7 @@ export class RoomsController {
   updateStay(@Param('stayId', ParseUUIDPipe) stayId: string, @Body() dto: UpdateRoomStayDto) { return this.rooms.updateStay(stayId, dto); }
 
   @JobPermissions('ROOM_FOLIO')
-  @Post('stays/:stayId/settle') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Settle the current room tab and keep the guest stay open' }) @ApiResponse({ status: 201, description: 'Paid room folio and settlement details.' }) @ApiConflictResponse({ description: 'There is no open balance or the stay is closed.' })
+  @Post('stays/:stayId/settle') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Settle the room tab, or selected bills, and keep the guest stay open' }) @ApiResponse({ status: 201, description: 'Paid room folio and settlement details.' }) @ApiConflictResponse({ description: 'There is no open balance, a selected bill is already settled, or the stay is closed.' })
   settle(@Param('stayId', ParseUUIDPipe) stayId: string, @GetUser('id') cashierId: string, @Body() dto: SettleRoomStayDto) { return this.rooms.settle(stayId, cashierId, dto); }
 
   @JobPermissions('ROOM_FOLIO')

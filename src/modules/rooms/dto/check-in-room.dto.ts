@@ -1,8 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ArrayMaxSize, IsArray, IsBoolean, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsBoolean, IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CheckInRoomDto {
+  @ApiPropertyOptional({ format: 'uuid' }) @IsOptional() @IsUUID() clientRequestId?: string;
   @ApiProperty({ example: 'Jordan Lee' }) @IsString() @IsNotEmpty() @MaxLength(120) primaryGuestName!: string;
   @ApiPropertyOptional({ type: [String], example: ['Jordan Lee', 'Taylor Lee'] }) @IsOptional() @IsArray() @ArrayMaxSize(20) @IsString({ each: true }) occupants?: string[];
   @ApiPropertyOptional({ example: '2026-10-28T00:00:00.000Z' }) @IsOptional() @IsDateString() expectedCheckoutAt?: string;

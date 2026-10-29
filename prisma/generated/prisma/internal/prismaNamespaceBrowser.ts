@@ -71,6 +71,7 @@ export const ModelName = {
   MenuItemModifierGroup: 'MenuItemModifierGroup',
   Order: 'Order',
   OrderPrepTicket: 'OrderPrepTicket',
+  ClientSubmission: 'ClientSubmission',
   OrderItem: 'OrderItem'
 } as const
 
@@ -384,6 +385,18 @@ export const OrderPrepTicketScalarFieldEnum = {
 } as const
 
 export type OrderPrepTicketScalarFieldEnum = (typeof OrderPrepTicketScalarFieldEnum)[keyof typeof OrderPrepTicketScalarFieldEnum]
+
+
+export const ClientSubmissionScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  key: 'key',
+  userId: 'userId',
+  response: 'response',
+  createdAt: 'createdAt'
+} as const
+
+export type ClientSubmissionScalarFieldEnum = (typeof ClientSubmissionScalarFieldEnum)[keyof typeof ClientSubmissionScalarFieldEnum]
 
 
 export const OrderItemScalarFieldEnum = {

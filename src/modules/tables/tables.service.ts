@@ -1,5 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from 'prisma/generated/prisma/client';
+import { IdempotencyService } from '../../utils/prisma/idempotency.service';
 import { PrismaService } from '../../utils/prisma/prisma.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
@@ -20,7 +21,7 @@ const occupiedSlots = (positionX: number, positionY: number, width: number, heig
 
 @Injectable()
 export class TablesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly idempotency: IdempotencyService) {}
   findAll() { return this.prisma.table.findMany({ include: { assignedRoomStays: { include: { room: true, occupants: true } } }, orderBy: { tableNumber: 'asc' } }); }
   findSections() {
     return this.prisma.floorSection.findMany({ orderBy: { position: 'asc' } });
@@ -222,7 +223,10 @@ export class TablesService {
     const folio = dto.paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT;
     if (folio && (!dto.signedByName?.trim() || !dto.signatureData?.trim())) throw new BadRequestException('A guest name and signature are required to add this bill to a room tab');
     if (![OrderPaymentMethod.CASH, OrderPaymentMethod.CARD, OrderPaymentMethod.PROMPTPAY, OrderPaymentMethod.ROOM_CHECKOUT].includes(dto.paymentMethod)) throw new BadRequestException('Choose cash, card, PromptPay QR, or a room tab');
-    return this.prisma.$transaction(async (tx) => {
+    try {
+    return await this.prisma.$transaction(async (tx) => {
+      const prior = await this.idempotency.read(tx, 'table.settle', dto.clientRequestId);
+      if (prior) return prior;
       const table = await tx.table.findUnique({ where: { id }, include: { assignedRoomStays: { include: { room: true, occupants: true } } } });
       if (!table) throw new NotFoundException('Table not found');
       const orders = await tx.order.findMany({ where: { id: { in: [...new Set(dto.orderIds)] }, tableId: id }, include: { items: { include: { menuItem: true } } } });
@@ -252,8 +256,15 @@ export class TablesService {
       }
       const remaining = await tx.order.count({ where: { tableId: id, status: { notIn: [OrderStatus.COMPLETED, OrderStatus.CANCELLED] } } });
       if (remaining === 0) await tx.table.update({ where: { id }, data: { status: TableStatus.AVAILABLE, assignedRoomStays: { set: [] } } });
-      return { tableId: id, tableNumber: table.tableNumber, paymentMethod: dto.paymentMethod, room: stay?.room ?? null, orderIds: orders.map((order) => order.id), totalAmount: orders.reduce((sum, order) => sum + Number(order.totalAmount), 0), signedByName: folio ? dto.signedByName!.trim() : null, checkedOutAt: now, tableCleared: remaining === 0 };
+      const settled = { tableId: id, tableNumber: table.tableNumber, paymentMethod: dto.paymentMethod, room: stay?.room ?? null, orderIds: orders.map((order) => order.id), totalAmount: orders.reduce((sum, order) => sum + Number(order.totalAmount), 0), signedByName: folio ? dto.signedByName!.trim() : null, checkedOutAt: now, tableCleared: remaining === 0 };
+      await this.idempotency.write(tx, 'table.settle', dto.clientRequestId, cashierId, settled);
+      return settled;
     });
+    } catch (error) {
+      const saved = await this.idempotency.recover(error, 'table.settle', dto.clientRequestId);
+      if (saved) return saved;
+      throw error;
+    }
   }
   async remove(id: string) {
     await this.findOne(id);

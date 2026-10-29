@@ -7,6 +7,7 @@ import {
 import { Subject } from 'rxjs';
 import { Prisma } from 'prisma/generated/prisma/client';
 import { PrismaService } from 'src/utils/prisma/prisma.service';
+import { IdempotencyService } from 'src/utils/prisma/idempotency.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { TableStatus } from 'prisma/generated/prisma/enums';
@@ -16,7 +17,7 @@ import { OrderPageQueryDto } from './dto/order-page-query.dto';
 @Injectable()
 export class OrdersService {
   private readonly orderEvents = new Subject<{ type: 'created' | 'updated' | 'deleted'; order: object | string }>();
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService, private readonly idempotency: IdempotencyService) { }
 
   events() { return this.orderEvents.asObservable(); }
 
@@ -180,6 +181,8 @@ export class OrdersService {
       const modifiers = line.modifierSelections as { groupId: string; groupName: string; station: PrepStation; options: { id: string; name: string; price: number }[] }[];
       const sameStationModifiers = modifiers.filter((selection) => selection.station === menuItem.prepStation);
       const itemStation = requestedLine.prepStation ?? menuItem.prepStation;
+      // Staff serve this dish straight away. It stays on the order, ticket, and receipt, and never becomes a kitchen or bar ticket.
+      if (itemStation === PrepStation.BAR) return;
       addTicketLine(itemStation, {
         menuItemName: menuItem.name, quantity: line.quantity, modifierSelections: sameStationModifiers,
         removeIngredients: line.removeIngredients, addExtras: line.addExtras, specialNotes: line.specialNotes, selectedAllergens: line.selectedAllergens,
@@ -192,7 +195,12 @@ export class OrdersService {
       });
     });
 
+    let replay = false;
+    try {
     const order = await this.prisma.$transaction(async (tx) => {
+      const prior = await this.idempotency.read(tx, 'order.create', dto.clientRequestId);
+      if (prior) { replay = true; return prior; }
+      replay = false;
       if (dto.roomStayId) {
         // A conditional no-op update locks the stay row so a concurrent
         // checkout cannot close it between validation and order creation.
@@ -205,6 +213,8 @@ export class OrdersService {
         const tableClaim = await tx.table.updateMany({ where: { id: table.id, status: table.status }, data: { status: TableStatus.OCCUPIED } });
         if (!tableClaim.count) throw new ConflictException('Table status changed; refresh and retry');
       }
+      const prepTickets = [...stationTicketItems.entries()].map(([station, items]) => ({ station, items }));
+      const servedAtTable = prepTickets.length === 0;
       const created = await tx.order.create({
         data: {
           type: orderType,
@@ -216,12 +226,11 @@ export class OrdersService {
           paymentStatus: paymentMethod === OrderPaymentMethod.ROOM_CHECKOUT ? OrderPaymentStatus.ROOM_FOLIO : OrderPaymentStatus.UNPAID,
           waiterId,
           totalAmount,
+          ...(servedAtTable ? { status: OrderStatus.SERVED, servedAt: new Date(), servedById: waiterId } : {}),
           items: {
             create: orderItemsData,
           },
-          prepTickets: {
-            create: [...stationTicketItems.entries()].map(([station, items]) => ({ station, items })),
-          },
+          ...(prepTickets.length ? { prepTickets: { create: prepTickets } } : {}),
         },
         include: {
           items: {
@@ -239,10 +248,16 @@ export class OrdersService {
         const summary = dto.items.map((line) => `${line.quantity}× ${menuItems.find((item) => item.id === line.menuItemId)?.name ?? 'item'}`).join(', ');
         await tx.roomCharge.create({ data: { stayId: dto.roomStayId, orderId: created.id, kind: 'RESTAURANT_ORDER', description: `Restaurant order: ${summary}`, quantity: 1, unitPrice: totalAmount, amount: totalAmount } });
       }
+      await this.idempotency.write(tx, 'order.create', dto.clientRequestId, waiterId, created);
       return created;
     });
-    this.orderEvents.next({ type: 'created', order });
+    if (!replay) this.orderEvents.next({ type: 'created', order: order as object });
     return order;
+    } catch (error) {
+      const saved = await this.idempotency.recover(error, 'order.create', dto.clientRequestId);
+      if (saved) return saved;
+      throw error;
+    }
   }
 
   activeRoomStays() {
@@ -270,7 +285,7 @@ export class OrdersService {
     if (from && to && from >= to) throw new BadRequestException('The start of the date range must be before its end');
     const where = from || to ? { createdAt: { ...(from ? { gte: from } : {}), ...(to ? { lt: to } : {}) } } : {};
     const [items, total] = await Promise.all([
-      this.prisma.order.findMany({ where, orderBy: { createdAt: 'desc' }, skip: offset, take: limit, include: this.orderDetails() }),
+      this.prisma.order.findMany({ where, orderBy: { createdAt: 'desc' }, skip: offset, take: limit, include: { ...this.orderDetails(), roomCharge: { select: { signedByName: true, signatureData: true } } } }),
       this.prisma.order.count({ where }),
     ]);
     return { items, total, offset, limit, hasMore: offset + items.length < total };
@@ -406,6 +421,58 @@ export class OrdersService {
     const completed = await this.prisma.order.findUniqueOrThrow({ where: { id }, include: this.orderDetails() });
     this.orderEvents.next({ type: 'updated', order: completed });
     return completed;
+  }
+
+  async pickupKitchenTicket(ticketId: string, servedById: string) {
+    const ticket = await this.prisma.orderPrepTicket.findUnique({ where: { id: ticketId }, select: { id: true, orderId: true, station: true } });
+    if (!ticket || ticket.station !== PrepStation.KITCHEN) throw new NotFoundException('Prep ticket not found');
+    return this.collectFromKitchen(ticket.orderId, servedById);
+  }
+
+  async pickupKitchenOrder(orderId: string, servedById: string) {
+    return this.collectFromKitchen(orderId, servedById);
+  }
+
+  private async collectFromKitchen(orderId: string, servedById: string) {
+    const now = new Date();
+    const updated = await this.prisma.$transaction(async (tx) => {
+      const order = await tx.order.findUnique({ where: { id: orderId }, select: { id: true, status: true, preparingAt: true, readyAt: true } });
+      if (!order) throw new NotFoundException('Order not found');
+      if (order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELLED) {
+        throw new ConflictException('This order can no longer be picked up');
+      }
+      if (order.status === OrderStatus.SERVED) {
+        return tx.order.findUniqueOrThrow({ where: { id: orderId }, include: this.orderDetails() });
+      }
+      await tx.orderPrepTicket.updateMany({
+        where: { orderId, station: PrepStation.KITCHEN, status: { in: [PrepTicketStatus.PENDING, PrepTicketStatus.PREPARING] } },
+        data: { status: PrepTicketStatus.READY, preparingAt: now, readyAt: now },
+      });
+      const remaining = await tx.orderPrepTicket.count({ where: { orderId, status: { not: PrepTicketStatus.READY } } });
+      if (remaining > 0) {
+        if (order.status !== OrderStatus.PENDING) {
+          return tx.order.findUniqueOrThrow({ where: { id: orderId }, include: this.orderDetails() });
+        }
+        return tx.order.update({
+          where: { id: orderId },
+          data: { status: OrderStatus.PREPARING, preparingAt: order.preparingAt ?? now },
+          include: this.orderDetails(),
+        });
+      }
+      return tx.order.update({
+        where: { id: orderId },
+        data: {
+          status: OrderStatus.SERVED,
+          preparingAt: order.preparingAt ?? now,
+          readyAt: order.readyAt ?? now,
+          servedAt: now,
+          servedById,
+        },
+        include: this.orderDetails(),
+      });
+    });
+    this.orderEvents.next({ type: 'updated', order: updated });
+    return updated;
   }
 
   async cookStart(id: string) { return this.transition(id, OrderStatus.PENDING, OrderStatus.PREPARING); }

@@ -428,6 +428,17 @@ model OrderPrepTicket {
   @@index([station, status, createdAt])
 }
 
+model ClientSubmission {
+  id        String   @id @default(uuid())
+  scope     String
+  key       String
+  userId    String
+  response  Json
+  createdAt DateTime @default(now())
+
+  @@unique([scope, key])
+}
+
 model OrderItem {
   id                String   @id @default(uuid())
   orderId           String

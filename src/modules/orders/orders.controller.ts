@@ -257,6 +257,22 @@ export class OrdersController {
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   readyKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string) { return this.ordersService.updatePrepTicket(ticketId, PrepStation.KITCHEN, 'ready'); }
 
+  @JobPermissions('KITCHEN', 'ORDER_SERVE')
+  @Patch('kitchen/tickets/:ticketId/pickup')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Waiter picks up a kitchen ticket and marks the order served' })
+  pickupKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string, @GetUser('id') servedById: string) {
+    return this.ordersService.pickupKitchenTicket(ticketId, servedById);
+  }
+
+  @JobPermissions('KITCHEN', 'ORDER_SERVE')
+  @Patch('kitchen/orders/:id/pickup')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Waiter picks up a kitchen order that has no prep ticket' })
+  pickupKitchenOrder(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') servedById: string) {
+    return this.ordersService.pickupKitchenOrder(id, servedById);
+  }
+
   @JobPermissions('BAR')
   @Patch('bar/tickets/:ticketId/prepare')
   @Roles(Role.ADMIN, Role.EMPLOYEE)

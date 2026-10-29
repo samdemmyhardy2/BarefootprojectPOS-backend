@@ -140,6 +140,11 @@ export type Order = Prisma.OrderModel
  */
 export type OrderPrepTicket = Prisma.OrderPrepTicketModel
 /**
+ * Model ClientSubmission
+ * 
+ */
+export type ClientSubmission = Prisma.ClientSubmissionModel
+/**
  * Model OrderItem
  * 
  */

@@ -3,6 +3,10 @@ import { ArrayMaxSize, ArrayMinSize, IsArray, IsEnum, IsOptional, IsString, IsUU
 import { OrderPaymentMethod } from 'prisma/generated/prisma/enums';
 
 export class SettlePartyDto {
+  @ApiPropertyOptional({ format: 'uuid' })
+  @IsOptional() @IsUUID()
+  clientRequestId?: string;
+
   @ApiProperty({ type: [String], format: 'uuid' })
   @IsArray() @ArrayMinSize(1) @ArrayMaxSize(100) @IsUUID(undefined, { each: true })
   orderIds!: string[];

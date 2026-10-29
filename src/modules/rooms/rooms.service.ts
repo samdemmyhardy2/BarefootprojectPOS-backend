@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from 'prisma/generated/prisma/client';
 import { OrderPaymentStatus, OrderStatus, RoomChargeKind, RoomPaymentMethod, RoomStatus } from 'prisma/generated/prisma/enums';
+import { IdempotencyService } from '../../utils/prisma/idempotency.service';
 import { PrismaService } from '../../utils/prisma/prisma.service';
 import { CheckInRoomDto } from './dto/check-in-room.dto';
 import { CreateRoomChargeDto } from './dto/create-room-charge.dto';
@@ -12,7 +13,7 @@ import { SettleRoomStayDto } from './dto/settle-room-stay.dto';
 
 @Injectable()
 export class RoomsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly idempotency: IdempotencyService) {}
 
   findAll() {
     return this.prisma.room.findMany({
@@ -61,7 +62,10 @@ export class RoomsService {
     await this.findRoom(roomId);
     const names = [...new Set([dto.primaryGuestName, ...(dto.occupants ?? [])].map((name) => name.trim()).filter(Boolean))];
     if (!names.length) throw new BadRequestException('Enter at least one guest name');
-    return this.prisma.$transaction(async (tx) => {
+    try {
+    const stay = await this.prisma.$transaction(async (tx) => {
+      const prior = await this.idempotency.read(tx, 'room.check-in', dto.clientRequestId);
+      if (prior) return prior;
       const claimed = await tx.room.updateMany({ where: { id: roomId, status: RoomStatus.AVAILABLE }, data: { status: RoomStatus.OCCUPIED } });
       if (!claimed.count) throw new ConflictException('Room is already occupied');
       const stay = await tx.roomStay.create({
@@ -75,8 +79,16 @@ export class RoomsService {
           ...(dto.chargeLimit !== undefined ? { chargeLimit: dto.chargeLimit === null ? null : new Prisma.Decimal(dto.chargeLimit) } : {}),
         },
       });
-      return tx.roomStay.findUniqueOrThrow({ where: { id: stay.id }, include: this.stayDetails() });
+      const created = await tx.roomStay.findUniqueOrThrow({ where: { id: stay.id }, include: this.stayDetails() });
+      await this.idempotency.write(tx, 'room.check-in', dto.clientRequestId, 'check-in', created);
+      return created;
     });
+    return stay;
+    } catch (error) {
+      const saved = await this.idempotency.recover(error, 'room.check-in', dto.clientRequestId);
+      if (saved) return saved;
+      throw error;
+    }
   }
 
   async addCharge(stayId: string, dto: CreateRoomChargeDto) {
@@ -130,23 +142,36 @@ export class RoomsService {
   }
 
   async settle(stayId: string, receivedById: string, dto: SettleRoomStayDto) {
-    return this.prisma.$transaction(async (tx) => {
+    try {
+    return await this.prisma.$transaction(async (tx) => {
+      const prior = await this.idempotency.read(tx, 'room.settle', dto.clientRequestId);
+      if (prior) return prior;
       const stay = await tx.roomStay.findUnique({ where: { id: stayId }, include: { charges: { where: { settledAt: null }, select: { id: true, orderId: true, amount: true } } } });
       if (!stay) throw new NotFoundException('Room stay not found');
       if (stay.checkedOutAt) throw new ConflictException('Cannot settle a checked-out stay');
-      const amount = stay.charges.reduce((sum, charge) => sum + Number(charge.amount), 0);
+      const requestedIds = dto.chargeIds ? [...new Set(dto.chargeIds)] : null;
+      const charges = requestedIds ? stay.charges.filter((charge) => requestedIds.includes(charge.id)) : stay.charges;
+      if (requestedIds && charges.length !== requestedIds.length) throw new ConflictException('One or more bills are already settled or do not belong to this stay');
+      const amount = charges.reduce((sum, charge) => sum + Number(charge.amount), 0);
       if (amount <= 0) throw new ConflictException('There is no open room tab to settle');
       const now = new Date();
       await tx.roomPayment.create({ data: { stayId, amount: new Prisma.Decimal(amount), method: dto.method, note: dto.note?.trim() || null, receivedById } });
-      await tx.roomCharge.updateMany({ where: { id: { in: stay.charges.map((charge) => charge.id) } }, data: { settledAt: now } });
-      const orderIds = stay.charges.flatMap((charge) => charge.orderId ? [charge.orderId] : []);
+      await tx.roomCharge.updateMany({ where: { id: { in: charges.map((charge) => charge.id) } }, data: { settledAt: now } });
+      const orderIds = charges.flatMap((charge) => charge.orderId ? [charge.orderId] : []);
       if (orderIds.length) await tx.order.updateMany({ where: { id: { in: orderIds }, paymentStatus: OrderPaymentStatus.ROOM_FOLIO }, data: { paymentMethod: dto.method === RoomPaymentMethod.CARD ? 'CARD' : 'CASH', paymentStatus: OrderPaymentStatus.PAID, paidAt: now, paidById: receivedById } });
       const result = await tx.roomStay.findUniqueOrThrow({ where: { id: stayId }, include: this.stayDetails() });
       const openTotal = result.charges.filter((charge) => !charge.settledAt).reduce((sum, charge) => sum + Number(charge.amount), 0);
       const paidTotal = result.payments.reduce((sum, payment) => sum + Number(payment.amount), 0);
       const grossTotal = result.charges.reduce((sum, charge) => sum + Number(charge.amount), 0);
-      return { ...result, folioTotal: openTotal, grossTotal, paidTotal, balanceDue: openTotal };
+      const settled = { ...result, folioTotal: openTotal, grossTotal, paidTotal, balanceDue: openTotal };
+      await this.idempotency.write(tx, 'room.settle', dto.clientRequestId, receivedById, settled);
+      return settled;
     });
+    } catch (error) {
+      const saved = await this.idempotency.recover(error, 'room.settle', dto.clientRequestId);
+      if (saved) return saved;
+      throw error;
+    }
   }
 
   async history(roomId: string) {

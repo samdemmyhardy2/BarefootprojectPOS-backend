@@ -417,6 +417,7 @@ export const ModelName = {
   MenuItemModifierGroup: 'MenuItemModifierGroup',
   Order: 'Order',
   OrderPrepTicket: 'OrderPrepTicket',
+  ClientSubmission: 'ClientSubmission',
   OrderItem: 'OrderItem'
 } as const
 
@@ -433,7 +434,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "floorSection" | "table" | "room" | "roomStay" | "roomOccupant" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "modifierGroup" | "modifierOption" | "menuItemModifierGroup" | "order" | "orderPrepTicket" | "orderItem"
+    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "floorSection" | "table" | "room" | "roomStay" | "roomOccupant" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "modifierGroup" | "modifierOption" | "menuItemModifierGroup" | "order" | "orderPrepTicket" | "clientSubmission" | "orderItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1917,6 +1918,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ClientSubmission: {
+      payload: Prisma.$ClientSubmissionPayload<ExtArgs>
+      fields: Prisma.ClientSubmissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClientSubmissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClientSubmissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>
+        }
+        findFirst: {
+          args: Prisma.ClientSubmissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClientSubmissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>
+        }
+        findMany: {
+          args: Prisma.ClientSubmissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>[]
+        }
+        create: {
+          args: Prisma.ClientSubmissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>
+        }
+        createMany: {
+          args: Prisma.ClientSubmissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClientSubmissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>[]
+        }
+        delete: {
+          args: Prisma.ClientSubmissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>
+        }
+        update: {
+          args: Prisma.ClientSubmissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClientSubmissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClientSubmissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClientSubmissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ClientSubmissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientSubmissionPayload>
+        }
+        aggregate: {
+          args: Prisma.ClientSubmissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClientSubmission>
+        }
+        groupBy: {
+          args: Prisma.ClientSubmissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientSubmissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClientSubmissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientSubmissionCountAggregateOutputType> | number
+        }
+      }
+    }
     OrderItem: {
       payload: Prisma.$OrderItemPayload<ExtArgs>
       fields: Prisma.OrderItemFieldRefs
@@ -2324,6 +2399,18 @@ export const OrderPrepTicketScalarFieldEnum = {
 } as const
 
 export type OrderPrepTicketScalarFieldEnum = (typeof OrderPrepTicketScalarFieldEnum)[keyof typeof OrderPrepTicketScalarFieldEnum]
+
+
+export const ClientSubmissionScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  key: 'key',
+  userId: 'userId',
+  response: 'response',
+  createdAt: 'createdAt'
+} as const
+
+export type ClientSubmissionScalarFieldEnum = (typeof ClientSubmissionScalarFieldEnum)[keyof typeof ClientSubmissionScalarFieldEnum]
 
 
 export const OrderItemScalarFieldEnum = {
@@ -2868,6 +2955,7 @@ export type GlobalOmitConfig = {
   menuItemModifierGroup?: Prisma.MenuItemModifierGroupOmit
   order?: Prisma.OrderOmit
   orderPrepTicket?: Prisma.OrderPrepTicketOmit
+  clientSubmission?: Prisma.ClientSubmissionOmit
   orderItem?: Prisma.OrderItemOmit
 }
 
