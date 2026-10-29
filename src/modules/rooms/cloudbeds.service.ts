@@ -1,5 +1,6 @@
 import { BadGatewayException, BadRequestException, Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
+import { SAMPLE_ROOMS, sampleStays } from './sample-calendar';
 
 const CLOUDBEDS_API = 'https://api.cloudbeds.com/api/v1.3';
 
@@ -45,10 +46,15 @@ export type CloudbedsCalendarStay = {
   children: string;
   balance: number;
   sourceName: string;
+  tone?: string;
+  arriveTime?: string;
+  leaveTime?: string;
 };
 
 @Injectable()
 export class CloudbedsService {
+  private readonly sampleStatus = new Map<string, string>();
+
   constructor(private readonly rooms: RoomsService) {}
 
   configured() {
@@ -57,11 +63,17 @@ export class CloudbedsService {
 
   async calendar(from: string, to: string) {
     if (!this.configured()) {
-      return { configured: false as const, from, to, propertyID: null, rooms: [], stays: [] };
+      this.assertRange(from, to);
+      return {
+        configured: false as const,
+        from,
+        to,
+        propertyID: null,
+        rooms: SAMPLE_ROOMS,
+        stays: sampleStays(from, to, (reservationID) => this.sampleStatus.get(reservationID)),
+      };
     }
-    if (from > to) throw new BadRequestException('The calendar start date must be on or before the end date');
-    const span = this.daySpan(from, to);
-    if (span > 62) throw new BadRequestException('Choose a calendar range of 62 days or less');
+    this.assertRange(from, to);
     const propertyID = process.env.CLOUDBEDS_PROPERTY_ID?.trim() || undefined;
     const [roomPages, reservations] = await Promise.all([
       this.pages<{ propertyID: string; rooms: CloudbedsRoom[] }>('getRooms', { propertyIDs: propertyID, pageSize: 100, sort: 'room_position:asc' }),
@@ -83,6 +95,7 @@ export class CloudbedsService {
   }
 
   async checkIn(dto: { reservationID: string; subReservationID?: string; roomID?: string; roomName?: string; guestName?: string; checkOut?: string }) {
+    if (!this.configured()) return this.sampleAction(dto.reservationID, 'in_house');
     await this.post('postRoomCheckIn', {
       propertyID: process.env.CLOUDBEDS_PROPERTY_ID?.trim(),
       reservationID: dto.reservationID,
@@ -93,6 +106,7 @@ export class CloudbedsService {
   }
 
   async checkOut(dto: { reservationID: string; subReservationID?: string; roomID?: string; roomName?: string }) {
+    if (!this.configured()) return this.sampleAction(dto.reservationID, 'checked_out');
     await this.post('postRoomCheckOut', {
       propertyID: process.env.CLOUDBEDS_PROPERTY_ID?.trim(),
       reservationID: dto.reservationID,
@@ -208,6 +222,19 @@ export class CloudbedsService {
       throw new BadGatewayException(payload?.message || 'Cloudbeds rejected the request.');
     }
     return payload ?? { data: undefined };
+  }
+
+  private sampleAction(reservationID: string, roomStatus: 'in_house' | 'checked_out') {
+    if (!reservationID.startsWith('sample-')) {
+      throw new ServiceUnavailableException('Cloudbeds is not connected. Add CLOUDBEDS_API_KEY on the server.');
+    }
+    this.sampleStatus.set(reservationID, roomStatus);
+    return { success: true, folio: { opened: false, stayId: null, warning: null } };
+  }
+
+  private assertRange(from: string, to: string) {
+    if (from > to) throw new BadRequestException('The calendar start date must be on or before the end date');
+    if (this.daySpan(from, to) > 62) throw new BadRequestException('Choose a calendar range of 62 days or less');
   }
 
   private daySpan(from: string, to: string) {

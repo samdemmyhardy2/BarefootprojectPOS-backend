@@ -33,6 +33,9 @@ export class RoomsController {
   @Post('cloudbeds/check-out') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Check a Cloudbeds reservation room out' })
   cloudbedsCheckOut(@Body() dto: CloudbedsRoomActionDto) { return this.cloudbeds.checkOut(dto); }
 
+  @Get('calendar') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Local room calendar for a date range' })
+  calendar(@Query() query: CloudbedsCalendarQueryDto) { return this.rooms.calendar(query.from, query.to); }
+
   @Get() @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'List rooms and current guests' }) @ApiResponse({ status: 200, description: 'Room list and active stay details.' })
   findAll() { return this.rooms.findAll(); }
 

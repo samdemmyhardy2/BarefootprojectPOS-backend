@@ -22,6 +22,65 @@ export class RoomsService {
     });
   }
 
+  async calendar(from: string, to: string) {
+    if (from > to) throw new BadRequestException('The calendar start date must be on or before the end date');
+    const fromDate = new Date(`${from}T00:00:00`);
+    const toDate = new Date(`${to}T00:00:00`);
+    const rooms = await this.prisma.room.findMany({
+      orderBy: { roomNumber: 'asc' },
+      include: {
+        stays: {
+          where: {
+            checkedInAt: { lt: toDate },
+            OR: [
+              { checkedOutAt: { gt: fromDate } },
+              { checkedOutAt: null, expectedCheckoutAt: { gt: fromDate } },
+              { checkedOutAt: null, expectedCheckoutAt: null },
+            ],
+          },
+          include: { occupants: true },
+          orderBy: { checkedInAt: 'asc' },
+        },
+      },
+    });
+    return {
+      from,
+      to,
+      rooms: rooms.map((room) => ({
+        id: room.id,
+        roomNumber: room.roomNumber,
+        status: room.status,
+        stays: room.stays.map((stay) => {
+          const start = stay.checkedInAt;
+          const plannedLeave = stay.checkedOutAt ?? stay.expectedCheckoutAt;
+          const leave = plannedLeave ?? toDate;
+          let end = this.dayKey(leave);
+          const startKey = this.dayKey(start);
+          if (end <= startKey) end = this.dayKey(new Date(start.getFullYear(), start.getMonth(), start.getDate() + 1));
+          return {
+            id: stay.id,
+            guestName: stay.primaryGuestName,
+            startDate: startKey,
+            endDate: end,
+            arriveTime: this.clock(start),
+            leaveTime: plannedLeave ? this.clock(plannedLeave) : '',
+            adults: String(Math.max(stay.occupants.length, 1)),
+            guestNotes: stay.guestNotes,
+            checkedOut: Boolean(stay.checkedOutAt),
+          };
+        }),
+      })),
+    };
+  }
+
+  private dayKey(value: Date) {
+    return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
+  }
+
+  private clock(value: Date) {
+    return `${String(value.getHours()).padStart(2, '0')}:${String(value.getMinutes()).padStart(2, '0')}`;
+  }
+
   async create(dto: CreateRoomDto) {
     try { return await this.prisma.room.create({ data: { roomNumber: dto.roomNumber } }); }
     catch (error) { if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') throw new ConflictException('Room number already exists'); throw error; }
