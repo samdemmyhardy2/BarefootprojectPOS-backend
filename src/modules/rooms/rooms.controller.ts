@@ -13,11 +13,25 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 import { UpdateRoomStatusDto } from './dto/update-room-status.dto';
 import { UpdateRoomStayDto } from './dto/update-room-stay.dto';
 import { SettleRoomStayDto } from './dto/settle-room-stay.dto';
+import { CloudbedsCalendarQueryDto } from './dto/cloudbeds-calendar-query.dto';
+import { CloudbedsRoomActionDto } from './dto/cloudbeds-room-action.dto';
+import { CloudbedsService } from './cloudbeds.service';
 import { RoomsService } from './rooms.service';
 
 @ApiTags('Rooms') @ApiBearerAuth() @UseGuards(JwtAuthGuard, RolesGuard) @Controller('rooms') @JobPermissions('ROOM_VIEW')
 export class RoomsController {
-  constructor(private readonly rooms: RoomsService) {}
+  constructor(private readonly rooms: RoomsService, private readonly cloudbeds: CloudbedsService) {}
+
+  @Get('cloudbeds/calendar') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Cloudbeds room calendar for a date range' })
+  cloudbedsCalendar(@Query() query: CloudbedsCalendarQueryDto) { return this.cloudbeds.calendar(query.from, query.to); }
+
+  @JobPermissions('ROOM_MANAGE')
+  @Post('cloudbeds/check-in') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Check a Cloudbeds reservation room in' })
+  cloudbedsCheckIn(@Body() dto: CloudbedsRoomActionDto) { return this.cloudbeds.checkIn(dto); }
+
+  @JobPermissions('ROOM_MANAGE')
+  @Post('cloudbeds/check-out') @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'Check a Cloudbeds reservation room out' })
+  cloudbedsCheckOut(@Body() dto: CloudbedsRoomActionDto) { return this.cloudbeds.checkOut(dto); }
 
   @Get() @Roles(Role.ADMIN, Role.EMPLOYEE) @ApiOperation({ summary: 'List rooms and current guests' }) @ApiResponse({ status: 200, description: 'Room list and active stay details.' })
   findAll() { return this.rooms.findAll(); }
