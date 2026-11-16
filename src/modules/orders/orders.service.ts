@@ -720,6 +720,10 @@ export class OrdersService implements OnModuleInit {
     const ticket = await this.prisma.orderPrepTicket.findUnique({ where: { id: ticketId } });
     if (!ticket || ticket.station !== station) throw new NotFoundException('Prep ticket not found');
     const expected = action === 'prepare' ? PrepTicketStatus.PENDING : PrepTicketStatus.PREPARING;
+    const alreadyDone = action === 'prepare'
+      ? ticket.status === PrepTicketStatus.PREPARING || ticket.status === PrepTicketStatus.READY
+      : ticket.status === PrepTicketStatus.READY;
+    if (alreadyDone) return presentOrder(await this.prisma.order.findUniqueOrThrow({ where: { id: ticket.orderId }, include: this.orderDetails() }));
     if (ticket.status !== expected) throw new ConflictException('This prep ticket has already changed; refresh and retry');
     const now = new Date();
     const updated = await this.prisma.$transaction(async (tx) => {
@@ -802,12 +806,16 @@ export class OrdersService implements OnModuleInit {
     return completed;
   }
 
-  async pickupKitchenTicket(ticketId: string, servedById: string | null) {
+  async pickupKitchenTicket(ticketId: string, servedById: string | null, clientRequestId?: string) {
+    try {
     const ticket = await this.prisma.orderPrepTicket.findUnique({ where: { id: ticketId }, select: { id: true, orderId: true, station: true, status: true, items: true } });
     if (!ticket || ticket.station !== PrepStation.KITCHEN) throw new NotFoundException('Prep ticket not found');
     const now = new Date();
     const portion = takeOneKitchenDish(ticket.items);
     const updated = await this.prisma.$transaction(async (tx) => {
+      const prior = await this.idempotency.read(tx, 'kitchen.pickup', clientRequestId);
+      if (prior) return { shown: prior, fresh: false };
+      let row;
       if (ticket.status !== PrepTicketStatus.READY && !portion.finished) {
         await tx.orderPrepTicket.update({
           where: { id: ticket.id },
@@ -819,32 +827,39 @@ export class OrdersService implements OnModuleInit {
       const order = await tx.order.findUnique({ where: { id: ticket.orderId }, select: { id: true, status: true, preparingAt: true, readyAt: true } });
       if (!order) throw new NotFoundException('Order not found');
       if (order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELLED || order.status === OrderStatus.SERVED) {
-        return tx.order.findUniqueOrThrow({ where: { id: order.id }, include: this.orderDetails() });
-      }
+        row = await tx.order.findUniqueOrThrow({ where: { id: order.id }, include: this.orderDetails() });
+      } else {
       const remaining = await tx.orderPrepTicket.count({ where: { orderId: order.id, status: { not: PrepTicketStatus.READY } } });
-      if (remaining > 0) {
-        return tx.order.update({
+      row = remaining > 0
+        ? await tx.order.update({
           where: { id: order.id },
           data: order.status === OrderStatus.PENDING ? { status: OrderStatus.PREPARING, preparingAt: order.preparingAt ?? now } : {},
           include: this.orderDetails(),
+        })
+        : await tx.order.update({
+          where: { id: order.id },
+          data: { status: OrderStatus.SERVED, preparingAt: order.preparingAt ?? now, readyAt: order.readyAt ?? now, servedAt: now, servedById },
+          include: this.orderDetails(),
         });
       }
-      return tx.order.update({
-        where: { id: order.id },
-        data: { status: OrderStatus.SERVED, preparingAt: order.preparingAt ?? now, readyAt: order.readyAt ?? now, servedAt: now, servedById },
-        include: this.orderDetails(),
-      });
+      const shown = presentOrder(row);
+      await this.idempotency.write(tx, 'kitchen.pickup', clientRequestId, servedById ?? 'system', shown);
+      return { shown, fresh: true };
     });
-    const shown = presentOrder(updated);
-    this.orderEvents.next({ type: 'updated', order: shown });
-    return shown;
+    if (updated.fresh) this.orderEvents.next({ type: 'updated', order: updated.shown });
+    return updated.shown;
+    } catch (error) {
+      const saved = await this.idempotency.recover(error, 'kitchen.pickup', clientRequestId);
+      if (saved) return saved;
+      throw error;
+    }
   }
 
-  async pickupKitchenOrder(orderId: string, servedById: string | null) {
-    return this.collectFromKitchen(orderId, servedById);
+  async pickupKitchenOrder(orderId: string, servedById: string | null, clientRequestId?: string) {
+    return this.collectFromKitchen(orderId, servedById, clientRequestId);
   }
 
-  private async collectFromKitchen(orderId: string, servedById: string | null) {
+  private async collectFromKitchen(orderId: string, servedById: string | null, _clientRequestId?: string) {
     const now = new Date();
     const updated = await this.prisma.$transaction(async (tx) => {
       const order = await tx.order.findUnique({ where: { id: orderId }, select: { id: true, status: true, preparingAt: true, readyAt: true } });
@@ -942,8 +957,10 @@ export class OrdersService implements OnModuleInit {
       },
     });
     if (!changed.count) {
-      const order = await this.prisma.order.findUnique({ where: { id }, select: { id: true, status: true } });
+      const order = await this.prisma.order.findUnique({ where: { id }, include: this.orderDetails() });
       if (!order) throw new NotFoundException('Order not found');
+      const rank: Record<string, number> = { PENDING: 0, PREPARING: 1, READY: 2, SERVED: 3, COMPLETED: 4 };
+      if ((rank[order.status] ?? -1) >= (rank[to] ?? 99)) return presentOrder(order);
       throw new ConflictException(`Order must be ${from} before it can become ${to}`);
     }
     const updated = await this.prisma.order.findUniqueOrThrow({ where: { id }, include: this.orderDetails() });
@@ -1000,10 +1017,10 @@ export class OrdersService implements OnModuleInit {
       include: { items: true, prepTickets: true, roomCharge: true },
     });
     if (!order) throw new NotFoundException('Order not found');
+    const item = order.items.find((entry) => entry.id === itemId);
+    if (!item) return presentOrder(await this.prisma.order.findUniqueOrThrow({ where: { id: orderId }, include: this.orderDetails() }));
     if (order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELLED) throw new ConflictException('This order is already closed');
     if (order.paymentStatus === OrderPaymentStatus.PAID) throw new ConflictException('This dish is already paid');
-    const item = order.items.find((entry) => entry.id === itemId);
-    if (!item) throw new NotFoundException('Dish not found');
     if (order.roomCharge?.settledAt) throw new ConflictException('This dish is already on a settled room bill');
     const bills = order.tableId ? await this.prisma.tableBill.findMany({ where: { tableId: order.tableId } }) : [];
     const billLines = (value: unknown) => (Array.isArray(value) ? value.map((line) => snapshotRecord(line)) : []);
@@ -1079,8 +1096,7 @@ export class OrdersService implements OnModuleInit {
     if (order.paymentStatus === OrderPaymentStatus.PAID) throw new ConflictException('This dish is already paid');
     if (order.status === OrderStatus.COMPLETED && order.paymentStatus !== OrderPaymentStatus.ROOM_FOLIO) throw new ConflictException('This order is already closed');
     const item = order.items.find((entry) => entry.id === itemId);
-    if (!item) throw new NotFoundException('Dish not found');
-    if (item.removedAt) throw new ConflictException('This dish is already removed');
+    if (!item || item.removedAt) return presentOrder(await this.prisma.order.findUniqueOrThrow({ where: { id: orderId }, include: this.orderDetails() }));
     if (order.roomCharge?.settledAt) throw new ConflictException('This dish is already on a settled room bill');
     const bills = order.tableId ? await this.prisma.tableBill.findMany({ where: { tableId: order.tableId } }) : [];
     const billLines = (value: unknown) => (Array.isArray(value) ? value.map((line) => snapshotRecord(line)) : []);

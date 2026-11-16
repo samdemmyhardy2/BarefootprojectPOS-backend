@@ -141,3 +141,9 @@ export class RemoveOrderItemDto {
   @MaxLength(240)
   reason!: string;
 }
+
+export class ClientRequestDto {
+  @ApiPropertyOptional({ format: 'uuid', description: 'Repeating this id returns the first result instead of doing the action again.' })
+  @IsOptional() @IsUUID()
+  clientRequestId?: string;
+}

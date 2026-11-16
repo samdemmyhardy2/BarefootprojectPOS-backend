@@ -373,9 +373,13 @@ export class TablesService {
       throw error;
     }
   }
-  async moveParty(id: string, destinationId: string) {
+  async moveParty(id: string, destinationId: string, clientRequestId?: string) {
     if (id === destinationId) throw new BadRequestException('Choose a different table');
-    const movedIds = await this.prisma.$transaction(async (tx) => {
+    let movedIds: string[];
+    try {
+    movedIds = await this.prisma.$transaction(async (tx) => {
+      const prior = await this.idempotency.read(tx, 'table.move', clientRequestId);
+      if (prior && typeof prior === 'object' && Array.isArray((prior as { orderIds?: unknown }).orderIds)) return (prior as { orderIds: string[] }).orderIds;
       const source = await tx.table.findUnique({ where: { id }, include: { assignedRoomStays: { select: { id: true } } } });
       const destination = await tx.table.findUnique({ where: { id: destinationId } });
       if (!source || !destination) throw new NotFoundException('Table not found');
@@ -409,8 +413,14 @@ export class TablesService {
       const sourceStillOpen = await tx.order.count({ where: { tableId: id, ...openWhere } });
       await tx.table.update({ where: { id }, data: { status: sourceStillOpen ? TableStatus.OCCUPIED : TableStatus.AVAILABLE } });
       if (orderIds.length) await tx.table.update({ where: { id: destinationId }, data: { status: TableStatus.OCCUPIED } });
+      await this.idempotency.write(tx, 'table.move', clientRequestId, 'system', { orderIds, destinationId });
       return orderIds;
     });
+    } catch (error) {
+      const saved = await this.idempotency.recover(error, 'table.move', clientRequestId);
+      if (saved && typeof saved === 'object' && Array.isArray((saved as { orderIds?: unknown }).orderIds)) movedIds = (saved as { orderIds: string[] }).orderIds;
+      else throw error;
+    }
     const [orders, tables] = await Promise.all([
       this.orders.publishUpdates(movedIds),
       this.prisma.table.findMany({ where: { id: { in: [id, destinationId] } }, include: this.tableView() }),

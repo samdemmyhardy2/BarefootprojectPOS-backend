@@ -30,7 +30,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto, RemoveOrderItemDto, SetKitchenFlagDto } from './dto/create-order.dto';
+import { ClientRequestDto, CreateOrderDto, RemoveOrderItemDto, SetKitchenFlagDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
@@ -306,15 +306,15 @@ export class OrdersController {
   @Public()
   @Patch('kitchen/tickets/:ticketId/pickup')
   @ApiOperation({ summary: 'Pick up a kitchen ticket from the open kitchen display' })
-  pickupKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string, @GetUser('id') servedById?: string) {
-    return this.ordersService.pickupKitchenTicket(ticketId, servedById ?? null);
+  pickupKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string, @GetUser('id') servedById: string | undefined, @Body() dto: ClientRequestDto) {
+    return this.ordersService.pickupKitchenTicket(ticketId, servedById ?? null, dto?.clientRequestId);
   }
 
   @Public()
   @Patch('kitchen/orders/:id/pickup')
   @ApiOperation({ summary: 'Pick up a kitchen order from the open kitchen display' })
-  pickupKitchenOrder(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') servedById?: string) {
-    return this.ordersService.pickupKitchenOrder(id, servedById ?? null);
+  pickupKitchenOrder(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') servedById: string | undefined, @Body() dto: ClientRequestDto) {
+    return this.ordersService.pickupKitchenOrder(id, servedById ?? null, dto?.clientRequestId);
   }
 
   @JobPermissions('BAR')
