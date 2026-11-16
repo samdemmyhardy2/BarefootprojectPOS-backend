@@ -15,9 +15,10 @@ import { RestaurantSettingsModule } from './modules/restaurant-settings/restaura
 import { TechnicalModule } from './modules/technical/technical.module';
 import { PrintingModule } from './modules/printing/printing.module';
 import { BackupModule } from './modules/backup/backup.module';
+import { SyncModule } from './modules/sync/sync.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, OrdersModule, MenuModule, TablesModule, EmployeesModule, RoomsModule, TasksModule, AnalyticsModule, RestaurantSettingsModule, TechnicalModule, PrintingModule, BackupModule],
+  imports: [PrismaModule, AuthModule, OrdersModule, MenuModule, TablesModule, EmployeesModule, RoomsModule, TasksModule, AnalyticsModule, RestaurantSettingsModule, TechnicalModule, PrintingModule, BackupModule, SyncModule],
   controllers: [AppController, HealthController],
   providers: [AppService],
 })

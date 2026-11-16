@@ -4,6 +4,7 @@ import { InboundEmailStatus } from 'prisma/generated/prisma/enums';
 import { PrismaService } from '../../utils/prisma/prisma.service';
 import { extractCloudbedsNotices, importOutcome, type ExtractedCloudbedsNotice } from './cloudbeds-email';
 import { RoomsService } from './rooms.service';
+import { syncRole } from '../sync/sync-tables';
 import { beginExclusiveSync, inboundMessageKey, isTemporaryMailError, mailConcurrency, mailLookback, mailMaxAttempts, mailResultForImport, mailRetryBaseMs, mailStaleMs, pumpMailQueue, renderImportAttempt, TemporaryMailError, type ImportAttemptStage, type MailQueueStore, type MailWorkResult, type QueuedMail } from './reservation-mail.queue';
 
 const MAX_MESSAGE_BYTES = 3_000_000;
@@ -35,6 +36,8 @@ export class ReservationMailService implements OnModuleInit, OnModuleDestroy {
   }
 
   onModuleInit() {
+    // The hosted server only mirrors the laptop; importing mail there would write rows the next sync overwrites.
+    if (syncRole() === 'server') return;
     this.ensurePump();
     this.schedule();
     if (!this.configured()) {

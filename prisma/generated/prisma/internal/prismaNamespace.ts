@@ -426,7 +426,9 @@ export const ModelName = {
   Printer: 'Printer',
   PrintJob: 'PrintJob',
   ClientSubmission: 'ClientSubmission',
-  OrderItem: 'OrderItem'
+  OrderItem: 'OrderItem',
+  SyncChange: 'SyncChange',
+  SyncState: 'SyncState'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -442,7 +444,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "floorSection" | "table" | "room" | "roomStay" | "emailSyncRun" | "inboundEmail" | "reservationNight" | "roomOccupant" | "commissionItem" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "modifierGroup" | "modifierOption" | "menuItemModifierGroup" | "order" | "tableSplit" | "orderPrepTicket" | "tableBill" | "printer" | "printJob" | "clientSubmission" | "orderItem"
+    modelProps: "user" | "restaurantSetting" | "task" | "taskAssignment" | "employeeShift" | "shiftBreak" | "floorSection" | "table" | "room" | "roomStay" | "emailSyncRun" | "inboundEmail" | "reservationNight" | "roomOccupant" | "commissionItem" | "roomCharge" | "roomPayment" | "category" | "menuItem" | "modifierGroup" | "modifierOption" | "menuItemModifierGroup" | "order" | "tableSplit" | "orderPrepTicket" | "tableBill" | "printer" | "printJob" | "clientSubmission" | "orderItem" | "syncChange" | "syncState"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2666,6 +2668,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SyncChange: {
+      payload: Prisma.$SyncChangePayload<ExtArgs>
+      fields: Prisma.SyncChangeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SyncChangeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SyncChangeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>
+        }
+        findFirst: {
+          args: Prisma.SyncChangeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SyncChangeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>
+        }
+        findMany: {
+          args: Prisma.SyncChangeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>[]
+        }
+        create: {
+          args: Prisma.SyncChangeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>
+        }
+        createMany: {
+          args: Prisma.SyncChangeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SyncChangeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>[]
+        }
+        delete: {
+          args: Prisma.SyncChangeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>
+        }
+        update: {
+          args: Prisma.SyncChangeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>
+        }
+        deleteMany: {
+          args: Prisma.SyncChangeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SyncChangeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SyncChangeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>[]
+        }
+        upsert: {
+          args: Prisma.SyncChangeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncChangePayload>
+        }
+        aggregate: {
+          args: Prisma.SyncChangeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSyncChange>
+        }
+        groupBy: {
+          args: Prisma.SyncChangeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SyncChangeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SyncChangeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SyncChangeCountAggregateOutputType> | number
+        }
+      }
+    }
+    SyncState: {
+      payload: Prisma.$SyncStatePayload<ExtArgs>
+      fields: Prisma.SyncStateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SyncStateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SyncStateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>
+        }
+        findFirst: {
+          args: Prisma.SyncStateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SyncStateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>
+        }
+        findMany: {
+          args: Prisma.SyncStateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>[]
+        }
+        create: {
+          args: Prisma.SyncStateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>
+        }
+        createMany: {
+          args: Prisma.SyncStateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SyncStateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>[]
+        }
+        delete: {
+          args: Prisma.SyncStateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>
+        }
+        update: {
+          args: Prisma.SyncStateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>
+        }
+        deleteMany: {
+          args: Prisma.SyncStateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SyncStateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SyncStateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>[]
+        }
+        upsert: {
+          args: Prisma.SyncStateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SyncStatePayload>
+        }
+        aggregate: {
+          args: Prisma.SyncStateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSyncState>
+        }
+        groupBy: {
+          args: Prisma.SyncStateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SyncStateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SyncStateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SyncStateCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3229,6 +3379,26 @@ export const OrderItemScalarFieldEnum = {
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
 
 
+export const SyncChangeScalarFieldEnum = {
+  id: 'id',
+  table: 'table',
+  op: 'op',
+  row: 'row',
+  createdAt: 'createdAt'
+} as const
+
+export type SyncChangeScalarFieldEnum = (typeof SyncChangeScalarFieldEnum)[keyof typeof SyncChangeScalarFieldEnum]
+
+
+export const SyncStateScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SyncStateScalarFieldEnum = (typeof SyncStateScalarFieldEnum)[keyof typeof SyncStateScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3599,6 +3769,20 @@ export type ListEnumPrintJobStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt[]'
+ */
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3792,6 +3976,8 @@ export type GlobalOmitConfig = {
   printJob?: Prisma.PrintJobOmit
   clientSubmission?: Prisma.ClientSubmissionOmit
   orderItem?: Prisma.OrderItemOmit
+  syncChange?: Prisma.SyncChangeOmit
+  syncState?: Prisma.SyncStateOmit
 }
 
 /* Types for Logging */

@@ -80,7 +80,9 @@ export const ModelName = {
   Printer: 'Printer',
   PrintJob: 'PrintJob',
   ClientSubmission: 'ClientSubmission',
-  OrderItem: 'OrderItem'
+  OrderItem: 'OrderItem',
+  SyncChange: 'SyncChange',
+  SyncState: 'SyncState'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -621,6 +623,26 @@ export const OrderItemScalarFieldEnum = {
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
+
+
+export const SyncChangeScalarFieldEnum = {
+  id: 'id',
+  table: 'table',
+  op: 'op',
+  row: 'row',
+  createdAt: 'createdAt'
+} as const
+
+export type SyncChangeScalarFieldEnum = (typeof SyncChangeScalarFieldEnum)[keyof typeof SyncChangeScalarFieldEnum]
+
+
+export const SyncStateScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SyncStateScalarFieldEnum = (typeof SyncStateScalarFieldEnum)[keyof typeof SyncStateScalarFieldEnum]
 
 
 export const SortOrder = {

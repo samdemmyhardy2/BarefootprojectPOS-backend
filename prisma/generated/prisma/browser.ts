@@ -167,3 +167,13 @@ export type ClientSubmission = Prisma.ClientSubmissionModel
  * 
  */
 export type OrderItem = Prisma.OrderItemModel
+/**
+ * Model SyncChange
+ * Every insert, update, and delete on this database, written by the sync_capture trigger and pushed to the hosted server.
+ */
+export type SyncChange = Prisma.SyncChangeModel
+/**
+ * Model SyncState
+ * Small key/value store for server sync progress, such as when the last full copy was sent.
+ */
+export type SyncState = Prisma.SyncStateModel

@@ -691,3 +691,19 @@ model OrderItem {
   removedAt         DateTime?
   removalReason     String?
 }
+
+/// Every insert, update, and delete on this database, written by the sync_capture trigger and pushed to the hosted server.
+model SyncChange {
+  id        BigInt   @id @default(autoincrement())
+  table     String
+  op        String
+  row       Json
+  createdAt DateTime @default(now())
+}
+
+/// Small key/value store for server sync progress, such as when the last full copy was sent.
+model SyncState {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
