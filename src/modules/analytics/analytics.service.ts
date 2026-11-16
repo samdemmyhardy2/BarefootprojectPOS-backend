@@ -100,15 +100,19 @@ export class AnalyticsService {
       for (const line of order.items) {
         const quantity = line.quantity;
         const lineRevenue = Number(line.subtotal);
-        const category = line.menuItem.category;
-        const categoryTotal = categoryTotals.get(category.id) ?? { id: category.id, name: category.name, quantity: 0, revenue: 0 };
+        const copy = line.itemSnapshot && typeof line.itemSnapshot === 'object' && !Array.isArray(line.itemSnapshot) ? line.itemSnapshot as { name?: string; categoryName?: string } : {};
+        const categoryId = line.menuItem?.category?.id ?? copy.categoryName ?? 'menu';
+        const categoryName = copy.categoryName || line.menuItem?.category?.name || 'Menu';
+        const dishId = line.menuItem?.id ?? line.menuItemId ?? copy.name ?? line.id;
+        const dishLabel = copy.name || line.menuItem?.name || 'Removed dish';
+        const categoryTotal = categoryTotals.get(categoryId) ?? { id: categoryId, name: categoryName, quantity: 0, revenue: 0 };
         categoryTotal.quantity += quantity;
         categoryTotal.revenue += lineRevenue;
-        categoryTotals.set(category.id, categoryTotal);
-        const dishTotal = dishTotals.get(line.menuItem.id) ?? { id: line.menuItem.id, name: line.menuItem.name, categoryName: category.name, quantity: 0, revenue: 0 };
+        categoryTotals.set(categoryId, categoryTotal);
+        const dishTotal = dishTotals.get(dishId) ?? { id: dishId, name: dishLabel, categoryName, quantity: 0, revenue: 0 };
         dishTotal.quantity += quantity;
         dishTotal.revenue += lineRevenue;
-        dishTotals.set(line.menuItem.id, dishTotal);
+        dishTotals.set(dishId, dishTotal);
       }
     }
 

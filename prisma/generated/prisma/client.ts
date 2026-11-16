@@ -90,10 +90,30 @@ export type Room = Prisma.RoomModel
  */
 export type RoomStay = Prisma.RoomStayModel
 /**
+ * Model EmailSyncRun
+ * 
+ */
+export type EmailSyncRun = Prisma.EmailSyncRunModel
+/**
+ * Model InboundEmail
+ * 
+ */
+export type InboundEmail = Prisma.InboundEmailModel
+/**
+ * Model ReservationNight
+ * 
+ */
+export type ReservationNight = Prisma.ReservationNightModel
+/**
  * Model RoomOccupant
  * 
  */
 export type RoomOccupant = Prisma.RoomOccupantModel
+/**
+ * Model CommissionItem
+ * 
+ */
+export type CommissionItem = Prisma.CommissionItemModel
 /**
  * Model RoomCharge
  * 
@@ -135,10 +155,30 @@ export type MenuItemModifierGroup = Prisma.MenuItemModifierGroupModel
  */
 export type Order = Prisma.OrderModel
 /**
+ * Model TableSplit
+ * 
+ */
+export type TableSplit = Prisma.TableSplitModel
+/**
  * Model OrderPrepTicket
  * 
  */
 export type OrderPrepTicket = Prisma.OrderPrepTicketModel
+/**
+ * Model TableBill
+ * 
+ */
+export type TableBill = Prisma.TableBillModel
+/**
+ * Model Printer
+ * 
+ */
+export type Printer = Prisma.PrinterModel
+/**
+ * Model PrintJob
+ * 
+ */
+export type PrintJob = Prisma.PrintJobModel
 /**
  * Model ClientSubmission
  * 

@@ -1,0 +1,316 @@
+Return-Path: <barefootproject.kohphayam+caf_=inbox=forward.starbridgemyanmar.tech@gmail.com>
+X-Original-To: inbox@forward.starbridgemyanmar.tech
+Delivered-To: inbox@forward.starbridgemyanmar.tech
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	by mail.starbridgemyanmar.tech (Postfix) with ESMTPS id 8DEB8C844E
+	for <inbox@forward.starbridgemyanmar.tech>; Mon,  2 Nov 2026 12:52:17 +0000 (UTC)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6acb9c018ffso4349241a12.1
+        for <inbox@forward.starbridgemyanmar.tech>; Mon, 02 Nov 2026 04:52:17 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; t=1793623935; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=g3QTQuBVnsg3VrZ3qDVHc/vi01vuaTOf5xW0DHvkugBNuqyKe8WlEtWWW4DznokyuX
+         gB1r//cR0u3xnVCBvP57lT64Hi97B6T5FpjMrAATntqzDI4DbRtlWKu467XhpTpqf+U9
+         o3nNPaM6RcaA/9j0Oook5KixZZB9yQN0SR0NlzwfVn4iuWPx6gfrpZunFuIo2aNRy2n4
+         kLuXfFArSxZm8E1sOzcGJVvNlRNiS5n+BEclkjngnIVGPgB19rYaM/gvTUaBOIwDn8Ra
+         alpCxPeFjMc0lPBOcGqNkmv2cWeWXoNj/sY1aMnZQ4hLwbKYs69W+LuATliwd2KgzlTh
+         N9ig==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:mime-version:subject:message-id:from:date:dkim-signature
+         :dkim-signature:delivered-to;
+        bh=xSKaOObUItnTV8dPFlEMqdBlhWEOuU5+avASr3Ds5HQ=;
+        fh=QC2KNz+K2crW6zOkjRvAhiFEJDwpkwnnR83/fYypGnc=;
+        b=rlepKtMxUB5tlUjzUfG/hJIJHehLVPmsY+5pFlAa/hvJCxhMJq3Y/L/NnSu+vf8xws
+         HsMO+Ki2CCf3UBvhDPhNpaH+P/Av0rYK/VI6lkkn1h6ipeydevDrJYt93iu8yt5qmqTg
+         41FBHPrY3Vi2llAGNZ0QRj3nxYUU3LP6b8oonpABF/Io/WciEdCjvGD/W3VoAxh2w6rq
+         iryk77UpPiyrWK6GacKKE6XG+eu1H6eYTTo5PnluUFP5QmfXw4PLg70csYYQ3gSNQJ5S
+         pWFkUj2UcItIkpiRrlUO5Mriz3H1/vwCOuf9gD6gtzRI1wxY8m29bHEr0edh4QlzHmuY
+         GbHw==;
+        darn=forward.starbridgemyanmar.tech
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@okta.com header.s=smtpapi header.b=FSlNlbjJ;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b=aGK1tip7;
+       spf=pass (google.com: domain of bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com designates 159.183.213.107 as permitted sender) smtp.mailfrom="bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=okta.com
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793623935; x=1794228735;
+        h=content-type:to:mime-version:subject:message-id:from:date
+         :dkim-signature:dkim-signature:delivered-to:x-forwarded-for
+         :x-forwarded-to:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xSKaOObUItnTV8dPFlEMqdBlhWEOuU5+avASr3Ds5HQ=;
+        b=uUpOUJG83laaKYeq0ARWotIHMLy41ZQqIVf5lcC/pBT1yHu9UGoQlFMsHspN7WhRfR
+         m7RJjp2QMek9d90OofjWVelI1FZbIVicnz4F4rfSH93uQ4NZzv0Hf/V/L3pTBEAXjG9m
+         TmKhEkXFAGPvXxJq+o/F2XR726gwnojgN/daY+5VSj7Q5OXMXDA2XNVP4UfmpjShpPnr
+         hCoREI/Z+zodWPP6uBe4xShE8Q8iXWG7W/qYONwXEqIrI1BTDvbi41s2Nzz6p23LkK3z
+         db2aF734UoEpM30QF9a/vY1AB2vrkc6NlVFqNFdHKmeTNhU6+oSKEEqClOYmI9Dz7WqA
+         oHnQ==
+X-Forwarded-Encrypted: i=2; AKwUvBxIKGGF3n7wHUmMDpVSamKJ+p1m63i17etnaJX0anGjhvq642AxoD6uPBD2djt2A0cbj2LHBg==@forward.starbridgemyanmar.tech
+X-Gm-Message-State: APuU4Z8Jm2LH+g5mysSSBIPGheg7k4Ka6D5JlViGZROBSA88sHPKjeFZ
+	S2iSGjuhXf1JHbfAikuzmBcUP9q5ymBtZ3tWyk1n0Tp/w+Ej+rQ/Q4EZbglAp/DnAvf8TUtK53A
+	DJNG/ruS4JZBnFtnzYa5AcTrGbMCi4FIFQxHqvCe5z8hz8LF9WhoorWNKcWPUYw==
+X-Received: by 2002:a05:6402:546:b0:6b3:b0b2:6e7 with SMTP id 4fb4d7f45d1cf-6b4b0c1f69fmr6752278a12.18.1793623934929;
+        Mon, 02 Nov 2026 04:52:14 -0800 (PST)
+X-Forwarded-To: inbox@forward.starbridgemyanmar.tech
+X-Forwarded-For: barefootproject.kohphayam@gmail.com inbox@forward.starbridgemyanmar.tech
+Delivered-To: barefootproject.kohphayam@gmail.com
+Received: by 2002:a05:7412:8c90:b0:230:df9d:739b with SMTP id xh16csp5369328rdb;
+        Mon, 2 Nov 2026 04:52:13 -0800 (PST)
+X-Received: by 2002:a05:6808:17a2:b0:55c:928:69d1 with SMTP id 5614622812f47-5640de74884mr7894904b6e.56.1793623933512;
+        Mon, 02 Nov 2026 04:52:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793623933; cv=none;
+        d=google.com; s=arc-20260327;
+        b=k1qa2Yphen7NBT7OxtOf3HIlRWz3Uyat1MjVquDAowv22qyLtQT6FicMMQltIniiIn
+         U882XqDEP6HjCo3GiqGvr/w7Z7sSdiYDC5nws8JfgMP4hvYpyAhThj4t8MaebbRoAEKJ
+         q2k3gpzMPVz48rYTH7lVdDEi4MB2wEBMDJrdipNhSFbuH51ruddXIw1e+qH4jkPYqZ7l
+         gzn662Gwmx2Ggm383zly796ee12mqQxzsG8Le0UNE7Bl6V6vsJM/H79BTud8/YHv1bN1
+         FJirAXb5FVm6grUDQIvz8z8zkUTjUETvZSmHo4cpjcjSLV7uVHnJc9sTIjKFDlH2FOmU
+         JyEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:mime-version:subject:message-id:from:date:dkim-signature
+         :dkim-signature;
+        bh=xSKaOObUItnTV8dPFlEMqdBlhWEOuU5+avASr3Ds5HQ=;
+        fh=AXim7Wzi8Oik6OAMU4xUX08Q27KdrXzfzs/YJ/E0Pxg=;
+        b=UMJmydQfPe4orz3W4rnui06uFjooAO9iWH/D3oKbwhNli5lqOKrqgeT/koGHa2EGK+
+         Fg0mMfvLP1SZ6/CWUnCqoHugI5fQZzSH3sXNQUdfjejwp5Bieifh3sHWU2vxgqUXBlt3
+         M0EyOfi6/SpsqBn/XOqlw/obHuB3x34SF3nmpb+hUG7/+6twvc2hKfUxdo5mFFBHmmZy
+         n9M22HaG8/iNcnyOZDW0gb3YA+k08dKDS8EAk64u3dNYCEJU+h8eWqZy4ONvkhYGxKfw
+         I0wG/uOpBUClsQFRGaSDcZ+xqlU3IZczaexdYgmBOja9Qj5vkVZnRfZbaNh6cO2Q0HTN
+         hddQ==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@okta.com header.s=smtpapi header.b=FSlNlbjJ;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b=aGK1tip7;
+       spf=pass (google.com: domain of bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com designates 159.183.213.107 as permitted sender) smtp.mailfrom="bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=okta.com
+Received: from o22.mailrelay.okta.com (o22.mailrelay.okta.com. [159.183.213.107])
+        by mx.google.com with ESMTPS id 5614622812f47-5640fe4619fsi12263414b6e.94.2026.11.02.04.52.13
+        for <barefootproject.kohphayam@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 04:52:13 -0800 (PST)
+Received-SPF: pass (google.com: domain of bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com designates 159.183.213.107 as permitted sender) client-ip=159.183.213.107;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@okta.com header.s=smtpapi header.b=FSlNlbjJ;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b=aGK1tip7;
+       spf=pass (google.com: domain of bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com designates 159.183.213.107 as permitted sender) smtp.mailfrom="bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=okta.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=okta.com;
+	h=date:from:subject:mime-version:to:content-type:cc:content-type:date:
+	feedback-id:from:subject:to;
+	s=smtpapi; t=1793623932;
+	bh=xSKaOObUItnTV8dPFlEMqdBlhWEOuU5+avASr3Ds5HQ=;
+	b=FSlNlbjJHM8sJFbngcItcczDItuwI1tLV3AUzESVsJjlrzSVtsVREDM55IlRHmA3ERf9
+	teAhMFApSNSpxr64AshqIpnkbDX1zYWvMJobSECz0ed4JFOscpIJeFG9NaDKRVjK3t04ds
+	BPdzXh757U+mX/N1dp1qHuVO6qasvETm8=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sendgrid.info;
+	h=date:from:subject:mime-version:to:content-type:cc:content-type:date:
+	feedback-id:from:subject:to;
+	s=smtpapi; t=1793623932;
+	bh=xSKaOObUItnTV8dPFlEMqdBlhWEOuU5+avASr3Ds5HQ=;
+	b=aGK1tip7/BB6iqCYgSGBIa9rIYny1GqsOzX41Yyzqvg5P9mhsRRgbwBzFvEodBllDTOL
+	+W6J3QIPqlyF2uVmRq9OtTF1rzz1NhGl2u4+jlUBhewGDEDzmQSCYeDYFJH+vC94nMhsnG
+	VQ1EwKeaJCcY5OWnw/Tr+rU0+nH90BSoA=
+Received: by recvd-d595d5f8b-hvvv8 with SMTP id recvd-d595d5f8b-hvvv8-1-6AE8877C-3E
+	2026-11-02 12:52:12.812575454 +0000 UTC m=+2922660.894440142
+Received: from mailrelay.okta.com (unknown)
+	by geopod-ismtpd-10 (SG)
+	with ESMTP id T7Q7eu-uQyqv37AmpRcA3Q
+	for <barefootproject.kohphayam@gmail.com>;
+	Mon, 02 Nov 2026 12:52:12.783 +0000 (UTC)
+Received: from ok12-majorapp-664bd7b89b-zhtcz (unknown [127.0.0.6])
+	by mailrelay.okta.com (Postfix) with ESMTP id ADB8810E5542
+	for <barefootproject.kohphayam@gmail.com>; Mon, 02 Nov 2026 12:52:12 +0000 (UTC)
+Date: Mon, 02 Nov 2026 12:52:12 +0000 (UTC)
+From: Okta <noreply@okta.com>
+Message-ID: <1146482716.90717.1793623932701@okta.com>
+Subject: New sign-on notification
+MIME-Version: 1.0
+X-SG-EID: 
+ =?us-ascii?Q?u001=2EcS44OXziC4iAKBVoW6hV9+Vzl2M9iX8v+knqf+qhfG+qYT0XUef1oUXZa?=
+ =?us-ascii?Q?jwg2TebLNnkvWLJ4bXsRTlU8AlN5XHK5f8JncNu?=
+ =?us-ascii?Q?v60haut+4AZb0cPaFbfZrClV+bRCwPJH8EvJ5ih?=
+ =?us-ascii?Q?3zeO2inuysCiROCkGmW75Dzb0sjtD5+KUmBBy0m?=
+ =?us-ascii?Q?iOAadtxyoAEWORKujRRNu1+cIUw9828bY56+PM+?=
+ =?us-ascii?Q?macdRlVMqu0zBfvjG6mk8qJqdxoxLkms4gRp64S?= =?us-ascii?Q?8Jpi?=
+X-SG-ID: 
+ =?us-ascii?Q?u001=2ESdBcvi+Evd=2FbQef8eZF3Bv4YNnBjOwhBT5PXAKkrf8Idd9mlJlkI5ZKjc?=
+ =?us-ascii?Q?Mnu92kNkgLEk8nS3htaq43rIVrS2w6np2Zo3+=2Fq?=
+ =?us-ascii?Q?D1csdj+3EVBgbAigP+6Kc0dNKd1Y=2Fd1uLtDUOuG?=
+ =?us-ascii?Q?s=2Fxhm2U=2F4xo0P2I=2FrMa7hINTBPD6r8BBtizdRm2?=
+ =?us-ascii?Q?W3GVq3Mh01Fmhgx2KBqB1sGgDUDk5HFb4W4Tb8K?=
+ =?us-ascii?Q?iZ6gAVgH7WUYyYWfTLk8ZdLp23VPf2T4yERmp=2Fh?=
+ =?us-ascii?Q?=2FToUOmGffqQAkEkFfF5OANgqOTluDDQSYytVhFX?=
+ =?us-ascii?Q?ba=2FufPULaI1mGW+3tA+77uacgyxERlrBIbyQ9o3?=
+ =?us-ascii?Q?v8VLebpYmhRJlvME0HyQsD1XV3GWLz=2FaqwZ945j?=
+ =?us-ascii?Q?8O4NDx3ZfOuKURzPgy6I3IIvJ0U4rzNhWP86BSw?=
+ =?us-ascii?Q?qGo=2F=2F3beKpiqwM=2FpbVQJsFI22N6GW+7UwZ5TBK6?=
+ =?us-ascii?Q?a?=
+To: barefootproject.kohphayam@gmail.com
+X-Entity-ID: u001.MofRC1Mfq+VAFIClfby/Lg==
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_90717_709353971.1793623932701"
+
+------=_Part_90717_709353971.1793623932701
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+
+
+   =20
+
+
+
+   =20
+       =20
+       =20
+           =20
+               =20
+                   =20
+                        Cloudbeds - New sign-on detected for your account
+                   =20
+               =20
+               =20
+                   =20
+                        Hi Sam,
+                   =20
+               =20
+               =20
+                   =20
+                        Your Cloudbeds Account barefootproject.kohphayam@gm=
+ail.com was just used to sign-in from a new or unrecognized device, browser=
+, or application.
+                   =20
+               =20
+               =20
+                   =20
+                        Sign-In Details
+                   =20
+               =20
+               =20
+                   =20
+                        SAFARI - Mac OS X (iPad)
+                       =20
+                        Monday, November 2, 2026
+                       =20
+                        Ko Samui, Surat Thani, Thailand
+                       =20
+                        IP: 223.205.201.98
+                   =20
+               =20
+               =20
+                   =20
+                        Don't recognize this activity?
+                   =20
+               =20
+               =20
+                   =20
+                        Your account may have been compromised; we recommen=
+d changing your password.
+                   =20
+               =20
+               =20
+                   =20
+                        The security of your account is very important to u=
+s and we want to ensure that you are updated when important actions are tak=
+en.
+                   =20
+               =20
+               =20
+                   =20
+                        We were unable to determine if you had previously s=
+igned in with this device before. This notification is common if you are si=
+gning in a new device, a new browser, have deleted your cookies or are acce=
+ssing Cloudbeds in Incognito Mode.
+                   =20
+               =20
+           =20
+       =20
+       =20
+           =20
+                This message was automatically generated on Monday, Novembe=
+r 2, 2026, at 12:52:12=E2=80=AFPM Coordinated Universal Time. Replies are n=
+ot monitored or answered.
+           =20
+       =20
+   =20
+
+
+
+
+------=_Part_90717_709353971.1793623932701
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/htm=
+l4/strict.dtd">
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; charset=
+=3DUTF-8"></head>
+<body><div style=3D"background-color:#ebebed;margin:0">
+  <table style=3D"font-family:'proxima nova' , 'century gothic' , 'arial' ,=
+ 'verdana' , sans-serif;font-size:14px;color:#5e5e5e;width:98%;max-width:60=
+0px;float:none;margin:0 auto" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" valign=3D"top" align=3D"left">
+    <tbody>
+      <tr align=3D"middle">
+        <td style=3D"padding-top:30px;padding-bottom:32px"><img src=3D"http=
+s://ok12static.oktacdn.com/fs/bco/1/fs0rcgtsgcSvtWtaT5d7" height=3D"37" /><=
+/td>
+      </tr>
+      <tr bgcolor=3D"#ffffff">
+        <td>
+          <table bgcolor=3D"#ffffff" style=3D"width:100%;line-height:20px;p=
+adding:32px;border:1px solid;border-color:#f0f0f0" cellpadding=3D"0">
+            <tbody>
+              <tr>
+                <td style=3D"color:#5e5e5e;font-size:22px;line-height:22px"=
+>Cloudbeds - New sign-on detected for your account</td>
+              </tr>
+              <tr>
+                <td style=3D"padding-top:24px">Hi Sam,</td>
+              </tr>
+              <tr>
+                <td style=3D"padding-top:24px">Your Cloudbeds Account baref=
+ootproject.kohphayam@gmail.com was just used to sign-in from a new or unrec=
+ognized device, browser, or application.</td>
+              </tr>
+              <tr>
+                <td style=3D"padding-top:24px;font-size:18px;font-weight:60=
+0;color:#5e5e5e;line-height:24px">Sign-In Details</td>
+              </tr>
+              <tr>
+                <td style=3D"line-height:24px">SAFARI - Mac OS X (iPad) <br=
+ /> Monday, November 2, 2026 <br /> Ko Samui, Surat Thani, Thailand <br /> =
+IP: 223.205.201.98</td>
+              </tr>
+              <tr>
+                <td style=3D"padding-top:24px;font-size:18px;font-weight:60=
+0;color:#5e5e5e;line-height:24px">Don't recognize this activity?</td>
+              </tr>
+              <tr>
+                <td>Your account may have been compromised; we recommend ch=
+anging your password.</td>
+              </tr>
+              <tr>
+                <td style=3D"padding-top:24px">The security of your account=
+ is very important to us and we want to ensure that you are updated when im=
+portant actions are taken.</td>
+              </tr>
+              <tr>
+                <td style=3D"padding-top:24px">We were unable to determine =
+if you had previously signed in with this device before. This notification =
+is common if you are signing in a new device, a new browser, have deleted y=
+our cookies or are accessing Cloudbeds in Incognito Mode.</td>
+              </tr>
+            </tbody>
+          </table></td>
+      </tr>
+      <tr>
+        <td style=3D"font-size:12px;padding:16px 0 30px 50px;color:#999">Th=
+is message was automatically generated on Monday, November 2, 2026, at 12:5=
+2:12=E2=80=AFPM Coordinated Universal Time. Replies are not monitored or an=
+swered.</td>
+      </tr>
+    </tbody>
+  </table>
+</div></body></html>
+------=_Part_90717_709353971.1793623932701--

@@ -4,6 +4,7 @@ import { ArrayMaxSize, IsArray, IsBoolean, IsEnum, IsIn, IsInt, IsNotEmpty, IsNu
 import { ModifierMadeAt, ModifierSelectionType } from 'prisma/generated/prisma/enums';
 
 export class ModifierOptionInputDto {
+  @ApiPropertyOptional({ format: 'uuid' }) @IsOptional() @IsUUID() id?: string;
   @ApiProperty() @IsString() @IsNotEmpty() @MaxLength(120) name!: string;
   @ApiPropertyOptional() @IsOptional() @IsString() @MaxLength(120) nameMy?: string;
   @ApiPropertyOptional() @IsOptional() @IsString() @MaxLength(120) nameTh?: string;
@@ -20,7 +21,7 @@ export class CreateModifierGroupDto {
   @ApiPropertyOptional() @IsOptional() @IsString() @MaxLength(120) nameTh?: string;
   @ApiPropertyOptional({ default: 'General' }) @IsOptional() @IsString() @MaxLength(80) category?: string;
   @ApiPropertyOptional({ enum: ['Utensils', 'Salad', 'Coffee', 'ChefHat', 'Flame', 'CircleDot', 'Sparkles', 'Cookie'], default: 'Utensils' }) @IsOptional() @IsIn(['Utensils', 'Salad', 'Coffee', 'ChefHat', 'Flame', 'CircleDot', 'Sparkles', 'Cookie']) icon?: string;
-  @ApiPropertyOptional({ enum: ['RADIO', 'CHECKBOX', 'SLIDER', 'QUANTITY', 'TEXT'], default: 'CHECKBOX' }) @IsOptional() @IsIn(['RADIO', 'CHECKBOX', 'SLIDER', 'QUANTITY', 'TEXT']) appearance?: string;
+  @ApiPropertyOptional({ enum: ['RADIO', 'CHECKBOX', 'SLIDER', 'QUANTITY', 'TEXT', 'TOGGLE'], default: 'CHECKBOX' }) @IsOptional() @IsIn(['RADIO', 'CHECKBOX', 'SLIDER', 'QUANTITY', 'TEXT', 'TOGGLE']) appearance?: string;
   @ApiPropertyOptional({ enum: ModifierMadeAt, default: ModifierMadeAt.SAME_AS_DISH }) @IsOptional() @IsEnum(ModifierMadeAt) madeAt?: ModifierMadeAt;
   @ApiPropertyOptional({ default: false }) @IsOptional() @IsBoolean() required?: boolean;
   @ApiPropertyOptional({ enum: ModifierSelectionType }) @IsOptional() @IsEnum(ModifierSelectionType) selectionType?: ModifierSelectionType;
@@ -38,7 +39,7 @@ export class UpdateModifierGroupDto extends PartialType(CreateModifierGroupDto) 
 export class ModifierGroupQueryDto {
   @ApiPropertyOptional() @IsOptional() @IsString() @MaxLength(80) category?: string;
   @ApiPropertyOptional({ enum: ['Utensils', 'Salad', 'Coffee', 'ChefHat', 'Flame', 'CircleDot', 'Sparkles', 'Cookie'], default: 'Utensils' }) @IsOptional() @IsIn(['Utensils', 'Salad', 'Coffee', 'ChefHat', 'Flame', 'CircleDot', 'Sparkles', 'Cookie']) icon?: string;
-  @ApiPropertyOptional({ enum: ['RADIO', 'CHECKBOX', 'SLIDER', 'QUANTITY', 'TEXT'], default: 'CHECKBOX' }) @IsOptional() @IsIn(['RADIO', 'CHECKBOX', 'SLIDER', 'QUANTITY', 'TEXT']) appearance?: string;
+  @ApiPropertyOptional({ enum: ['RADIO', 'CHECKBOX', 'SLIDER', 'QUANTITY', 'TEXT', 'TOGGLE'], default: 'CHECKBOX' }) @IsOptional() @IsIn(['RADIO', 'CHECKBOX', 'SLIDER', 'QUANTITY', 'TEXT', 'TOGGLE']) appearance?: string;
   @ApiPropertyOptional({ enum: ModifierMadeAt, default: ModifierMadeAt.SAME_AS_DISH }) @IsOptional() @IsEnum(ModifierMadeAt) madeAt?: ModifierMadeAt;
 }
 

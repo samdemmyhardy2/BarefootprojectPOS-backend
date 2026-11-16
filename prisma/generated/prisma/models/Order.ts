@@ -27,19 +27,25 @@ export type AggregateOrder = {
 }
 
 export type OrderAvgAggregateOutputType = {
+  number: number | null
   totalAmount: runtime.Decimal | null
+  vatPercent: runtime.Decimal | null
 }
 
 export type OrderSumAggregateOutputType = {
+  number: number | null
   totalAmount: runtime.Decimal | null
+  vatPercent: runtime.Decimal | null
 }
 
 export type OrderMinAggregateOutputType = {
   id: string | null
+  number: number | null
   type: $Enums.OrderType | null
   customerName: string | null
   customerPhone: string | null
   tableId: string | null
+  tableSplitId: string | null
   roomStayId: string | null
   paymentMethod: $Enums.OrderPaymentMethod | null
   paymentStatus: $Enums.OrderPaymentStatus | null
@@ -49,6 +55,7 @@ export type OrderMinAggregateOutputType = {
   servedById: string | null
   status: $Enums.OrderStatus | null
   totalAmount: runtime.Decimal | null
+  vatPercent: runtime.Decimal | null
   preparingAt: Date | null
   readyAt: Date | null
   servedAt: Date | null
@@ -58,10 +65,12 @@ export type OrderMinAggregateOutputType = {
 
 export type OrderMaxAggregateOutputType = {
   id: string | null
+  number: number | null
   type: $Enums.OrderType | null
   customerName: string | null
   customerPhone: string | null
   tableId: string | null
+  tableSplitId: string | null
   roomStayId: string | null
   paymentMethod: $Enums.OrderPaymentMethod | null
   paymentStatus: $Enums.OrderPaymentStatus | null
@@ -71,6 +80,7 @@ export type OrderMaxAggregateOutputType = {
   servedById: string | null
   status: $Enums.OrderStatus | null
   totalAmount: runtime.Decimal | null
+  vatPercent: runtime.Decimal | null
   preparingAt: Date | null
   readyAt: Date | null
   servedAt: Date | null
@@ -80,10 +90,13 @@ export type OrderMaxAggregateOutputType = {
 
 export type OrderCountAggregateOutputType = {
   id: number
+  number: number
   type: number
   customerName: number
   customerPhone: number
   tableId: number
+  tableSplitId: number
+  tableSnapshot: number
   roomStayId: number
   roomGuestsSnapshot: number
   paymentMethod: number
@@ -94,6 +107,7 @@ export type OrderCountAggregateOutputType = {
   servedById: number
   status: number
   totalAmount: number
+  vatPercent: number
   preparingAt: number
   readyAt: number
   servedAt: number
@@ -104,19 +118,25 @@ export type OrderCountAggregateOutputType = {
 
 
 export type OrderAvgAggregateInputType = {
+  number?: true
   totalAmount?: true
+  vatPercent?: true
 }
 
 export type OrderSumAggregateInputType = {
+  number?: true
   totalAmount?: true
+  vatPercent?: true
 }
 
 export type OrderMinAggregateInputType = {
   id?: true
+  number?: true
   type?: true
   customerName?: true
   customerPhone?: true
   tableId?: true
+  tableSplitId?: true
   roomStayId?: true
   paymentMethod?: true
   paymentStatus?: true
@@ -126,6 +146,7 @@ export type OrderMinAggregateInputType = {
   servedById?: true
   status?: true
   totalAmount?: true
+  vatPercent?: true
   preparingAt?: true
   readyAt?: true
   servedAt?: true
@@ -135,10 +156,12 @@ export type OrderMinAggregateInputType = {
 
 export type OrderMaxAggregateInputType = {
   id?: true
+  number?: true
   type?: true
   customerName?: true
   customerPhone?: true
   tableId?: true
+  tableSplitId?: true
   roomStayId?: true
   paymentMethod?: true
   paymentStatus?: true
@@ -148,6 +171,7 @@ export type OrderMaxAggregateInputType = {
   servedById?: true
   status?: true
   totalAmount?: true
+  vatPercent?: true
   preparingAt?: true
   readyAt?: true
   servedAt?: true
@@ -157,10 +181,13 @@ export type OrderMaxAggregateInputType = {
 
 export type OrderCountAggregateInputType = {
   id?: true
+  number?: true
   type?: true
   customerName?: true
   customerPhone?: true
   tableId?: true
+  tableSplitId?: true
+  tableSnapshot?: true
   roomStayId?: true
   roomGuestsSnapshot?: true
   paymentMethod?: true
@@ -171,6 +198,7 @@ export type OrderCountAggregateInputType = {
   servedById?: true
   status?: true
   totalAmount?: true
+  vatPercent?: true
   preparingAt?: true
   readyAt?: true
   servedAt?: true
@@ -267,10 +295,13 @@ export type OrderGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type OrderGroupByOutputType = {
   id: string
+  number: number
   type: $Enums.OrderType
   customerName: string | null
   customerPhone: string | null
   tableId: string | null
+  tableSplitId: string | null
+  tableSnapshot: runtime.JsonValue | null
   roomStayId: string | null
   roomGuestsSnapshot: runtime.JsonValue | null
   paymentMethod: $Enums.OrderPaymentMethod
@@ -281,6 +312,7 @@ export type OrderGroupByOutputType = {
   servedById: string | null
   status: $Enums.OrderStatus
   totalAmount: runtime.Decimal
+  vatPercent: runtime.Decimal
   preparingAt: Date | null
   readyAt: Date | null
   servedAt: Date | null
@@ -313,10 +345,13 @@ export type OrderWhereInput = {
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   id?: Prisma.StringFilter<"Order"> | string
+  number?: Prisma.IntFilter<"Order"> | number
   type?: Prisma.EnumOrderTypeFilter<"Order"> | $Enums.OrderType
   customerName?: Prisma.StringNullableFilter<"Order"> | string | null
   customerPhone?: Prisma.StringNullableFilter<"Order"> | string | null
   tableId?: Prisma.StringNullableFilter<"Order"> | string | null
+  tableSplitId?: Prisma.StringNullableFilter<"Order"> | string | null
+  tableSnapshot?: Prisma.JsonNullableFilter<"Order">
   roomStayId?: Prisma.StringNullableFilter<"Order"> | string | null
   roomGuestsSnapshot?: Prisma.JsonNullableFilter<"Order">
   paymentMethod?: Prisma.EnumOrderPaymentMethodFilter<"Order"> | $Enums.OrderPaymentMethod
@@ -327,12 +362,14 @@ export type OrderWhereInput = {
   servedById?: Prisma.StringNullableFilter<"Order"> | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   readyAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   servedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
+  tableSplit?: Prisma.XOR<Prisma.TableSplitNullableScalarRelationFilter, Prisma.TableSplitWhereInput> | null
   roomStay?: Prisma.XOR<Prisma.RoomStayNullableScalarRelationFilter, Prisma.RoomStayWhereInput> | null
   paidBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   roomCharge?: Prisma.XOR<Prisma.RoomChargeNullableScalarRelationFilter, Prisma.RoomChargeWhereInput> | null
@@ -340,14 +377,18 @@ export type OrderWhereInput = {
   servedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
   prepTickets?: Prisma.OrderPrepTicketListRelationFilter
+  printJobs?: Prisma.PrintJobListRelationFilter
 }
 
 export type OrderOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  number?: Prisma.SortOrder
   type?: Prisma.SortOrder
   customerName?: Prisma.SortOrderInput | Prisma.SortOrder
   customerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
   tableId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tableSplitId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tableSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   roomStayId?: Prisma.SortOrderInput | Prisma.SortOrder
   roomGuestsSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
@@ -358,12 +399,14 @@ export type OrderOrderByWithRelationInput = {
   servedById?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  vatPercent?: Prisma.SortOrder
   preparingAt?: Prisma.SortOrderInput | Prisma.SortOrder
   readyAt?: Prisma.SortOrderInput | Prisma.SortOrder
   servedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   table?: Prisma.TableOrderByWithRelationInput
+  tableSplit?: Prisma.TableSplitOrderByWithRelationInput
   roomStay?: Prisma.RoomStayOrderByWithRelationInput
   paidBy?: Prisma.UserOrderByWithRelationInput
   roomCharge?: Prisma.RoomChargeOrderByWithRelationInput
@@ -371,10 +414,12 @@ export type OrderOrderByWithRelationInput = {
   servedBy?: Prisma.UserOrderByWithRelationInput
   items?: Prisma.OrderItemOrderByRelationAggregateInput
   prepTickets?: Prisma.OrderPrepTicketOrderByRelationAggregateInput
+  printJobs?: Prisma.PrintJobOrderByRelationAggregateInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  number?: number
   AND?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
@@ -382,6 +427,8 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   customerName?: Prisma.StringNullableFilter<"Order"> | string | null
   customerPhone?: Prisma.StringNullableFilter<"Order"> | string | null
   tableId?: Prisma.StringNullableFilter<"Order"> | string | null
+  tableSplitId?: Prisma.StringNullableFilter<"Order"> | string | null
+  tableSnapshot?: Prisma.JsonNullableFilter<"Order">
   roomStayId?: Prisma.StringNullableFilter<"Order"> | string | null
   roomGuestsSnapshot?: Prisma.JsonNullableFilter<"Order">
   paymentMethod?: Prisma.EnumOrderPaymentMethodFilter<"Order"> | $Enums.OrderPaymentMethod
@@ -392,12 +439,14 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   servedById?: Prisma.StringNullableFilter<"Order"> | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   readyAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   servedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
+  tableSplit?: Prisma.XOR<Prisma.TableSplitNullableScalarRelationFilter, Prisma.TableSplitWhereInput> | null
   roomStay?: Prisma.XOR<Prisma.RoomStayNullableScalarRelationFilter, Prisma.RoomStayWhereInput> | null
   paidBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   roomCharge?: Prisma.XOR<Prisma.RoomChargeNullableScalarRelationFilter, Prisma.RoomChargeWhereInput> | null
@@ -405,14 +454,18 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   servedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
   prepTickets?: Prisma.OrderPrepTicketListRelationFilter
-}, "id">
+  printJobs?: Prisma.PrintJobListRelationFilter
+}, "id" | "number">
 
 export type OrderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  number?: Prisma.SortOrder
   type?: Prisma.SortOrder
   customerName?: Prisma.SortOrderInput | Prisma.SortOrder
   customerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
   tableId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tableSplitId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tableSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   roomStayId?: Prisma.SortOrderInput | Prisma.SortOrder
   roomGuestsSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
@@ -423,6 +476,7 @@ export type OrderOrderByWithAggregationInput = {
   servedById?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  vatPercent?: Prisma.SortOrder
   preparingAt?: Prisma.SortOrderInput | Prisma.SortOrder
   readyAt?: Prisma.SortOrderInput | Prisma.SortOrder
   servedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -440,10 +494,13 @@ export type OrderScalarWhereWithAggregatesInput = {
   OR?: Prisma.OrderScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OrderScalarWhereWithAggregatesInput | Prisma.OrderScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Order"> | string
+  number?: Prisma.IntWithAggregatesFilter<"Order"> | number
   type?: Prisma.EnumOrderTypeWithAggregatesFilter<"Order"> | $Enums.OrderType
   customerName?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   customerPhone?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   tableId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  tableSplitId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  tableSnapshot?: Prisma.JsonNullableWithAggregatesFilter<"Order">
   roomStayId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   roomGuestsSnapshot?: Prisma.JsonNullableWithAggregatesFilter<"Order">
   paymentMethod?: Prisma.EnumOrderPaymentMethodWithAggregatesFilter<"Order"> | $Enums.OrderPaymentMethod
@@ -454,6 +511,7 @@ export type OrderScalarWhereWithAggregatesInput = {
   servedById?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalWithAggregatesFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalWithAggregatesFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   readyAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
   servedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
@@ -463,21 +521,25 @@ export type OrderScalarWhereWithAggregatesInput = {
 
 export type OrderCreateInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
   roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
   paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
@@ -485,14 +547,18 @@ export type OrderCreateInput = {
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -503,6 +569,7 @@ export type OrderUncheckedCreateInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -511,25 +578,30 @@ export type OrderUncheckedCreateInput = {
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
   paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
@@ -537,14 +609,18 @@ export type OrderUpdateInput = {
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -555,6 +631,7 @@ export type OrderUncheckedUpdateInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -563,14 +640,18 @@ export type OrderUncheckedUpdateInput = {
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -581,6 +662,7 @@ export type OrderCreateManyInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -590,15 +672,18 @@ export type OrderCreateManyInput = {
 
 export type OrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -608,10 +693,13 @@ export type OrderUpdateManyMutationInput = {
 
 export type OrderUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -622,6 +710,7 @@ export type OrderUncheckedUpdateManyInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -646,10 +735,13 @@ export type OrderNullableScalarRelationFilter = {
 
 export type OrderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  number?: Prisma.SortOrder
   type?: Prisma.SortOrder
   customerName?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
   tableId?: Prisma.SortOrder
+  tableSplitId?: Prisma.SortOrder
+  tableSnapshot?: Prisma.SortOrder
   roomStayId?: Prisma.SortOrder
   roomGuestsSnapshot?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
@@ -660,6 +752,7 @@ export type OrderCountOrderByAggregateInput = {
   servedById?: Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  vatPercent?: Prisma.SortOrder
   preparingAt?: Prisma.SortOrder
   readyAt?: Prisma.SortOrder
   servedAt?: Prisma.SortOrder
@@ -668,15 +761,19 @@ export type OrderCountOrderByAggregateInput = {
 }
 
 export type OrderAvgOrderByAggregateInput = {
+  number?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  vatPercent?: Prisma.SortOrder
 }
 
 export type OrderMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  number?: Prisma.SortOrder
   type?: Prisma.SortOrder
   customerName?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
   tableId?: Prisma.SortOrder
+  tableSplitId?: Prisma.SortOrder
   roomStayId?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
   paymentStatus?: Prisma.SortOrder
@@ -686,6 +783,7 @@ export type OrderMaxOrderByAggregateInput = {
   servedById?: Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  vatPercent?: Prisma.SortOrder
   preparingAt?: Prisma.SortOrder
   readyAt?: Prisma.SortOrder
   servedAt?: Prisma.SortOrder
@@ -695,10 +793,12 @@ export type OrderMaxOrderByAggregateInput = {
 
 export type OrderMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  number?: Prisma.SortOrder
   type?: Prisma.SortOrder
   customerName?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
   tableId?: Prisma.SortOrder
+  tableSplitId?: Prisma.SortOrder
   roomStayId?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
   paymentStatus?: Prisma.SortOrder
@@ -708,6 +808,7 @@ export type OrderMinOrderByAggregateInput = {
   servedById?: Prisma.SortOrder
   status?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  vatPercent?: Prisma.SortOrder
   preparingAt?: Prisma.SortOrder
   readyAt?: Prisma.SortOrder
   servedAt?: Prisma.SortOrder
@@ -716,7 +817,9 @@ export type OrderMinOrderByAggregateInput = {
 }
 
 export type OrderSumOrderByAggregateInput = {
+  number?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  vatPercent?: Prisma.SortOrder
 }
 
 export type OrderScalarRelationFilter = {
@@ -966,6 +1069,48 @@ export type EnumOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.OrderStatus
 }
 
+export type OrderCreateNestedManyWithoutTableSplitInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutTableSplitInput, Prisma.OrderUncheckedCreateWithoutTableSplitInput> | Prisma.OrderCreateWithoutTableSplitInput[] | Prisma.OrderUncheckedCreateWithoutTableSplitInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutTableSplitInput | Prisma.OrderCreateOrConnectWithoutTableSplitInput[]
+  createMany?: Prisma.OrderCreateManyTableSplitInputEnvelope
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+}
+
+export type OrderUncheckedCreateNestedManyWithoutTableSplitInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutTableSplitInput, Prisma.OrderUncheckedCreateWithoutTableSplitInput> | Prisma.OrderCreateWithoutTableSplitInput[] | Prisma.OrderUncheckedCreateWithoutTableSplitInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutTableSplitInput | Prisma.OrderCreateOrConnectWithoutTableSplitInput[]
+  createMany?: Prisma.OrderCreateManyTableSplitInputEnvelope
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+}
+
+export type OrderUpdateManyWithoutTableSplitNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutTableSplitInput, Prisma.OrderUncheckedCreateWithoutTableSplitInput> | Prisma.OrderCreateWithoutTableSplitInput[] | Prisma.OrderUncheckedCreateWithoutTableSplitInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutTableSplitInput | Prisma.OrderCreateOrConnectWithoutTableSplitInput[]
+  upsert?: Prisma.OrderUpsertWithWhereUniqueWithoutTableSplitInput | Prisma.OrderUpsertWithWhereUniqueWithoutTableSplitInput[]
+  createMany?: Prisma.OrderCreateManyTableSplitInputEnvelope
+  set?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  disconnect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  delete?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  update?: Prisma.OrderUpdateWithWhereUniqueWithoutTableSplitInput | Prisma.OrderUpdateWithWhereUniqueWithoutTableSplitInput[]
+  updateMany?: Prisma.OrderUpdateManyWithWhereWithoutTableSplitInput | Prisma.OrderUpdateManyWithWhereWithoutTableSplitInput[]
+  deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
+export type OrderUncheckedUpdateManyWithoutTableSplitNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutTableSplitInput, Prisma.OrderUncheckedCreateWithoutTableSplitInput> | Prisma.OrderCreateWithoutTableSplitInput[] | Prisma.OrderUncheckedCreateWithoutTableSplitInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutTableSplitInput | Prisma.OrderCreateOrConnectWithoutTableSplitInput[]
+  upsert?: Prisma.OrderUpsertWithWhereUniqueWithoutTableSplitInput | Prisma.OrderUpsertWithWhereUniqueWithoutTableSplitInput[]
+  createMany?: Prisma.OrderCreateManyTableSplitInputEnvelope
+  set?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  disconnect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  delete?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  update?: Prisma.OrderUpdateWithWhereUniqueWithoutTableSplitInput | Prisma.OrderUpdateWithWhereUniqueWithoutTableSplitInput[]
+  updateMany?: Prisma.OrderUpdateManyWithWhereWithoutTableSplitInput | Prisma.OrderUpdateManyWithWhereWithoutTableSplitInput[]
+  deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
 export type OrderCreateNestedOneWithoutPrepTicketsInput = {
   create?: Prisma.XOR<Prisma.OrderCreateWithoutPrepTicketsInput, Prisma.OrderUncheckedCreateWithoutPrepTicketsInput>
   connectOrCreate?: Prisma.OrderCreateOrConnectWithoutPrepTicketsInput
@@ -978,6 +1123,22 @@ export type OrderUpdateOneRequiredWithoutPrepTicketsNestedInput = {
   upsert?: Prisma.OrderUpsertWithoutPrepTicketsInput
   connect?: Prisma.OrderWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutPrepTicketsInput, Prisma.OrderUpdateWithoutPrepTicketsInput>, Prisma.OrderUncheckedUpdateWithoutPrepTicketsInput>
+}
+
+export type OrderCreateNestedOneWithoutPrintJobsInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutPrintJobsInput, Prisma.OrderUncheckedCreateWithoutPrintJobsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutPrintJobsInput
+  connect?: Prisma.OrderWhereUniqueInput
+}
+
+export type OrderUpdateOneWithoutPrintJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutPrintJobsInput, Prisma.OrderUncheckedCreateWithoutPrintJobsInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutPrintJobsInput
+  upsert?: Prisma.OrderUpsertWithoutPrintJobsInput
+  disconnect?: Prisma.OrderWhereInput | boolean
+  delete?: Prisma.OrderWhereInput | boolean
+  connect?: Prisma.OrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutPrintJobsInput, Prisma.OrderUpdateWithoutPrintJobsInput>, Prisma.OrderUncheckedUpdateWithoutPrintJobsInput>
 }
 
 export type OrderCreateNestedOneWithoutItemsInput = {
@@ -996,35 +1157,43 @@ export type OrderUpdateOneRequiredWithoutItemsNestedInput = {
 
 export type OrderCreateWithoutWaiterInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
   roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
   paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutWaiterInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1034,6 +1203,7 @@ export type OrderUncheckedCreateWithoutWaiterInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1042,6 +1212,7 @@ export type OrderUncheckedCreateWithoutWaiterInput = {
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutWaiterInput = {
@@ -1056,35 +1227,43 @@ export type OrderCreateManyWaiterInputEnvelope = {
 
 export type OrderCreateWithoutServedByInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
   roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
   paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutServedByInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1094,6 +1273,7 @@ export type OrderUncheckedCreateWithoutServedByInput = {
   waiterId: string
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1102,6 +1282,7 @@ export type OrderUncheckedCreateWithoutServedByInput = {
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutServedByInput = {
@@ -1116,35 +1297,43 @@ export type OrderCreateManyServedByInputEnvelope = {
 
 export type OrderCreateWithoutPaidByInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
   roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutPaidByInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1154,6 +1343,7 @@ export type OrderUncheckedCreateWithoutPaidByInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1162,6 +1352,7 @@ export type OrderUncheckedCreateWithoutPaidByInput = {
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutPaidByInput = {
@@ -1195,10 +1386,13 @@ export type OrderScalarWhereInput = {
   OR?: Prisma.OrderScalarWhereInput[]
   NOT?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
   id?: Prisma.StringFilter<"Order"> | string
+  number?: Prisma.IntFilter<"Order"> | number
   type?: Prisma.EnumOrderTypeFilter<"Order"> | $Enums.OrderType
   customerName?: Prisma.StringNullableFilter<"Order"> | string | null
   customerPhone?: Prisma.StringNullableFilter<"Order"> | string | null
   tableId?: Prisma.StringNullableFilter<"Order"> | string | null
+  tableSplitId?: Prisma.StringNullableFilter<"Order"> | string | null
+  tableSnapshot?: Prisma.JsonNullableFilter<"Order">
   roomStayId?: Prisma.StringNullableFilter<"Order"> | string | null
   roomGuestsSnapshot?: Prisma.JsonNullableFilter<"Order">
   paymentMethod?: Prisma.EnumOrderPaymentMethodFilter<"Order"> | $Enums.OrderPaymentMethod
@@ -1209,6 +1403,7 @@ export type OrderScalarWhereInput = {
   servedById?: Prisma.StringNullableFilter<"Order"> | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   readyAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
   servedAt?: Prisma.DateTimeNullableFilter<"Order"> | Date | string | null
@@ -1250,20 +1445,24 @@ export type OrderUpdateManyWithWhereWithoutPaidByInput = {
 
 export type OrderCreateWithoutTableInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
   roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
   paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
@@ -1271,13 +1470,17 @@ export type OrderCreateWithoutTableInput = {
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutTableInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1288,6 +1491,7 @@ export type OrderUncheckedCreateWithoutTableInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1296,6 +1500,7 @@ export type OrderUncheckedCreateWithoutTableInput = {
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutTableInput = {
@@ -1326,35 +1531,43 @@ export type OrderUpdateManyWithWhereWithoutTableInput = {
 
 export type OrderCreateWithoutRoomStayInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
   paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutRoomStayInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
@@ -1364,6 +1577,7 @@ export type OrderUncheckedCreateWithoutRoomStayInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1372,6 +1586,7 @@ export type OrderUncheckedCreateWithoutRoomStayInput = {
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutRoomStayInput = {
@@ -1402,35 +1617,43 @@ export type OrderUpdateManyWithWhereWithoutRoomStayInput = {
 
 export type OrderCreateWithoutRoomChargeInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
   roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
   paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutRoomChargeInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1441,6 +1664,7 @@ export type OrderUncheckedCreateWithoutRoomChargeInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1448,6 +1672,7 @@ export type OrderUncheckedCreateWithoutRoomChargeInput = {
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutRoomChargeInput = {
@@ -1468,35 +1693,43 @@ export type OrderUpdateToOneWithWhereWithoutRoomChargeInput = {
 
 export type OrderUpdateWithoutRoomChargeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
   paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutRoomChargeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -1507,6 +1740,7 @@ export type OrderUncheckedUpdateWithoutRoomChargeInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1514,19 +1748,23 @@ export type OrderUncheckedUpdateWithoutRoomChargeInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
-export type OrderCreateWithoutPrepTicketsInput = {
+export type OrderCreateWithoutTableSplitInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1539,14 +1777,18 @@ export type OrderCreateWithoutPrepTicketsInput = {
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
 }
 
-export type OrderUncheckedCreateWithoutPrepTicketsInput = {
+export type OrderUncheckedCreateWithoutTableSplitInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1557,6 +1799,7 @@ export type OrderUncheckedCreateWithoutPrepTicketsInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1564,6 +1807,94 @@ export type OrderUncheckedCreateWithoutPrepTicketsInput = {
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type OrderCreateOrConnectWithoutTableSplitInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutTableSplitInput, Prisma.OrderUncheckedCreateWithoutTableSplitInput>
+}
+
+export type OrderCreateManyTableSplitInputEnvelope = {
+  data: Prisma.OrderCreateManyTableSplitInput | Prisma.OrderCreateManyTableSplitInput[]
+  skipDuplicates?: boolean
+}
+
+export type OrderUpsertWithWhereUniqueWithoutTableSplitInput = {
+  where: Prisma.OrderWhereUniqueInput
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutTableSplitInput, Prisma.OrderUncheckedUpdateWithoutTableSplitInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutTableSplitInput, Prisma.OrderUncheckedCreateWithoutTableSplitInput>
+}
+
+export type OrderUpdateWithWhereUniqueWithoutTableSplitInput = {
+  where: Prisma.OrderWhereUniqueInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutTableSplitInput, Prisma.OrderUncheckedUpdateWithoutTableSplitInput>
+}
+
+export type OrderUpdateManyWithWhereWithoutTableSplitInput = {
+  where: Prisma.OrderScalarWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateManyMutationInput, Prisma.OrderUncheckedUpdateManyWithoutTableSplitInput>
+}
+
+export type OrderCreateWithoutPrepTicketsInput = {
+  id?: string
+  number: number
+  type?: $Enums.OrderType
+  customerName?: string | null
+  customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: $Enums.OrderPaymentMethod
+  paymentStatus?: $Enums.OrderPaymentStatus
+  paidAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  servedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
+  roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
+  paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
+  roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
+  waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
+  servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
+}
+
+export type OrderUncheckedCreateWithoutPrepTicketsInput = {
+  id?: string
+  number: number
+  type?: $Enums.OrderType
+  customerName?: string | null
+  customerPhone?: string | null
+  tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomStayId?: string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: $Enums.OrderPaymentMethod
+  paymentStatus?: $Enums.OrderPaymentStatus
+  paidAt?: Date | string | null
+  paidById?: string | null
+  waiterId: string
+  servedById?: string | null
+  status?: $Enums.OrderStatus
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  servedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutPrepTicketsInput = {
@@ -1584,35 +1915,43 @@ export type OrderUpdateToOneWithWhereWithoutPrepTicketsInput = {
 
 export type OrderUpdateWithoutPrepTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
   paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutPrepTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -1623,6 +1962,7 @@ export type OrderUncheckedUpdateWithoutPrepTicketsInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1630,39 +1970,48 @@ export type OrderUncheckedUpdateWithoutPrepTicketsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
-export type OrderCreateWithoutItemsInput = {
+export type OrderCreateWithoutPrintJobsInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
   paidAt?: Date | string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
   roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
   paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
   roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
   waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
   servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
 }
 
-export type OrderUncheckedCreateWithoutItemsInput = {
+export type OrderUncheckedCreateWithoutPrintJobsInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1673,6 +2022,143 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  servedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type OrderCreateOrConnectWithoutPrintJobsInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutPrintJobsInput, Prisma.OrderUncheckedCreateWithoutPrintJobsInput>
+}
+
+export type OrderUpsertWithoutPrintJobsInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutPrintJobsInput, Prisma.OrderUncheckedUpdateWithoutPrintJobsInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutPrintJobsInput, Prisma.OrderUncheckedCreateWithoutPrintJobsInput>
+  where?: Prisma.OrderWhereInput
+}
+
+export type OrderUpdateToOneWithWhereWithoutPrintJobsInput = {
+  where?: Prisma.OrderWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutPrintJobsInput, Prisma.OrderUncheckedUpdateWithoutPrintJobsInput>
+}
+
+export type OrderUpdateWithoutPrintJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
+  paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
+  roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
+  paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
+  roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
+  waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutPrintJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
+  paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  waiterId?: Prisma.StringFieldUpdateOperationsInput | string
+  servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderCreateWithoutItemsInput = {
+  id?: string
+  number: number
+  type?: $Enums.OrderType
+  customerName?: string | null
+  customerPhone?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: $Enums.OrderPaymentMethod
+  paymentStatus?: $Enums.OrderPaymentStatus
+  paidAt?: Date | string | null
+  status?: $Enums.OrderStatus
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  servedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  tableSplit?: Prisma.TableSplitCreateNestedOneWithoutOrdersInput
+  roomStay?: Prisma.RoomStayCreateNestedOneWithoutOrdersInput
+  paidBy?: Prisma.UserCreateNestedOneWithoutPaidOrdersInput
+  roomCharge?: Prisma.RoomChargeCreateNestedOneWithoutOrderInput
+  waiter: Prisma.UserCreateNestedOneWithoutOrdersInput
+  servedBy?: Prisma.UserCreateNestedOneWithoutServedOrdersInput
+  prepTickets?: Prisma.OrderPrepTicketCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobCreateNestedManyWithoutOrderInput
+}
+
+export type OrderUncheckedCreateWithoutItemsInput = {
+  id?: string
+  number: number
+  type?: $Enums.OrderType
+  customerName?: string | null
+  customerPhone?: string | null
+  tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomStayId?: string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: $Enums.OrderPaymentMethod
+  paymentStatus?: $Enums.OrderPaymentStatus
+  paidAt?: Date | string | null
+  paidById?: string | null
+  waiterId: string
+  servedById?: string | null
+  status?: $Enums.OrderStatus
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1680,6 +2166,7 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   updatedAt?: Date | string
   roomCharge?: Prisma.RoomChargeUncheckedCreateNestedOneWithoutOrderInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedCreateNestedManyWithoutOrderInput
+  printJobs?: Prisma.PrintJobUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutItemsInput = {
@@ -1700,35 +2187,43 @@ export type OrderUpdateToOneWithWhereWithoutItemsInput = {
 
 export type OrderUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
   paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -1739,6 +2234,7 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1746,14 +2242,18 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyWaiterInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1763,6 +2263,7 @@ export type OrderCreateManyWaiterInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1772,10 +2273,13 @@ export type OrderCreateManyWaiterInput = {
 
 export type OrderCreateManyServedByInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1785,6 +2289,7 @@ export type OrderCreateManyServedByInput = {
   waiterId: string
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1794,10 +2299,13 @@ export type OrderCreateManyServedByInput = {
 
 export type OrderCreateManyPaidByInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -1807,6 +2315,7 @@ export type OrderCreateManyPaidByInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -1816,35 +2325,43 @@ export type OrderCreateManyPaidByInput = {
 
 export type OrderUpdateWithoutWaiterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
   paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutWaiterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -1854,6 +2371,7 @@ export type OrderUncheckedUpdateWithoutWaiterInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1862,14 +2380,18 @@ export type OrderUncheckedUpdateWithoutWaiterInput = {
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutWaiterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -1879,6 +2401,7 @@ export type OrderUncheckedUpdateManyWithoutWaiterInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1888,35 +2411,43 @@ export type OrderUncheckedUpdateManyWithoutWaiterInput = {
 
 export type OrderUpdateWithoutServedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
   paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutServedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -1926,6 +2457,7 @@ export type OrderUncheckedUpdateWithoutServedByInput = {
   waiterId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1934,14 +2466,18 @@ export type OrderUncheckedUpdateWithoutServedByInput = {
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutServedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -1951,6 +2487,7 @@ export type OrderUncheckedUpdateManyWithoutServedByInput = {
   waiterId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1960,35 +2497,43 @@ export type OrderUncheckedUpdateManyWithoutServedByInput = {
 
 export type OrderUpdateWithoutPaidByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutPaidByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -1998,6 +2543,7 @@ export type OrderUncheckedUpdateWithoutPaidByInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2006,14 +2552,18 @@ export type OrderUncheckedUpdateWithoutPaidByInput = {
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutPaidByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -2023,6 +2573,7 @@ export type OrderUncheckedUpdateManyWithoutPaidByInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2032,9 +2583,12 @@ export type OrderUncheckedUpdateManyWithoutPaidByInput = {
 
 export type OrderCreateManyTableInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
@@ -2045,6 +2599,7 @@ export type OrderCreateManyTableInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -2054,20 +2609,24 @@ export type OrderCreateManyTableInput = {
 
 export type OrderUpdateWithoutTableInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
   paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
@@ -2075,13 +2634,17 @@ export type OrderUpdateWithoutTableInput = {
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutTableInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -2092,6 +2655,7 @@ export type OrderUncheckedUpdateWithoutTableInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2100,13 +2664,17 @@ export type OrderUncheckedUpdateWithoutTableInput = {
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutTableInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
@@ -2117,6 +2685,7 @@ export type OrderUncheckedUpdateManyWithoutTableInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2126,10 +2695,13 @@ export type OrderUncheckedUpdateManyWithoutTableInput = {
 
 export type OrderCreateManyRoomStayInput = {
   id?: string
+  number: number
   type?: $Enums.OrderType
   customerName?: string | null
   customerPhone?: string | null
   tableId?: string | null
+  tableSplitId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: $Enums.OrderPaymentMethod
   paymentStatus?: $Enums.OrderPaymentStatus
@@ -2139,6 +2711,7 @@ export type OrderCreateManyRoomStayInput = {
   servedById?: string | null
   status?: $Enums.OrderStatus
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Date | string | null
   readyAt?: Date | string | null
   servedAt?: Date | string | null
@@ -2148,35 +2721,43 @@ export type OrderCreateManyRoomStayInput = {
 
 export type OrderUpdateWithoutRoomStayInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  tableSplit?: Prisma.TableSplitUpdateOneWithoutOrdersNestedInput
   paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
   roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
   waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutRoomStayInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
@@ -2186,6 +2767,7 @@ export type OrderUncheckedUpdateWithoutRoomStayInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2194,14 +2776,18 @@ export type OrderUncheckedUpdateWithoutRoomStayInput = {
   roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutRoomStayInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
   customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSplitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
   paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
@@ -2211,6 +2797,119 @@ export type OrderUncheckedUpdateManyWithoutRoomStayInput = {
   servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type OrderCreateManyTableSplitInput = {
+  id?: string
+  number: number
+  type?: $Enums.OrderType
+  customerName?: string | null
+  customerPhone?: string | null
+  tableId?: string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomStayId?: string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: $Enums.OrderPaymentMethod
+  paymentStatus?: $Enums.OrderPaymentStatus
+  paidAt?: Date | string | null
+  paidById?: string | null
+  waiterId: string
+  servedById?: string | null
+  status?: $Enums.OrderStatus
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Date | string | null
+  readyAt?: Date | string | null
+  servedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type OrderUpdateWithoutTableSplitInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
+  paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  roomStay?: Prisma.RoomStayUpdateOneWithoutOrdersNestedInput
+  paidBy?: Prisma.UserUpdateOneWithoutPaidOrdersNestedInput
+  roomCharge?: Prisma.RoomChargeUpdateOneWithoutOrderNestedInput
+  waiter?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  servedBy?: Prisma.UserUpdateOneWithoutServedOrdersNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutTableSplitInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
+  paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  waiterId?: Prisma.StringFieldUpdateOperationsInput | string
+  servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roomCharge?: Prisma.RoomChargeUncheckedUpdateOneWithoutOrderNestedInput
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  prepTickets?: Prisma.OrderPrepTicketUncheckedUpdateManyWithoutOrderNestedInput
+  printJobs?: Prisma.PrintJobUncheckedUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateManyWithoutTableSplitInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumOrderTypeFieldUpdateOperationsInput | $Enums.OrderType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tableSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  roomStayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roomGuestsSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethod?: Prisma.EnumOrderPaymentMethodFieldUpdateOperationsInput | $Enums.OrderPaymentMethod
+  paymentStatus?: Prisma.EnumOrderPaymentStatusFieldUpdateOperationsInput | $Enums.OrderPaymentStatus
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paidById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  waiterId?: Prisma.StringFieldUpdateOperationsInput | string
+  servedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  vatPercent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   preparingAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   readyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   servedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2226,11 +2925,13 @@ export type OrderUncheckedUpdateManyWithoutRoomStayInput = {
 export type OrderCountOutputType = {
   items: number
   prepTickets: number
+  printJobs: number
 }
 
 export type OrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | OrderCountOutputTypeCountItemsArgs
   prepTickets?: boolean | OrderCountOutputTypeCountPrepTicketsArgs
+  printJobs?: boolean | OrderCountOutputTypeCountPrintJobsArgs
 }
 
 /**
@@ -2257,13 +2958,23 @@ export type OrderCountOutputTypeCountPrepTicketsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.OrderPrepTicketWhereInput
 }
 
+/**
+ * OrderCountOutputType without action
+ */
+export type OrderCountOutputTypeCountPrintJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PrintJobWhereInput
+}
+
 
 export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  number?: boolean
   type?: boolean
   customerName?: boolean
   customerPhone?: boolean
   tableId?: boolean
+  tableSplitId?: boolean
+  tableSnapshot?: boolean
   roomStayId?: boolean
   roomGuestsSnapshot?: boolean
   paymentMethod?: boolean
@@ -2274,12 +2985,14 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   servedById?: boolean
   status?: boolean
   totalAmount?: boolean
+  vatPercent?: boolean
   preparingAt?: boolean
   readyAt?: boolean
   servedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
+  tableSplit?: boolean | Prisma.Order$tableSplitArgs<ExtArgs>
   roomStay?: boolean | Prisma.Order$roomStayArgs<ExtArgs>
   paidBy?: boolean | Prisma.Order$paidByArgs<ExtArgs>
   roomCharge?: boolean | Prisma.Order$roomChargeArgs<ExtArgs>
@@ -2287,15 +3000,19 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   servedBy?: boolean | Prisma.Order$servedByArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   prepTickets?: boolean | Prisma.Order$prepTicketsArgs<ExtArgs>
+  printJobs?: boolean | Prisma.Order$printJobsArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  number?: boolean
   type?: boolean
   customerName?: boolean
   customerPhone?: boolean
   tableId?: boolean
+  tableSplitId?: boolean
+  tableSnapshot?: boolean
   roomStayId?: boolean
   roomGuestsSnapshot?: boolean
   paymentMethod?: boolean
@@ -2306,12 +3023,14 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   servedById?: boolean
   status?: boolean
   totalAmount?: boolean
+  vatPercent?: boolean
   preparingAt?: boolean
   readyAt?: boolean
   servedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
+  tableSplit?: boolean | Prisma.Order$tableSplitArgs<ExtArgs>
   roomStay?: boolean | Prisma.Order$roomStayArgs<ExtArgs>
   paidBy?: boolean | Prisma.Order$paidByArgs<ExtArgs>
   waiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2320,10 +3039,13 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 
 export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  number?: boolean
   type?: boolean
   customerName?: boolean
   customerPhone?: boolean
   tableId?: boolean
+  tableSplitId?: boolean
+  tableSnapshot?: boolean
   roomStayId?: boolean
   roomGuestsSnapshot?: boolean
   paymentMethod?: boolean
@@ -2334,12 +3056,14 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   servedById?: boolean
   status?: boolean
   totalAmount?: boolean
+  vatPercent?: boolean
   preparingAt?: boolean
   readyAt?: boolean
   servedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
+  tableSplit?: boolean | Prisma.Order$tableSplitArgs<ExtArgs>
   roomStay?: boolean | Prisma.Order$roomStayArgs<ExtArgs>
   paidBy?: boolean | Prisma.Order$paidByArgs<ExtArgs>
   waiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2348,10 +3072,13 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 
 export type OrderSelectScalar = {
   id?: boolean
+  number?: boolean
   type?: boolean
   customerName?: boolean
   customerPhone?: boolean
   tableId?: boolean
+  tableSplitId?: boolean
+  tableSnapshot?: boolean
   roomStayId?: boolean
   roomGuestsSnapshot?: boolean
   paymentMethod?: boolean
@@ -2362,6 +3089,7 @@ export type OrderSelectScalar = {
   servedById?: boolean
   status?: boolean
   totalAmount?: boolean
+  vatPercent?: boolean
   preparingAt?: boolean
   readyAt?: boolean
   servedAt?: boolean
@@ -2369,9 +3097,10 @@ export type OrderSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "customerName" | "customerPhone" | "tableId" | "roomStayId" | "roomGuestsSnapshot" | "paymentMethod" | "paymentStatus" | "paidAt" | "paidById" | "waiterId" | "servedById" | "status" | "totalAmount" | "preparingAt" | "readyAt" | "servedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "number" | "type" | "customerName" | "customerPhone" | "tableId" | "tableSplitId" | "tableSnapshot" | "roomStayId" | "roomGuestsSnapshot" | "paymentMethod" | "paymentStatus" | "paidAt" | "paidById" | "waiterId" | "servedById" | "status" | "totalAmount" | "vatPercent" | "preparingAt" | "readyAt" | "servedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
+  tableSplit?: boolean | Prisma.Order$tableSplitArgs<ExtArgs>
   roomStay?: boolean | Prisma.Order$roomStayArgs<ExtArgs>
   paidBy?: boolean | Prisma.Order$paidByArgs<ExtArgs>
   roomCharge?: boolean | Prisma.Order$roomChargeArgs<ExtArgs>
@@ -2379,10 +3108,12 @@ export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   servedBy?: boolean | Prisma.Order$servedByArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   prepTickets?: boolean | Prisma.Order$prepTicketsArgs<ExtArgs>
+  printJobs?: boolean | Prisma.Order$printJobsArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
+  tableSplit?: boolean | Prisma.Order$tableSplitArgs<ExtArgs>
   roomStay?: boolean | Prisma.Order$roomStayArgs<ExtArgs>
   paidBy?: boolean | Prisma.Order$paidByArgs<ExtArgs>
   waiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2390,6 +3121,7 @@ export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 }
 export type OrderIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
+  tableSplit?: boolean | Prisma.Order$tableSplitArgs<ExtArgs>
   roomStay?: boolean | Prisma.Order$roomStayArgs<ExtArgs>
   paidBy?: boolean | Prisma.Order$paidByArgs<ExtArgs>
   waiter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2400,6 +3132,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Order"
   objects: {
     table: Prisma.$TablePayload<ExtArgs> | null
+    tableSplit: Prisma.$TableSplitPayload<ExtArgs> | null
     roomStay: Prisma.$RoomStayPayload<ExtArgs> | null
     paidBy: Prisma.$UserPayload<ExtArgs> | null
     roomCharge: Prisma.$RoomChargePayload<ExtArgs> | null
@@ -2407,13 +3140,17 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     servedBy: Prisma.$UserPayload<ExtArgs> | null
     items: Prisma.$OrderItemPayload<ExtArgs>[]
     prepTickets: Prisma.$OrderPrepTicketPayload<ExtArgs>[]
+    printJobs: Prisma.$PrintJobPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    number: number
     type: $Enums.OrderType
     customerName: string | null
     customerPhone: string | null
     tableId: string | null
+    tableSplitId: string | null
+    tableSnapshot: runtime.JsonValue | null
     roomStayId: string | null
     roomGuestsSnapshot: runtime.JsonValue | null
     paymentMethod: $Enums.OrderPaymentMethod
@@ -2424,6 +3161,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     servedById: string | null
     status: $Enums.OrderStatus
     totalAmount: runtime.Decimal
+    vatPercent: runtime.Decimal
     preparingAt: Date | null
     readyAt: Date | null
     servedAt: Date | null
@@ -2824,6 +3562,7 @@ readonly fields: OrderFieldRefs;
 export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   table<T extends Prisma.Order$tableArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$tableArgs<ExtArgs>>): Prisma.Prisma__TableClient<runtime.Types.Result.GetResult<Prisma.$TablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tableSplit<T extends Prisma.Order$tableSplitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$tableSplitArgs<ExtArgs>>): Prisma.Prisma__TableSplitClient<runtime.Types.Result.GetResult<Prisma.$TableSplitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   roomStay<T extends Prisma.Order$roomStayArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$roomStayArgs<ExtArgs>>): Prisma.Prisma__RoomStayClient<runtime.Types.Result.GetResult<Prisma.$RoomStayPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   paidBy<T extends Prisma.Order$paidByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$paidByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   roomCharge<T extends Prisma.Order$roomChargeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$roomChargeArgs<ExtArgs>>): Prisma.Prisma__RoomChargeClient<runtime.Types.Result.GetResult<Prisma.$RoomChargePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -2831,6 +3570,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
   servedBy<T extends Prisma.Order$servedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$servedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Order$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   prepTickets<T extends Prisma.Order$prepTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$prepTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPrepTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  printJobs<T extends Prisma.Order$printJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$printJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PrintJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2861,10 +3601,13 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface OrderFieldRefs {
   readonly id: Prisma.FieldRef<"Order", 'String'>
+  readonly number: Prisma.FieldRef<"Order", 'Int'>
   readonly type: Prisma.FieldRef<"Order", 'OrderType'>
   readonly customerName: Prisma.FieldRef<"Order", 'String'>
   readonly customerPhone: Prisma.FieldRef<"Order", 'String'>
   readonly tableId: Prisma.FieldRef<"Order", 'String'>
+  readonly tableSplitId: Prisma.FieldRef<"Order", 'String'>
+  readonly tableSnapshot: Prisma.FieldRef<"Order", 'Json'>
   readonly roomStayId: Prisma.FieldRef<"Order", 'String'>
   readonly roomGuestsSnapshot: Prisma.FieldRef<"Order", 'Json'>
   readonly paymentMethod: Prisma.FieldRef<"Order", 'OrderPaymentMethod'>
@@ -2875,6 +3618,7 @@ export interface OrderFieldRefs {
   readonly servedById: Prisma.FieldRef<"Order", 'String'>
   readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
   readonly totalAmount: Prisma.FieldRef<"Order", 'Decimal'>
+  readonly vatPercent: Prisma.FieldRef<"Order", 'Decimal'>
   readonly preparingAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly readyAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly servedAt: Prisma.FieldRef<"Order", 'DateTime'>
@@ -3300,6 +4044,25 @@ export type Order$tableArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 /**
+ * Order.tableSplit
+ */
+export type Order$tableSplitArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TableSplit
+   */
+  select?: Prisma.TableSplitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TableSplit
+   */
+  omit?: Prisma.TableSplitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TableSplitInclude<ExtArgs> | null
+  where?: Prisma.TableSplitWhereInput
+}
+
+/**
  * Order.roomStay
  */
 export type Order$roomStayArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3421,6 +4184,30 @@ export type Order$prepTicketsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.OrderPrepTicketScalarFieldEnum | Prisma.OrderPrepTicketScalarFieldEnum[]
+}
+
+/**
+ * Order.printJobs
+ */
+export type Order$printJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PrintJob
+   */
+  select?: Prisma.PrintJobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PrintJob
+   */
+  omit?: Prisma.PrintJobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PrintJobInclude<ExtArgs> | null
+  where?: Prisma.PrintJobWhereInput
+  orderBy?: Prisma.PrintJobOrderByWithRelationInput | Prisma.PrintJobOrderByWithRelationInput[]
+  cursor?: Prisma.PrintJobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PrintJobScalarFieldEnum | Prisma.PrintJobScalarFieldEnum[]
 }
 
 /**

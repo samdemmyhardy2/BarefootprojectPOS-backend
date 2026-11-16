@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiConflictResponse, ApiOperation, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsOptional, IsString, MaxLength, MinLength, Validate, ValidatorConstraint, type ValidatorConstraintInterface } from 'class-validator';
+import { uploadPath } from '../../common/upload-path';
 import { GetUser } from '../../common/decorators/get-user.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { AuthService } from './auth.service';
@@ -25,6 +27,7 @@ class AvatarImageUrlConstraint implements ValidatorConstraintInterface {
 
 class UpdateProfileDto {
   @IsOptional() @IsString() @MinLength(2) @MaxLength(120) name?: string;
+  @Transform(({ value }) => typeof value === 'string' ? uploadPath(value) : value)
   @IsOptional() @IsString() @Validate(AvatarImageUrlConstraint) avatarUrl?: string | null;
 }
 class ChangePasswordDto {

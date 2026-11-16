@@ -13,9 +13,11 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { RestaurantSettingsModule } from './modules/restaurant-settings/restaurant-settings.module';
 import { TechnicalModule } from './modules/technical/technical.module';
+import { PrintingModule } from './modules/printing/printing.module';
+import { BackupModule } from './modules/backup/backup.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, OrdersModule, MenuModule, TablesModule, EmployeesModule, RoomsModule, TasksModule, AnalyticsModule, RestaurantSettingsModule, TechnicalModule],
+  imports: [PrismaModule, AuthModule, OrdersModule, MenuModule, TablesModule, EmployeesModule, RoomsModule, TasksModule, AnalyticsModule, RestaurantSettingsModule, TechnicalModule, PrintingModule, BackupModule],
   controllers: [AppController, HealthController],
   providers: [AppService],
 })

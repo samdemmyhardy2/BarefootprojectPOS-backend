@@ -48,6 +48,8 @@ export type OrderItemMinAggregateOutputType = {
   addExtras: string | null
   specialNotes: string | null
   subtotal: runtime.Decimal | null
+  removedAt: Date | null
+  removalReason: string | null
 }
 
 export type OrderItemMaxAggregateOutputType = {
@@ -60,12 +62,15 @@ export type OrderItemMaxAggregateOutputType = {
   addExtras: string | null
   specialNotes: string | null
   subtotal: runtime.Decimal | null
+  removedAt: Date | null
+  removalReason: string | null
 }
 
 export type OrderItemCountAggregateOutputType = {
   id: number
   orderId: number
   menuItemId: number
+  itemSnapshot: number
   quantity: number
   unitPrice: number
   removeIngredients: number
@@ -74,6 +79,8 @@ export type OrderItemCountAggregateOutputType = {
   modifierSelections: number
   specialNotes: number
   subtotal: number
+  removedAt: number
+  removalReason: number
   _all: number
 }
 
@@ -100,6 +107,8 @@ export type OrderItemMinAggregateInputType = {
   addExtras?: true
   specialNotes?: true
   subtotal?: true
+  removedAt?: true
+  removalReason?: true
 }
 
 export type OrderItemMaxAggregateInputType = {
@@ -112,12 +121,15 @@ export type OrderItemMaxAggregateInputType = {
   addExtras?: true
   specialNotes?: true
   subtotal?: true
+  removedAt?: true
+  removalReason?: true
 }
 
 export type OrderItemCountAggregateInputType = {
   id?: true
   orderId?: true
   menuItemId?: true
+  itemSnapshot?: true
   quantity?: true
   unitPrice?: true
   removeIngredients?: true
@@ -126,6 +138,8 @@ export type OrderItemCountAggregateInputType = {
   modifierSelections?: true
   specialNotes?: true
   subtotal?: true
+  removedAt?: true
+  removalReason?: true
   _all?: true
 }
 
@@ -218,7 +232,8 @@ export type OrderItemGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type OrderItemGroupByOutputType = {
   id: string
   orderId: string
-  menuItemId: string
+  menuItemId: string | null
+  itemSnapshot: runtime.JsonValue | null
   quantity: number
   unitPrice: runtime.Decimal
   removeIngredients: string | null
@@ -227,6 +242,8 @@ export type OrderItemGroupByOutputType = {
   modifierSelections: runtime.JsonValue
   specialNotes: string | null
   subtotal: runtime.Decimal
+  removedAt: Date | null
+  removalReason: string | null
   _count: OrderItemCountAggregateOutputType | null
   _avg: OrderItemAvgAggregateOutputType | null
   _sum: OrderItemSumAggregateOutputType | null
@@ -255,7 +272,8 @@ export type OrderItemWhereInput = {
   NOT?: Prisma.OrderItemWhereInput | Prisma.OrderItemWhereInput[]
   id?: Prisma.StringFilter<"OrderItem"> | string
   orderId?: Prisma.StringFilter<"OrderItem"> | string
-  menuItemId?: Prisma.StringFilter<"OrderItem"> | string
+  menuItemId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  itemSnapshot?: Prisma.JsonNullableFilter<"OrderItem">
   quantity?: Prisma.IntFilter<"OrderItem"> | number
   unitPrice?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.StringNullableFilter<"OrderItem"> | string | null
@@ -264,14 +282,17 @@ export type OrderItemWhereInput = {
   modifierSelections?: Prisma.JsonFilter<"OrderItem">
   specialNotes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  removalReason?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
-  menuItem?: Prisma.XOR<Prisma.MenuItemScalarRelationFilter, Prisma.MenuItemWhereInput>
+  menuItem?: Prisma.XOR<Prisma.MenuItemNullableScalarRelationFilter, Prisma.MenuItemWhereInput> | null
 }
 
 export type OrderItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
-  menuItemId?: Prisma.SortOrder
+  menuItemId?: Prisma.SortOrderInput | Prisma.SortOrder
+  itemSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   removeIngredients?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -280,6 +301,8 @@ export type OrderItemOrderByWithRelationInput = {
   modifierSelections?: Prisma.SortOrder
   specialNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   subtotal?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  removalReason?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.OrderOrderByWithRelationInput
   menuItem?: Prisma.MenuItemOrderByWithRelationInput
 }
@@ -290,7 +313,8 @@ export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.OrderItemWhereInput[]
   NOT?: Prisma.OrderItemWhereInput | Prisma.OrderItemWhereInput[]
   orderId?: Prisma.StringFilter<"OrderItem"> | string
-  menuItemId?: Prisma.StringFilter<"OrderItem"> | string
+  menuItemId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  itemSnapshot?: Prisma.JsonNullableFilter<"OrderItem">
   quantity?: Prisma.IntFilter<"OrderItem"> | number
   unitPrice?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.StringNullableFilter<"OrderItem"> | string | null
@@ -299,14 +323,17 @@ export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
   modifierSelections?: Prisma.JsonFilter<"OrderItem">
   specialNotes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  removalReason?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
-  menuItem?: Prisma.XOR<Prisma.MenuItemScalarRelationFilter, Prisma.MenuItemWhereInput>
+  menuItem?: Prisma.XOR<Prisma.MenuItemNullableScalarRelationFilter, Prisma.MenuItemWhereInput> | null
 }, "id">
 
 export type OrderItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
-  menuItemId?: Prisma.SortOrder
+  menuItemId?: Prisma.SortOrderInput | Prisma.SortOrder
+  itemSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   removeIngredients?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -315,6 +342,8 @@ export type OrderItemOrderByWithAggregationInput = {
   modifierSelections?: Prisma.SortOrder
   specialNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   subtotal?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  removalReason?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OrderItemCountOrderByAggregateInput
   _avg?: Prisma.OrderItemAvgOrderByAggregateInput
   _max?: Prisma.OrderItemMaxOrderByAggregateInput
@@ -328,7 +357,8 @@ export type OrderItemScalarWhereWithAggregatesInput = {
   NOT?: Prisma.OrderItemScalarWhereWithAggregatesInput | Prisma.OrderItemScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
   orderId?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
-  menuItemId?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
+  menuItemId?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
+  itemSnapshot?: Prisma.JsonNullableWithAggregatesFilter<"OrderItem">
   quantity?: Prisma.IntWithAggregatesFilter<"OrderItem"> | number
   unitPrice?: Prisma.DecimalWithAggregatesFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
@@ -337,10 +367,13 @@ export type OrderItemScalarWhereWithAggregatesInput = {
   modifierSelections?: Prisma.JsonWithAggregatesFilter<"OrderItem">
   specialNotes?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
   subtotal?: Prisma.DecimalWithAggregatesFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OrderItem"> | Date | string | null
+  removalReason?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
 }
 
 export type OrderItemCreateInput = {
   id?: string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -349,14 +382,17 @@ export type OrderItemCreateInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Date | string | null
+  removalReason?: string | null
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
-  menuItem: Prisma.MenuItemCreateNestedOneWithoutOrderItemsInput
+  menuItem?: Prisma.MenuItemCreateNestedOneWithoutOrderItemsInput
 }
 
 export type OrderItemUncheckedCreateInput = {
   id?: string
   orderId: string
-  menuItemId: string
+  menuItemId?: string | null
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -365,10 +401,13 @@ export type OrderItemUncheckedCreateInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Date | string | null
+  removalReason?: string | null
 }
 
 export type OrderItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -377,14 +416,17 @@ export type OrderItemUpdateInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
-  menuItem?: Prisma.MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
+  menuItem?: Prisma.MenuItemUpdateOneWithoutOrderItemsNestedInput
 }
 
 export type OrderItemUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  menuItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  menuItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -393,12 +435,15 @@ export type OrderItemUncheckedUpdateInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderItemCreateManyInput = {
   id?: string
   orderId: string
-  menuItemId: string
+  menuItemId?: string | null
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -407,10 +452,13 @@ export type OrderItemCreateManyInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Date | string | null
+  removalReason?: string | null
 }
 
 export type OrderItemUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -419,12 +467,15 @@ export type OrderItemUpdateManyMutationInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderItemUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  menuItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  menuItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -433,6 +484,8 @@ export type OrderItemUncheckedUpdateManyInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderItemListRelationFilter = {
@@ -449,6 +502,7 @@ export type OrderItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   menuItemId?: Prisma.SortOrder
+  itemSnapshot?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   removeIngredients?: Prisma.SortOrder
@@ -457,6 +511,8 @@ export type OrderItemCountOrderByAggregateInput = {
   modifierSelections?: Prisma.SortOrder
   specialNotes?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
+  removalReason?: Prisma.SortOrder
 }
 
 export type OrderItemAvgOrderByAggregateInput = {
@@ -475,6 +531,8 @@ export type OrderItemMaxOrderByAggregateInput = {
   addExtras?: Prisma.SortOrder
   specialNotes?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
+  removalReason?: Prisma.SortOrder
 }
 
 export type OrderItemMinOrderByAggregateInput = {
@@ -487,6 +545,8 @@ export type OrderItemMinOrderByAggregateInput = {
   addExtras?: Prisma.SortOrder
   specialNotes?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
+  removedAt?: Prisma.SortOrder
+  removalReason?: Prisma.SortOrder
 }
 
 export type OrderItemSumOrderByAggregateInput = {
@@ -590,6 +650,7 @@ export type OrderItemUpdateselectedAllergensInput = {
 
 export type OrderItemCreateWithoutMenuItemInput = {
   id?: string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -598,12 +659,15 @@ export type OrderItemCreateWithoutMenuItemInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Date | string | null
+  removalReason?: string | null
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
 }
 
 export type OrderItemUncheckedCreateWithoutMenuItemInput = {
   id?: string
   orderId: string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -612,6 +676,8 @@ export type OrderItemUncheckedCreateWithoutMenuItemInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Date | string | null
+  removalReason?: string | null
 }
 
 export type OrderItemCreateOrConnectWithoutMenuItemInput = {
@@ -646,7 +712,8 @@ export type OrderItemScalarWhereInput = {
   NOT?: Prisma.OrderItemScalarWhereInput | Prisma.OrderItemScalarWhereInput[]
   id?: Prisma.StringFilter<"OrderItem"> | string
   orderId?: Prisma.StringFilter<"OrderItem"> | string
-  menuItemId?: Prisma.StringFilter<"OrderItem"> | string
+  menuItemId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  itemSnapshot?: Prisma.JsonNullableFilter<"OrderItem">
   quantity?: Prisma.IntFilter<"OrderItem"> | number
   unitPrice?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.StringNullableFilter<"OrderItem"> | string | null
@@ -655,10 +722,13 @@ export type OrderItemScalarWhereInput = {
   modifierSelections?: Prisma.JsonFilter<"OrderItem">
   specialNotes?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   subtotal?: Prisma.DecimalFilter<"OrderItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.DateTimeNullableFilter<"OrderItem"> | Date | string | null
+  removalReason?: Prisma.StringNullableFilter<"OrderItem"> | string | null
 }
 
 export type OrderItemCreateWithoutOrderInput = {
   id?: string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -667,12 +737,15 @@ export type OrderItemCreateWithoutOrderInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
-  menuItem: Prisma.MenuItemCreateNestedOneWithoutOrderItemsInput
+  removedAt?: Date | string | null
+  removalReason?: string | null
+  menuItem?: Prisma.MenuItemCreateNestedOneWithoutOrderItemsInput
 }
 
 export type OrderItemUncheckedCreateWithoutOrderInput = {
   id?: string
-  menuItemId: string
+  menuItemId?: string | null
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -681,6 +754,8 @@ export type OrderItemUncheckedCreateWithoutOrderInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Date | string | null
+  removalReason?: string | null
 }
 
 export type OrderItemCreateOrConnectWithoutOrderInput = {
@@ -712,6 +787,7 @@ export type OrderItemUpdateManyWithWhereWithoutOrderInput = {
 export type OrderItemCreateManyMenuItemInput = {
   id?: string
   orderId: string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -720,10 +796,13 @@ export type OrderItemCreateManyMenuItemInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Date | string | null
+  removalReason?: string | null
 }
 
 export type OrderItemUpdateWithoutMenuItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -732,12 +811,15 @@ export type OrderItemUpdateWithoutMenuItemInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
 }
 
 export type OrderItemUncheckedUpdateWithoutMenuItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -746,11 +828,14 @@ export type OrderItemUncheckedUpdateWithoutMenuItemInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderItemUncheckedUpdateManyWithoutMenuItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -759,11 +844,14 @@ export type OrderItemUncheckedUpdateManyWithoutMenuItemInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderItemCreateManyOrderInput = {
   id?: string
-  menuItemId: string
+  menuItemId?: string | null
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: string | null
@@ -772,10 +860,13 @@ export type OrderItemCreateManyOrderInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: string | null
   subtotal: runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Date | string | null
+  removalReason?: string | null
 }
 
 export type OrderItemUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -784,12 +875,15 @@ export type OrderItemUpdateWithoutOrderInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  menuItem?: Prisma.MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  menuItem?: Prisma.MenuItemUpdateOneWithoutOrderItemsNestedInput
 }
 
 export type OrderItemUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  menuItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  menuItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -798,11 +892,14 @@ export type OrderItemUncheckedUpdateWithoutOrderInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  menuItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  menuItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   removeIngredients?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -811,6 +908,8 @@ export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
   modifierSelections?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   specialNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removalReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -819,6 +918,7 @@ export type OrderItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   id?: boolean
   orderId?: boolean
   menuItemId?: boolean
+  itemSnapshot?: boolean
   quantity?: boolean
   unitPrice?: boolean
   removeIngredients?: boolean
@@ -827,14 +927,17 @@ export type OrderItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   modifierSelections?: boolean
   specialNotes?: boolean
   subtotal?: boolean
+  removedAt?: boolean
+  removalReason?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
-  menuItem?: boolean | Prisma.MenuItemDefaultArgs<ExtArgs>
+  menuItem?: boolean | Prisma.OrderItem$menuItemArgs<ExtArgs>
 }, ExtArgs["result"]["orderItem"]>
 
 export type OrderItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   orderId?: boolean
   menuItemId?: boolean
+  itemSnapshot?: boolean
   quantity?: boolean
   unitPrice?: boolean
   removeIngredients?: boolean
@@ -843,14 +946,17 @@ export type OrderItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   modifierSelections?: boolean
   specialNotes?: boolean
   subtotal?: boolean
+  removedAt?: boolean
+  removalReason?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
-  menuItem?: boolean | Prisma.MenuItemDefaultArgs<ExtArgs>
+  menuItem?: boolean | Prisma.OrderItem$menuItemArgs<ExtArgs>
 }, ExtArgs["result"]["orderItem"]>
 
 export type OrderItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   orderId?: boolean
   menuItemId?: boolean
+  itemSnapshot?: boolean
   quantity?: boolean
   unitPrice?: boolean
   removeIngredients?: boolean
@@ -859,14 +965,17 @@ export type OrderItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   modifierSelections?: boolean
   specialNotes?: boolean
   subtotal?: boolean
+  removedAt?: boolean
+  removalReason?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
-  menuItem?: boolean | Prisma.MenuItemDefaultArgs<ExtArgs>
+  menuItem?: boolean | Prisma.OrderItem$menuItemArgs<ExtArgs>
 }, ExtArgs["result"]["orderItem"]>
 
 export type OrderItemSelectScalar = {
   id?: boolean
   orderId?: boolean
   menuItemId?: boolean
+  itemSnapshot?: boolean
   quantity?: boolean
   unitPrice?: boolean
   removeIngredients?: boolean
@@ -875,32 +984,35 @@ export type OrderItemSelectScalar = {
   modifierSelections?: boolean
   specialNotes?: boolean
   subtotal?: boolean
+  removedAt?: boolean
+  removalReason?: boolean
 }
 
-export type OrderItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "menuItemId" | "quantity" | "unitPrice" | "removeIngredients" | "addExtras" | "selectedAllergens" | "modifierSelections" | "specialNotes" | "subtotal", ExtArgs["result"]["orderItem"]>
+export type OrderItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "menuItemId" | "itemSnapshot" | "quantity" | "unitPrice" | "removeIngredients" | "addExtras" | "selectedAllergens" | "modifierSelections" | "specialNotes" | "subtotal" | "removedAt" | "removalReason", ExtArgs["result"]["orderItem"]>
 export type OrderItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
-  menuItem?: boolean | Prisma.MenuItemDefaultArgs<ExtArgs>
+  menuItem?: boolean | Prisma.OrderItem$menuItemArgs<ExtArgs>
 }
 export type OrderItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
-  menuItem?: boolean | Prisma.MenuItemDefaultArgs<ExtArgs>
+  menuItem?: boolean | Prisma.OrderItem$menuItemArgs<ExtArgs>
 }
 export type OrderItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
-  menuItem?: boolean | Prisma.MenuItemDefaultArgs<ExtArgs>
+  menuItem?: boolean | Prisma.OrderItem$menuItemArgs<ExtArgs>
 }
 
 export type $OrderItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OrderItem"
   objects: {
     order: Prisma.$OrderPayload<ExtArgs>
-    menuItem: Prisma.$MenuItemPayload<ExtArgs>
+    menuItem: Prisma.$MenuItemPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     orderId: string
-    menuItemId: string
+    menuItemId: string | null
+    itemSnapshot: runtime.JsonValue | null
     quantity: number
     unitPrice: runtime.Decimal
     removeIngredients: string | null
@@ -909,6 +1021,8 @@ export type $OrderItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     modifierSelections: runtime.JsonValue
     specialNotes: string | null
     subtotal: runtime.Decimal
+    removedAt: Date | null
+    removalReason: string | null
   }, ExtArgs["result"]["orderItem"]>
   composites: {}
 }
@@ -1304,7 +1418,7 @@ readonly fields: OrderItemFieldRefs;
 export interface Prisma__OrderItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  menuItem<T extends Prisma.MenuItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MenuItemDefaultArgs<ExtArgs>>): Prisma.Prisma__MenuItemClient<runtime.Types.Result.GetResult<Prisma.$MenuItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  menuItem<T extends Prisma.OrderItem$menuItemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderItem$menuItemArgs<ExtArgs>>): Prisma.Prisma__MenuItemClient<runtime.Types.Result.GetResult<Prisma.$MenuItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1337,6 +1451,7 @@ export interface OrderItemFieldRefs {
   readonly id: Prisma.FieldRef<"OrderItem", 'String'>
   readonly orderId: Prisma.FieldRef<"OrderItem", 'String'>
   readonly menuItemId: Prisma.FieldRef<"OrderItem", 'String'>
+  readonly itemSnapshot: Prisma.FieldRef<"OrderItem", 'Json'>
   readonly quantity: Prisma.FieldRef<"OrderItem", 'Int'>
   readonly unitPrice: Prisma.FieldRef<"OrderItem", 'Decimal'>
   readonly removeIngredients: Prisma.FieldRef<"OrderItem", 'String'>
@@ -1345,6 +1460,8 @@ export interface OrderItemFieldRefs {
   readonly modifierSelections: Prisma.FieldRef<"OrderItem", 'Json'>
   readonly specialNotes: Prisma.FieldRef<"OrderItem", 'String'>
   readonly subtotal: Prisma.FieldRef<"OrderItem", 'Decimal'>
+  readonly removedAt: Prisma.FieldRef<"OrderItem", 'DateTime'>
+  readonly removalReason: Prisma.FieldRef<"OrderItem", 'String'>
 }
     
 
@@ -1743,6 +1860,25 @@ export type OrderItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many OrderItems to delete.
    */
   limit?: number
+}
+
+/**
+ * OrderItem.menuItem
+ */
+export type OrderItem$menuItemArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MenuItem
+   */
+  select?: Prisma.MenuItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MenuItem
+   */
+  omit?: Prisma.MenuItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MenuItemInclude<ExtArgs> | null
+  where?: Prisma.MenuItemWhereInput
 }
 
 /**

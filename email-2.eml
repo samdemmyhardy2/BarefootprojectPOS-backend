@@ -1,0 +1,83 @@
+Return-Path: <jokerlove2671@gmail.com>
+X-Original-To: inbox@forward.starbridgemyanmar.tech
+Delivered-To: inbox@forward.starbridgemyanmar.tech
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	by mail.starbridgemyanmar.tech (Postfix) with ESMTPS id 8A2F0CA436
+	for <inbox@forward.starbridgemyanmar.tech>; Sat, 31 Oct 2026 09:29:30 +0000 (UTC)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-3ac99992373so11709091fa.3
+        for <inbox@forward.starbridgemyanmar.tech>; Sat, 31 Oct 2026 02:29:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793438968; cv=none;
+        d=google.com; s=arc-20260327;
+        b=N8BfPxNPUIl9WV5oquHC9DCIl2mu7OShaNu67zqIVCRt/qgQ6LAEn6YPmVuOncueBF
+         kQRJ4RbJlzhBj9Hiepl0wRkcAvsRz1p9IctCpVb0J5z8wDxqdjd/1WCcItuPvUfzpQQs
+         dusO4Sb4T5+4RGbbQ0Lku4lg6dOr0ClGlmVBjslCSxf1e4K437neenzLdgsbfqTbqv3R
+         Spt12WeZR0EryHj4/p3ptbODGiBhxhBKiFeBRLfouO4E0UjDiBmoH/pAeUAewyXzUuc7
+         NnDBegBYg+lGjsgWcY2MdF95Tej5ItJUa5T1drnmciMm+beG7QHe1BDF9lxZlAeZ7ig2
+         /NIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=Z966F2gefaASZ4+1gEUxf8b5C2Q80bc7pq02J1gzIv8=;
+        fh=dLjZe9sMLGlX1AKfG3Z2Dpq0ekzpptIJRArxMCWIw+Y=;
+        b=VVLXd5RuuyxfP36yu+c8C+wQXqHBnr0A/xzj6OIDdwKDx6DSNfiJHdqUWLPZQvnTZR
+         C9hiIm5Uzixrp276LCXqo5xFDarux+FWr1ux1RyJ3ea24vpDyAIC5D2+6dpZLJq2Y8Sa
+         +0z3u5Tz396G0OQNXrrWo2GOQtR57/iwz6WE3kRzbT2+JQ6kXl5w2XShnyccjTrGZAXh
+         ubpqP/0vtrPSRPWv5kwcNiLPozLt4Y1hZfd4wNEZA58gWBeMwPHDvQQBfzK+aXXDzsPl
+         v5LkCOagWM0kL13HmzzGRkOK6278SpFWtKy1A8c7Cl+EKUQH9kZ73reupI5d7Lm7K83D
+         Pfbg==;
+        darn=forward.starbridgemyanmar.tech
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793438968; x=1794043768; darn=forward.starbridgemyanmar.tech;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Z966F2gefaASZ4+1gEUxf8b5C2Q80bc7pq02J1gzIv8=;
+        b=luGVqkqBhb/5mRUl/tdxvTvkNRcJUfz9/bFmpCbsqpzrV1QMJvtMd9PQ+fpY7frMc4
+         GRfuv7m+ulEc2u+JMSfrTTnNxtOE92T2qh/TKr4BUjzyYXjsUv75MXsgPTPbRxiDV/P4
+         SBFB483CVhcFVqL4bdqXynQSFfTl9NWez4ZrPZ0TAGhPLR7xXKxzGdbFjloiZ6HnRbuO
+         u+vh+9wmSbu+F27EyBvxNQ3q33sk8hiyw7UmasrF6EdG4TI3qZdGbKpZ95lbs8Om8fzZ
+         V4PVN6diViC/J/GxiGskGJvQ95tv6+4GRJSbhZ9JPiWcgtMWFuEdPsWE9Onh2UADQx4D
+         Iz3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793438968; x=1794043768;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Z966F2gefaASZ4+1gEUxf8b5C2Q80bc7pq02J1gzIv8=;
+        b=l3f5phGGHtrVW/2G0rcx74Moa9K5lBiS0vOBkeTjzo98cy2ZOtfwHJb4OvA1OmvoYK
+         Aw5E4+bYztaavkrPCQ6Cyw5NOxOqyz0lEoymEgDfFB1XZauju3YpAU3mzlsPtCgii2sO
+         FaWVCQ9uE0sbgAX3jFh5KX2yz4rc0qtAfSWCDv644X/rTUF3dVUAmIGb6NqZkTzSrBbs
+         QIf6NMUOBUXWB0CVhnr7QXkcK3/A9ATmTJvUY6WsnMH59/NetLnMOkT8wTjkgqU7ssdp
+         tnoni27Cy8MBB3uijxlCvoMKPDyJrnuSCUZNlmPglE5NT/UxILv478BHRm6rrNqVvgTX
+         9SIg==
+X-Gm-Message-State: AFq9FYLdgljsAF9X0JgtD23tOhAapN/qelR+mQnVXHxsquNISq5s+eWw
+	m4T5sCEgCR01gbhEpjGlu9mlxY7avKXgENWFtRZPhNQ01V6PWoABTOb7oIBgWqfya8/q8l3eyvv
+	NyIPY4NDJIdFkVMlXyFBQT3Rkcvu8qO6d6zN2isEPpw==
+X-Gm-Gg: AYBFou0i1OZ/LNXcdRCJBTLs4DEpZGXKR8zjh1mTjs4sy8Cc7kpyE0tTp8sA3smpKdr
+	G2riHxa8IS5GPNLyypd+bWgxh0kyKvyl7wEeorSmie6ykTczcHDo1gcW3pA2gu/BJV34WVcDS4O
+	lFYjboUCOQc13jhPc8z0uj8XyOe94z6wh6lAsQAhlVAwLhUX2LI+aqWUlY15UZkg9LEmMwZlgy2
+	UuYOkEIo3PSY7IgHRLezS1Lx2iZxxLA+DwdC5SR8/gl2zud/JFfBqqdYJr+jpskwY6WnFiw34p8
+	9AYWxMQPmSna7KEap11l75A8Zr+ChnhKiyCHMi6GQqp1AgOkCaMzTwYFNPrXCEWDDVRBjosbBpX
+	nQWnVBi684AZW4r3NOTt9Z5gAIfeHLlStLO1Lrw==
+X-Received: by 2002:a05:651c:2108:b0:3a9:7993:14d9 with SMTP id
+ 38308e7fff4ca-3acb7a8f4bdmr10841031fa.8.1793438967484; Sat, 31 Oct 2026
+ 02:29:27 -0700 (PDT)
+MIME-Version: 1.0
+From: Rize Kishimaro <jokerlove2671@gmail.com>
+Date: Sat, 31 Oct 2026 16:29:15 +0700
+X-Gm-Features: AclHuK_1LNVUWanXNKWfi6-AnmQKEFoZ88iwY-bEzmRDybMG8rR3c3BdaS9-InM
+Message-ID: <CALC+rNKzQ6pZbNXQ2rkPRnmqZ1MB510jgSYFkXHczG6_Sy2gnA@mail.gmail.com>
+Subject: Test Mail
+To: inbox@forward.starbridgemyanmar.tech
+Content-Type: multipart/alternative; boundary="0000000000009555f7065f1f8c97"
+
+--0000000000009555f7065f1f8c97
+Content-Type: text/plain; charset="UTF-8"
+
+See test
+
+--0000000000009555f7065f1f8c97
+Content-Type: text/html; charset="UTF-8"
+
+<div dir="ltr">See test</div>
+
+--0000000000009555f7065f1f8c97--

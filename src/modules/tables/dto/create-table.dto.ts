@@ -16,7 +16,7 @@ export class CreateTableDto {
   @ApiProperty({ enum: TableShape, required: false, default: TableShape.RECTANGLE }) @IsOptional() @IsEnum(TableShape)
   shape?: TableShape;
 
-  @ApiProperty({ minimum: 0, maximum: 7, required: false, description: 'Grid column in the floor layout (0–7).' }) @IsOptional() @Type(() => Number) @IsInt() @Min(0) @Max(7)
+  @ApiProperty({ minimum: 0, maximum: 11, required: false, description: 'Grid column in the 12-column floor layout (0–11).' }) @IsOptional() @Type(() => Number) @IsInt() @Min(0) @Max(11)
   positionX?: number;
 
   @ApiProperty({ minimum: 0, required: false, description: 'Row slot in the floor layout.' }) @IsOptional() @Type(() => Number) @IsInt() @Min(0)

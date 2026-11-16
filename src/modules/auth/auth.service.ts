@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { Role } from 'prisma/generated/prisma/enums';
+import { uploadPath } from '../../common/upload-path';
 
 @Injectable()
 export class AuthService {
@@ -81,7 +82,7 @@ export class AuthService {
   }
 
   private generateToken(userId: string, email: string, role: string, name: string, jobTitle: string, avatarUrl: string | null) {
-    const payload = { id: userId, sub: userId, email, role, name, jobTitle, avatarUrl };
+    const payload = { id: userId, sub: userId, email, role, name, jobTitle, avatarUrl: avatarUrl ? uploadPath(avatarUrl) : avatarUrl };
     return {
       access_token: this.jwtService.sign(payload),
     };

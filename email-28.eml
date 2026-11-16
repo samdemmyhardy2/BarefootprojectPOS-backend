@@ -1,0 +1,265 @@
+Return-Path: <barefootproject.kohphayam+caf_=inbox=forward.starbridgemyanmar.tech@gmail.com>
+X-Original-To: inbox@forward.starbridgemyanmar.tech
+Delivered-To: inbox@forward.starbridgemyanmar.tech
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	by mail.starbridgemyanmar.tech (Postfix) with ESMTPS id 215DDC3A5B
+	for <inbox@forward.starbridgemyanmar.tech>; Wed,  4 Nov 2026 10:56:19 +0000 (UTC)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6b1dae0febeso769617a12.2
+        for <inbox@forward.starbridgemyanmar.tech>; Wed, 04 Nov 2026 02:56:18 -0800 (PST)
+ARC-Seal: i=3; a=rsa-sha256; t=1793789776; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=puB4bHOR+L6rBbQhID8Bmub1ZBqCKHdlZF0H0/CZq8tqhQ687A2XZT0cEnEZu8vtF0
+         nuw446am54yL5vkyNhjz+WHlail3Gf9N7P0Yrsr3892QN8sjpQXdGJeBfvyzANVjKfek
+         MilwZmvazEQFQ/dMfzAwyowFymWqx2+vItIq2RUojHHLG485N0MvNqhrcc27x3sePrkG
+         2RuWPgWG2w51yfjTTTI3ZNpMdIQO2rBjdDItfQWniEmKDhCaxaPukKOSvAzi1CmvEh9X
+         l2kaWmBb2pVGKHRIGv3ORu5/QGR8YQWFBUjpeG2Te+0aRZhoX7xs5YQw7wfS/gGVT4E4
+         GPSA==
+ARC-Message-Signature: i=3; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature:delivered-to;
+        bh=vo8dh32CZ30uQ3wne/kLa6mB/kiXWK15NwymSZwSd5I=;
+        fh=CD5Cep98aYZcpu70O5G7OmEEdM9qs1JHsghWSQkmqyQ=;
+        b=f36LY+T7lz12zqF6gBboqQ+dZnZ5lquhBaZZZFEgGuKjFSpaZR9Up3n9cmqQvnNG0N
+         VWkvszgXm3p5xmN9CgpoBOI61GGmvn0IkyYoUZxqfwZrmJQcFO5INQLVrTSFVNAkbgh4
+         FPUtugaCLtmYb4aAP0USTW8lTfy8m5FhY8kfN+ljAB9U4vu67DOrQtqGOsZ4nQd1NJZq
+         hllC1znlc4it//Uc3ZC0vmlNPe2NSD28woMvFF/KyI3mSZDjSqKth8D18guMqtkRfqi/
+         8948r8A5+MucTv2Ma0ZBnT2fI7opfEI6tMoxSYq8tWrkYjeZbWKxKizv4vFknFH7Q3dq
+         jhvQ==;
+        darn=forward.starbridgemyanmar.tech
+ARC-Authentication-Results: i=3; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=c3hgVgpa;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of neubauerpa@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=neubauerpa@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793789776; x=1794394576;
+        h=content-type:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:dkim-signature:delivered-to:x-forwarded-for
+         :x-forwarded-to:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vo8dh32CZ30uQ3wne/kLa6mB/kiXWK15NwymSZwSd5I=;
+        b=oA+61zuBQ/TIULrKtH041PUeqiFGj5vG2oBGD8s028hcMTQe2UjMVeVXaPXcbi7O47
+         KoJg34bGU5MLpf+3IlMkveoH5ntPA0uodTXeA6SDNPJtcnMG2scd+hRxVCjUqYNfFTd5
+         fRqjX5JI0tNq95AZWoMVht5ILEPPY9iQbSC7/zWFFFoZWcusNLVoM2JO1hjnQfVNbuua
+         Ie6H0AWPFojelbb5SSYm3J7VZuLZM98xqOxIZEs3HgnWBtBt0P2IIkvW9/WkPsUQb9G+
+         vXb5Jtkitig6a6G5FwZYFtuouOcdYe5sE/0ZTXe+MW7piQFxrqm6Oa2K8IBX8t6Eu3I7
+         O/FQ==
+X-Forwarded-Encrypted: i=3; AKwUvBzxoTjRZTaeY0aXthaFyxqnLxP92D7YDlejw7OA/tFUVxLMgGhZezt+T8VCAy/t9UAlMnrdcw==@forward.starbridgemyanmar.tech
+X-Gm-Message-State: APuU4Z+JUDfkYCaPwhzOlYjj6Xw29wZGB42YVFkx/iiWlhA7pcywY/Qu
+	9jwHDZSyPfQWV+6Q2h+FkHfFl6fKDayXmb9ABEPm3VOTKE+HBPXVK+z1B+Lfy9bHtJf3oumjOs/
+	QxIP5W/qRhDB0vdRtTOlo+QTeWL002OzjVU/vxKz6WDkWA3zTKBfTj/ocn28GHA==
+X-Received: by 2002:a05:6402:1ecf:b0:6b4:be8c:325b with SMTP id 4fb4d7f45d1cf-6b4d3285c72mr12098586a12.0.1793789776425;
+        Wed, 04 Nov 2026 02:56:16 -0800 (PST)
+X-Forwarded-To: inbox@forward.starbridgemyanmar.tech
+X-Forwarded-For: barefootproject.kohphayam@gmail.com inbox@forward.starbridgemyanmar.tech
+Delivered-To: barefootproject.kohphayam@gmail.com
+Received: by 2002:a05:7412:b30d:b0:230:df9d:739b with SMTP id ds13csp238561rdb;
+        Wed, 4 Nov 2026 02:56:15 -0800 (PST)
+X-Received: by 2002:a05:6000:47ca:b0:48e:7508:bbf8 with SMTP id ffacd0b85a97d-48e7508bd71mr19868238f8f.27.1793789774885;
+        Wed, 04 Nov 2026 02:56:14 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; t=1793789774; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=hWlWYvGcdmGD+7bIP0WEKiRYyT4oB5pC2YTIfpAkwS6xL/8Q1vVkvhvNhMP1bTOA5U
+         x54/aStAtP/BmPnqsaHOgKWe8Mnb97yQqEj39StnYMG7BoQblPvOleVaPJRijY+rMcko
+         xf01QHbK5sX6jQIy+l6NvoisxOqyXGNWW/SMIIPzjJDZ3HxSoJdJoHnlLssD2MSAt36W
+         Io7C5qBs98lGDn6fDBELD9BjKkDjK15svbP+jJipgM7xgiXX0XqfZWgm/E4YAYN/Odzx
+         erhaFvCzEcEV6hY6OS8+Lsdb0mnrvnRj5mBdx9y5OsNKIHIURxS6+P16Nl0eP+9XxcNm
+         AMsA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature;
+        bh=vo8dh32CZ30uQ3wne/kLa6mB/kiXWK15NwymSZwSd5I=;
+        fh=+MYYFVSSXp5PZF1Wslny1HLyPY5wP2diwAv/ZqtVPpQ=;
+        b=YZ8FIBcMqoUsq4/ZzBlJJY7HL0wV+H3DIWAiTbvTLyGhR/KAl7JfpRWZo82kL+kHlA
+         63fbOQTEECZkDPU48rxP0kJL5pUr4Zs6u9vFtU1G4Apz5v1On+8Y/9UhnrzQKd2T7JtO
+         0z0bltkjjhFfPQherFq4ZreVHciBbfKIf353vkw11eidmUxMwwZ9Bh7P7bO8UadZg0vK
+         ucsDDi4vZpgS1kz/OC9HuENGxvDpwWbxgdSdHNQRcj8pSsVgCzWOENy8e26gUR3RWNR+
+         0+2x352nbouvs/1XBbNB44bVJkHJrzZofQtjMfSFsMRdCLCDszDB9NwT/FShe7581tBu
+         SFFw==;
+        dara=google.com
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=c3hgVgpa;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of neubauerpa@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=neubauerpa@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id ffacd0b85a97d-48fecda25c1sor332374f8f.12.2026.11.04.02.56.14
+        for <barefootproject.kohphayam@gmail.com>
+        (Google Transport Security);
+        Wed, 04 Nov 2026 02:56:14 -0800 (PST)
+Received-SPF: pass (google.com: domain of neubauerpa@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=c3hgVgpa;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of neubauerpa@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=neubauerpa@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1793789774; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lxdU5HkJP7tnFXLa1FkuMNtPBEnMo7tkg5mMj6XlC3/BhGkk3+LMhMaul6e6tqQNwd
+         JhhRp0CYKRO7XaW+1ccW2nGCSV5Tm+y5O5Pq3kmAfkYYAGXuB/p+OwxO78XXmTvkDWwj
+         OM4uTA/MLnDI9rocu7tA6cgG+phst/Ng9eaAcSTAP6wKeigQv80Xt+edfZ8oIJsu5z6n
+         +ms6KNx6c8UxEMzzWXISx2M1+UTx3/EKkANnpKdWYcgG0CdVQGpNEVB9UJ8Z9GxNrTxl
+         mnJ4qM9GASstwT/swgy+vP2W6ZOITOW2ZymTAYx5vfsE5YUZ9UoYxW65CaVLq5Jopxb0
+         RZ2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature;
+        bh=vo8dh32CZ30uQ3wne/kLa6mB/kiXWK15NwymSZwSd5I=;
+        fh=+MYYFVSSXp5PZF1Wslny1HLyPY5wP2diwAv/ZqtVPpQ=;
+        b=PAlpGXgBnyHhnlceiMUxpga39gvwq073TnbCXmo/+IowP9jW+VBtuN0IdHkpcgVCeT
+         TG3Uk10pvwcXlzmM8mEsiCFy9SeJaurAF/p7NkTXcoCeMJXOxqOogqcJx1rhEBg3w/z7
+         OXLgANq0ruSeUkiGP0hYc++/gTMjl85jc1eNWbXm2zX7Kc8UT++ry1IlWVEGpGKY2SF3
+         hOQPCl8eQcLdC+gxulXUZpb50N5XKU/DmUKunTM0A7TVVWdV29abXK4+BIINYKKopnAw
+         qERtx1AGf3jLTjz9eixmRHzHjfJCmpmACfctDSVGS/sORDUrmNuycXH7/ilEMH6WwJhG
+         djlw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793789774; x=1794394574; dara=google.com;
+        h=content-type:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vo8dh32CZ30uQ3wne/kLa6mB/kiXWK15NwymSZwSd5I=;
+        b=c3hgVgpaA/uhSFEda0UD1SF+PAkjmd/De8wZe26PZ8+EepoO0lIApFcNo0rhPBWKZt
+         YDcaZtzBWFcw222viY6n988s+E4Ibbvumk8novJApRVP89Zzh3kvnDkKd2mo2MXGozL1
+         nt4gUQjyOOnqrEOxps3uS+mYOfUfnwffBL1oAZ5OZbth9YM0lgAuaUVDY9uWAUqy52Rv
+         u421GQDeLs+5G4ixdpJSZ6nfZRqlCF0ar8ckZO/ymvopXQQJkI0bYb8DfATUEIJLvpwr
+         HXV+kgMy2NBlFAWh6vCMh3gxZI/U3p+Rom+G3rpMnGkgxXHmyYJ8HI1+rDx0FRUFNL+M
+         XwHA==
+X-Gm-Gg: AYBFou3vTa0J/W/ZqqIy5CzECartvaCfrM+nItzTRkNRezfOMONIJVyjmrnN3dKeqCJ
+	gbdqbkkITvI+n4cK18aBrLEqyVHvu0usnoRD7COOKc1hLY8fKu/dQjDAEQNhiccVccF2upXbxs6
+	HaL1Zov9ZlkrVBgux4Hhf34II42T3Xc6IG2pld56MyGpo/5VUS0THxrGuV6RQrlzXEzUOkIaB9l
+	qBWinndY1yKFnT83C/UB3ygK4fPKLcpHL0hBOmZnWHG59BRLZJGxsgSxysjB/hTh+/edaQYwtN1
+	aU9wVarX/3Qpn09vwQ1a3WhibiIQPDl6K9YmL+u0KJRUzB1RZCT3SLcoDEb8aX09a/WkNaYzDU+
+	3uO4F5IFWnVhNernsncEZ2I4GsR1eYtQfZYOg/ACDH4iziD5rsrpUtyobjoOF6pOQjlrzLC9tec
+	itPe61
+X-Received: by 2002:a05:6000:1449:b0:48d:ff71:dd9d with SMTP id
+ ffacd0b85a97d-48e6e2ef786mr33094712f8f.23.1793789774174; Wed, 04 Nov 2026
+ 02:56:14 -0800 (PST)
+MIME-Version: 1.0
+References: <CAAG3Z1nGGz76yB0Gi+HSs_xRT1GjPBLBEsh+XbwSnWRcqnvaJg@mail.gmail.com>
+ <F0345A74-FC50-4D78-BE44-B2F3A242ECA3@gmail.com>
+In-Reply-To: <F0345A74-FC50-4D78-BE44-B2F3A242ECA3@gmail.com>
+From: Patricia N <neubauerpa@gmail.com>
+Date: Wed, 4 Nov 2026 18:56:02 +0800
+X-Gm-Features: AclHuK_SBvACgWqpSkXUHTCHqpsRB3b1Pvgd0JwM3pEBB0hUuC19ppWqUz5Ky6U
+Message-ID: <CAAG3Z1miHhUwLwq2Ms9p1Di1Cp+QxdFnDU==a-3Hm8VH85j7yg@mail.gmail.com>
+Subject: Re: Koh Surin boat trip help
+To: Barefoot Project <barefootproject.kohphayam@gmail.com>
+Content-Type: multipart/alternative; boundary="0000000000004aa042065f713a23"
+
+--0000000000004aa042065f713a23
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+I looked further into the trip to Surin. I think it is easiest if we just
+join a one day snorkeling trip to Surin Island. How much would that cost
+for two adults and two children? Do you know how long a boat takes to get
+to Surin? We are thinking of going either on the 20th, 21st or 22nd. We are
+flexible.
+
+Thank you for your help.
+
+Best,
+Patricia
+
+On Wed, Nov 4, 2026, 08:31 Barefoot Project <
+barefootproject.kohphayam@gmail.com> wrote:
+
+> Hello partricia
+>
+> Hope you are well
+>
+> Yes there is boat that will go to Turin island there is one way to the
+> Turin island also
+>
+> If may I asked when are you planning to go and I will ask their schedule
+> for you
+>
+> Have a lovely day
+>
+> barefoot project
+> =F0=9F=90=B6=F0=9F=91=A9=F0=9F=8F=BD=E2=80=8D=F0=9F=A6=B3=F0=9F=A7=94=F0=
+=9F=8F=BB=E2=80=8D=E2=99=82=EF=B8=8F=F0=9F=90=A5=F0=9F=AA=A9=F0=9F=92=96=F0=
+=9F=8C=B8=F0=9F=8E=80
+>
+> On 3 Nov 2026, at 21:30, Patricia N <neubauerpa@gmail.com> wrote:
+>
+> Hello,
+>
+> My family and I are really looking forward to our stay in your resort. I
+> was wondering if you could help me something. We were thinking of going t=
+o
+> Koh Surin for one or two nights after our stay with you. I was hoping the=
+re
+> is a tour operator that departs from Koh Phayam. Maybe even one way would
+> be fine and then we would return to a different port. Or both ways from K=
+oh
+> Phayam. Do you know a boat trip operator with whom we could book this?
+>
+> Thank you very much for your help.
+>
+> Kind regards,
+> Patricia
+>
+>
+>
+
+--0000000000004aa042065f713a23
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Hello,=C2=A0<div dir=3D"auto">I looked further into the t=
+rip to Surin. I think it is easiest if we just join a one day snorkeling tr=
+ip to Surin Island. How much would that cost for two adults and two childre=
+n?=C2=A0Do you know how long a boat takes to get to Surin? We are thinking =
+of going either on the 20th, 21st or 22nd. We are flexible.=C2=A0</div><div=
+ dir=3D"auto"><br></div><div dir=3D"auto">Thank you for your help.=C2=A0</d=
+iv><div dir=3D"auto"><br></div><div dir=3D"auto">Best,=C2=A0</div><div dir=
+=3D"auto">Patricia=C2=A0</div></div><br><div class=3D"gmail_quote gmail_quo=
+te_container"><div dir=3D"ltr" class=3D"gmail_attr">On Wed, Nov 4, 2026, 08=
+:31 Barefoot Project &lt;<a href=3D"mailto:barefootproject.kohphayam@gmail.=
+com">barefootproject.kohphayam@gmail.com</a>&gt; wrote:<br></div><blockquot=
+e class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc sol=
+id;padding-left:1ex"><div style=3D"line-break:after-white-space">Hello part=
+ricia<div><br></div><div>Hope you are well</div><div><br></div><div>Yes the=
+re is boat that will go to Turin island there is one way to the Turin islan=
+d also</div><div><br></div><div>If may I asked when are you planning to go =
+and I will ask their schedule for you</div><div><br></div><div>Have a lovel=
+y day</div><div><br id=3D"m_2733504809190830866lineBreakAtBeginningOfMessag=
+e"><div>
+<div dir=3D"auto" style=3D"color:rgb(0,0,0);letter-spacing:normal;text-alig=
+n:start;text-indent:0px;text-transform:none;white-space:normal;word-spacing=
+:0px;text-decoration-line:none;text-decoration-style:solid;line-break:after=
+-white-space"><div dir=3D"auto" style=3D"color:rgb(0,0,0);letter-spacing:no=
+rmal;text-align:start;text-indent:0px;text-transform:none;white-space:norma=
+l;word-spacing:0px;text-decoration:none;line-break:after-white-space"><div =
+dir=3D"auto" style=3D"color:rgb(0,0,0);letter-spacing:normal;text-align:sta=
+rt;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0px;=
+text-decoration:none;line-break:after-white-space"><div dir=3D"auto" style=
+=3D"color:rgb(0,0,0);letter-spacing:normal;text-align:start;text-indent:0px=
+;text-transform:none;white-space:normal;word-spacing:0px;text-decoration:no=
+ne;line-break:after-white-space"><div>barefoot project<br>=F0=9F=90=B6=F0=
+=9F=91=A9=F0=9F=8F=BD=E2=80=8D=F0=9F=A6=B3=F0=9F=A7=94=F0=9F=8F=BB=E2=80=8D=
+=E2=99=82=EF=B8=8F=F0=9F=90=A5=F0=9F=AA=A9=F0=9F=92=96=F0=9F=8C=B8=F0=9F=8E=
+=80</div></div></div></div></div>
+</div>
+<div><br><blockquote type=3D"cite"><div>On 3 Nov 2026, at 21:30, Patricia N=
+ &lt;<a href=3D"mailto:neubauerpa@gmail.com" target=3D"_blank" rel=3D"noref=
+errer">neubauerpa@gmail.com</a>&gt; wrote:</div><br><div><div dir=3D"ltr">H=
+ello,=C2=A0<div><br></div><div>My family and I are really looking forward t=
+o our stay in your resort. I was wondering if you could help me something. =
+We were thinking of going to Koh Surin for one or two nights after our stay=
+ with you. I was hoping there is a tour operator that departs from Koh Phay=
+am. Maybe even one way would be fine and then we would return to a differen=
+t port. Or both ways from Koh Phayam. Do you know a boat trip operator with=
+ whom we could book this?=C2=A0</div><div><br></div><div>Thank you very muc=
+h for your help.=C2=A0</div><div><br></div><div>Kind regards,=C2=A0</div><d=
+iv>Patricia</div></div>
+</div></blockquote></div><br></div></div></blockquote></div>
+
+--0000000000004aa042065f713a23--

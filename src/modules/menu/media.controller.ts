@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Post, UploadedFile, UseGuards, UseInterceptors, Req } from '@nestjs/common';
+import { BadRequestException, Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
@@ -34,10 +34,8 @@ export class MediaController {
       callback(null, true);
     },
   }))
-  upload(@UploadedFile() file: { filename: string } | undefined, @Req() request: { protocol: string; get(name: string): string | undefined }) {
+  upload(@UploadedFile() file: { filename: string } | undefined) {
     if (!file) throw new BadRequestException('An image file is required.');
-    const configuredBase = process.env.PUBLIC_API_URL?.trim().replace(/\/$/, '');
-    const base = configuredBase || `${request.protocol}://${request.get('host')}`;
-    return { imageUrl: `${base}/uploads/images/${file.filename}` };
+    return { imageUrl: `/uploads/images/${file.filename}` };
   }
 }

@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { JOB_PERMISSIONS_KEY, JobPermission } from '../decorators/job-permissions.decorator';
 import { Role } from 'prisma/generated/prisma/enums';
@@ -10,6 +11,12 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector, private readonly prisma: PrismaService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) return true;
+
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),

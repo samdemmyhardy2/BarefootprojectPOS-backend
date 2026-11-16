@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
-import { IsDateString, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsDateString, IsEnum, IsIn, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { OrderStatus } from 'prisma/generated/prisma/enums';
 
 export class OrderPageQueryDto {
   @IsOptional() @Type(() => Number) @IsInt() @Min(0)
@@ -13,4 +14,13 @@ export class OrderPageQueryDto {
 
   @IsOptional() @IsDateString()
   to?: string;
+
+  @IsOptional() @IsEnum(OrderStatus)
+  status?: OrderStatus;
+
+  @IsOptional() @IsIn(['UNPAID', 'CASH', 'CARD', 'PROMPTPAY', 'ROOM', 'COUNTER', 'COMMISSION'])
+  payment?: 'UNPAID' | 'CASH' | 'CARD' | 'PROMPTPAY' | 'ROOM' | 'COUNTER' | 'COMMISSION';
+
+  @IsOptional() @IsIn(['TABLE', 'ROOM', 'WALKIN'])
+  place?: 'TABLE' | 'ROOM' | 'WALKIN';
 }

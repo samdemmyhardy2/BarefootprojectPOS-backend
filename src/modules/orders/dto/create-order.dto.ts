@@ -3,9 +3,11 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   ArrayMaxSize,
+  IsBoolean,
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
@@ -37,6 +39,10 @@ export class CreateOrderItemDto {
   @IsInt()
   @Min(1)
   quantity: number;
+
+  @ApiPropertyOptional({ description: 'Amount entered for a dish marked as a manual variable.', minimum: 0 })
+  @IsOptional() @Type(() => Number) @IsNumber({ maxDecimalPlaces: 2 }) @Min(0)
+  unitPrice?: number;
 
   @ApiPropertyOptional({ enum: PrepStation, description: 'Preparation station for this order line. Defaults to the menu item station.' })
   @IsOptional() @IsEnum(PrepStation)
@@ -73,6 +79,10 @@ export class CreateOrderItemDto {
   @ApiPropertyOptional({ type: [ModifierSelectionDto], description: 'Structured selections from the modifier groups attached to this menu item.' })
   @IsOptional() @IsArray() @ArrayMaxSize(50) @ValidateNested({ each: true }) @Type(() => ModifierSelectionDto)
   modifierSelections?: ModifierSelectionDto[];
+
+  @ApiPropertyOptional({ description: 'Marks only this dish so the kitchen shows a glowing comment icon.' })
+  @IsOptional() @IsBoolean()
+  kitchenFlag?: boolean;
 }
 
 export class CreateOrderDto {
@@ -91,6 +101,10 @@ export class CreateOrderDto {
   @ApiPropertyOptional({ description: 'Table receiving this order. Omit for room service.', example: 'b1f2c3d4-5678-90ab-cdef-1234567890ab' })
   @IsOptional() @IsUUID()
   tableId?: string;
+
+  @ApiPropertyOptional({ format: 'uuid', description: 'Side of a split table, such as 5A or 5B. Orders on different sides stay separate.' })
+  @IsOptional() @IsUUID()
+  tableSplitId?: string;
 
   @ApiPropertyOptional({ description: 'Active guest stay to associate with this order or checkout folio.', format: 'uuid' })
   @IsOptional() @IsUUID()
@@ -112,4 +126,18 @@ export class CreateOrderDto {
   @ValidateNested({ each: true })
   @Type(() => CreateOrderItemDto)
   items: CreateOrderItemDto[];
+}
+
+export class SetKitchenFlagDto {
+  @ApiProperty({ description: 'True shows the glowing comment icon on this dish only.' })
+  @IsBoolean()
+  flagged: boolean;
+}
+
+export class RemoveOrderItemDto {
+  @ApiProperty({ example: 'Guest changed their mind' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(240)
+  reason!: string;
 }

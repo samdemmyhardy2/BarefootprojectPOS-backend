@@ -1,0 +1,109 @@
+Return-Path: <forwarding-noreply@google.com>
+X-Original-To: inbox@forward.starbridgemyanmar.tech
+Delivered-To: inbox@forward.starbridgemyanmar.tech
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	by mail.starbridgemyanmar.tech (Postfix) with ESMTPS id 02FB1CA449
+	for <inbox@forward.starbridgemyanmar.tech>; Sun,  1 Nov 2026 12:13:17 +0000 (UTC)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6acb57c2b88so2682722a12.2
+        for <inbox@forward.starbridgemyanmar.tech>; Sun, 01 Nov 2026 04:13:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793535194; cv=none;
+        d=google.com; s=arc-20260327;
+        b=epc/I76Vx+CiJb6E9L0kAQpYqcXCiVbVXJtpEypPj20U9z8ymy/rPsKlNZIYhKD/a9
+         FkPETDHQcrlfVqpeKkkn6UHOTxnEDyG/BeZIX+ALdyL/M76TccIz1McROq7nIJDWDREo
+         5WGmbxMydKG4IhUbmmVUUA2pgK6Af3pqdR/XeiAkTI8f1YCEyUT2s2Ln0bUzPsvttLhz
+         JBSZtlQEB7u0TjwrIRthO2A5weZ5/KUURKS02YbhrrglBGvGwaiLZlmF/pIZwKWM1DJJ
+         VFvKDv/IMwSpYItXZZNFKN4fqbnZeZD2UUYfcjB3rxapqUrhTmVo0mkig7jJC4TNPpzq
+         su5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:from:subject:message-id:date:mime-version:dkim-signature;
+        bh=lAIhvvr/S42EbFPV/Qt9bxIxLZMFrTx5EXCCjVyKeik=;
+        fh=dLjZe9sMLGlX1AKfG3Z2Dpq0ekzpptIJRArxMCWIw+Y=;
+        b=G0rGKaOgmFZJwUappq+amSaO8Tf5aRdTcg22ZYUWPuKaVN/dyh2KmW8SSxHaGBKNRd
+         eREJKn1sy0G8UXFucY3OENrUDaEZfGiFF/byj2IEtCCzkGT59/TWNN7UFdur1bJjY2ej
+         zaS1DCxeqlsBiUc/z73ZCv2Ew0Aq1nqYAmTXPjnZ9UqmFoG8DE7AqPt0/H/mpfJc1Js6
+         phN/BFlTYmDU/LiXC/lGLw0g5kC/b5/qQdZZgS1I4u5yCLmPWRS4fPvNHljVdGwHQKeB
+         PluNWJEdVIdiXNjm4TyJLkNgUcezf/bess+qPQsx859LeZeJFB0ImqhjsdQtdQR4gG2E
+         orlA==;
+        darn=forward.starbridgemyanmar.tech
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793535194; x=1794139994; darn=forward.starbridgemyanmar.tech;
+        h=content-type:to:from:subject:message-id:date:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=lAIhvvr/S42EbFPV/Qt9bxIxLZMFrTx5EXCCjVyKeik=;
+        b=DG5AGm3rErAsaCpZfq2m0YqYTgdcVQrb176GmCVnvjomCWsn2Qi4B5cpCKLOdMU03L
+         D1X/VXMEymOm/m5Br7hmtqNbXp3Fuzd5Q9UK0/mzEuJd/TxeoE4IKqvhKir9A8+QMf9y
+         3dJJNb3bCHTnvgNyLvBIqS59Z5iIRQJI/b6N+nxQSRAD8VrfB0z6H75uc2hh9RZMsWoM
+         jDwpkjf5xMY3KuX3QUZsoviW8hyOdWgRnqBcSd4n5zFtI8t35GNjFsLVAMvqmZ7t6AOR
+         hUGMKF1euxKLhRiOoJ4wmBjTl51ma0GIfzvVUv5dPy8xI+k0a+7rzcEBDlOHrjo1P/WL
+         o/cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793535194; x=1794139994;
+        h=content-type:to:from:subject:message-id:date:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lAIhvvr/S42EbFPV/Qt9bxIxLZMFrTx5EXCCjVyKeik=;
+        b=14QCO1TUni6YXV9Tt2kZSpKC8HalNFeUbkGPP9AQrS5zcX3PCNEbmYE0k9yjv4+h2S
+         vfzAM0swZCDc3EjTnVaXsBlrMdj65VQbczuaFihfVOfYDqlzkQ7bT894fnfFAsUMwPZN
+         GqwgF6P0QJHJCXfMvPxY1kpN7WdQIguBFFLlDylc/IufhI7Ua2kcZmVZcjB7t5D0c1VU
+         5xc4SpvZmCirlsGa5AQtoGf0KUdZc+yhSzXOOsHW7PdmWu5UxjmgBn3oUw9xpNtlPPZh
+         aiJ14x950L3KARaHWZQk9fXR4inIK05Z43YUfsrYQ8Jsyi2k46kEhBoWUbArjpctV8kL
+         /Bfg==
+X-Gm-Message-State: APuU4Z+4l7N6KyX+Bn66/2hI8kEMIu03KuCeyXz/hO0+5MbpAF/8YT3W
+	etVPpM5Xu4mT1I+gmi6DMP1lbyBhw+9NNkRrkDALQi+nXO30m9OgcfJFLEcFqX+u/s4sNNRcPcT
+	wWqvxjk/ppPVOtwyLRrPEnStKof3nee3IcwGQzeX5UrEb8Q74Dthpx1TLMg4vmMfHxQ==
+X-Gm-Gg: AYBFou0hMsuuIUdAAvvv4b7qzR4/oPi4mFTG/WLBS0r1GJPSQ0S+toER27OzeqMkq+v
+	ffT7cNLkaYK5BNtf4tCmlHOd0PIc6C2o3dGxxp+n3Swk8dUKPA05UT2lv70MytVtyUC19fpw0s/
+	cANAEwnGueBaD1PxlIMmRXagP/62VL4G4op6zLBoUYIsQrZTDIoMVEBYvB18ojKEH4WreB/A5fz
+	GcKoybHE7LEXyuYh+KD/6LBrZKu+Ifj0TejVOucqbqo5PgnpdNfjyniIHaWEQuibkI+ho+phQx/
+	8DyiQ3qc0rKdN0brrIANYfXGNSnta1a8dQbiOEoh9PWFOCNU87oNfyIF81QV4cRSwxYSOmQeueg
+	TPgKqH2Ki9hOmr7uvfXmCGi4iuegWWNmI6GZeiTE=
+MIME-Version: 1.0
+X-Received: by 2002:a05:6402:280d:b0:6b4:206d:724b with SMTP id
+ 4fb4d7f45d1cf-6b4d428e344mr5441669a12.7.1793535194445; Sun, 01 Nov 2026
+ 04:13:14 -0800 (PST)
+X-Google-Address-Confirmation: xla5aZ-S8aYExOXqlaX4yg9eV4s
+Date: Sun, 1 Nov 2026 19:13:14 +0700
+X-Gm-Features: AclHuK-pJ95ApyqJ6mSL-riD-uFrW3Yo3_lKNkyFPjng8C3VtVCRXcDrVn-XFYU
+Message-ID: <CA+MzmrR1z0WK_0Uircwe0UwC1jrLMYvXn+92umaMjheN8vFPWQ@mail.gmail.com>
+Subject: (Gmail Forwarding Confirmation - Receive Mail from barefootproject.kohphayam@gmail.com
+From: Gmail Team <forwarding-noreply@google.com>
+To: inbox@forward.starbridgemyanmar.tech
+Content-Type: text/plain; charset="UTF-8"
+
+barefootproject.kohphayam@gmail.com has requested to automatically
+forward mail to your email
+address inbox@forward.starbridgemyanmar.tech.
+
+To allow barefootproject.kohphayam@gmail.com to automatically forward
+mail to your address,
+please click the link below to confirm the request:
+
+https://mail-settings.google.com/mail/vf-%5BANGjdJ_q2MUPtFLSqPqkzCeEhJ1ZOePj4nOVBvBZZSg6jMPJfX2rcWactB1xDODga2BaO1XYfu7fj09_ClElIiowoUnlMtMUyxfKXe5HWg%5D-roWbjFAZBRJ7UkR24NAakz1VEg8
+
+If you click the link and it appears to be broken, please copy and paste it
+into a new browser window.
+
+Thanks for using Gmail!
+
+Sincerely,
+
+The Gmail Team
+
+If you do not approve of this request, no further action is required.
+barefootproject.kohphayam@gmail.com cannot automatically forward
+messages to your email address
+unless you confirm the request by clicking the link above. If you accidentally
+clicked the link, but you do not want to allow
+barefootproject.kohphayam@gmail.com to
+automatically forward messages to your address, click this link to cancel this
+verification:
+https://mail-settings.google.com/mail/uf-%5BANGjdJ82Sf1njzIuUm-ZlOMJ2BbyW2NrJ0-mCe4W3R0PbjODcjMvGiBYNilWjGr0gCoTG9xrxmQW1bK5A1f7q2zzG_eHqfsVeHue8KkCog%5D-roWbjFAZBRJ7UkR24NAakz1VEg8
+
+To learn more about why you might have received this message, please
+visit: http://support.google.com/mail/bin/answer.py?answer=184973.
+
+Please do not respond to this message. If you'd like to contact the
+Google.com Team, please log in to your account and click 'Help' at
+the top of any page. Then, click 'Contact Us' along the bottom of the
+Help Center.

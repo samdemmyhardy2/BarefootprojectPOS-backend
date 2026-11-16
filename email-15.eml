@@ -1,0 +1,607 @@
+Return-Path: <barefootproject.kohphayam+caf_=inbox=forward.starbridgemyanmar.tech@gmail.com>
+X-Original-To: inbox@forward.starbridgemyanmar.tech
+Delivered-To: inbox@forward.starbridgemyanmar.tech
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	by mail.starbridgemyanmar.tech (Postfix) with ESMTPS id 8B774C844E
+	for <inbox@forward.starbridgemyanmar.tech>; Mon,  2 Nov 2026 13:10:27 +0000 (UTC)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c4322d310e7so487181266b.0
+        for <inbox@forward.starbridgemyanmar.tech>; Mon, 02 Nov 2026 05:10:27 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; t=1793625025; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=RLZcutdLImXibSu9/gXVq/813hJmU5QDPCVU68PhbQQ0axSerdAmI7LT0RwllJcqAD
+         HYkBgC83/5Aap5fyGqL4YHiMrMDCAqUcp4rgeFnAbEOO8Hjmi/o1Z1/lclpqWIZ2oqkn
+         W67F7hYRgRXvgbdfgRvXMh8eE2DGQdh/gJyoo0cHV0nMBd7oIjj1y0sNizK0jFRKwIe8
+         10pMjThUsomkQnruyc9Pq65vk3V+Po2qVTFXq25OnXFczFJBSg3uvoSxE6XOBc8WB/fN
+         CuNvwhMDcQoaRXk/s+jngIolTSHOYwPQhfEwjLxq/bHxgbo+NZF7CmDgm0FER6T5VCl5
+         ZdjA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:user-agent:subject:message-id:mime-version:from:date
+         :content-transfer-encoding:dkim-signature:dkim-signature
+         :delivered-to;
+        bh=Jqd1fAwU55su9f8YC6ThKIHBfz9EInRayglGLzesFq4=;
+        fh=vQ+O3e8gVbog5UIXA5c4nLVI3MI35IZhuJGJVOKkrgw=;
+        b=TFJuWCoEDoLcTb6qlJiQUar70SKFgBOWGvS+xk6SmIl4rxUkp2ZTstk0Cd7MtbodT6
+         lmF22Ekjh3rNxfoWCylOspIU5NDcY0SHhIlQDmn2V51SKzn2mZYXdcF3XKGBnBsSET77
+         V0IvoeKyghrGTJPvU7LnVVwPTHc3trp9Kt2Zs4e3tg1MaK8GlzO/t4FVE+pUJXOdSpYq
+         UdwAtJsMy+saSaZXoo3bmtUVssTwwBVvOBuvo/PRt/oL2xTryo4/onrur06utU1lQl1T
+         sUBRXipcI+j/GsRY9nrBkK8O1WyDvQLN7E/pcdi4uKgvPgM2ZuSbNW+nlHW09W4Udc7H
+         yylw==;
+        darn=forward.starbridgemyanmar.tech
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@cloudbeds.com header.s=s1 header.b=O7tU7hbB;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b="Z6EbkM/q";
+       spf=pass (google.com: domain of bounces+2234072-bb40-barefootproject.kohphayam=gmail.com@em622.cloudbeds.com designates 167.89.63.41 as permitted sender) smtp.mailfrom="bounces+2234072-bb40-barefootproject.kohphayam=gmail.com@em622.cloudbeds.com";
+       dmarc=pass (p=QUARANTINE sp=NONE dis=NONE) header.from=cloudbeds.com
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793625025; x=1794229825;
+        h=to:user-agent:subject:message-id:mime-version:from:date
+         :content-type:content-transfer-encoding:dkim-signature
+         :dkim-signature:delivered-to:x-forwarded-for:x-forwarded-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Jqd1fAwU55su9f8YC6ThKIHBfz9EInRayglGLzesFq4=;
+        b=Wwpmv9T2W+9rOcW4L/GLmydHtGXhmesjoO/jacp7s8ZAWt5SmxZpGTPj0mzZGQZepZ
+         Yu+mJuet8Vhu/7XoDhxdDXcOqnCd+uL8sUSW0ItKKEmUFVJxTxGpHK94fGqGtUt+0OBn
+         VQJLnRR71yBZlEfExqL1EskQ+RzhNIH5tPQqjDbc0ldyYimhnaUuZQzzWA92ZnPo1d4e
+         5gJpBPTNRMe1tcOvkkcDPOFLCc1oSVctmcEgZLcZy2Q3ANwYCnPxLOVjecWrrFLVlVNb
+         3qDXovA54H9WxCcwXGG0H2FLej8F82qWj2RF++ihLkH9FBT8YkLRYM0NiEoCspjGn9dW
+         Zhyw==
+X-Forwarded-Encrypted: i=2; AKwUvBwlpP+g6pG6kkVJyfbwN6cUzA/jgwEMY3Gdxx9Cbzh9TPPAq9yxcZ1dIb814KWDCJwFKGMRjA==@forward.starbridgemyanmar.tech
+X-Gm-Message-State: AFq9FYIZckfMb9NbBdqSVWQsZFWW0FDgH96lXP74qeycEDFGJxSXhd5h
+	zAGW1khJJNHc8tscye47PpCYgRpTPrp4njMTjUlACCsk3l6Krlfgu8RK+8XFPwo6pVJ1aQnflJY
+	oxsQUr2G6ssZRtWNf6l75EUUaAJTbmOH6JWCWoOJPt47F/29phm/yzmJOoWXyQA==
+X-Received: by 2002:a17:907:3e1e:b0:c48:a838:c188 with SMTP id a640c23a62f3a-c4ca7a4b3b4mr895621766b.13.1793625024546;
+        Mon, 02 Nov 2026 05:10:24 -0800 (PST)
+X-Forwarded-To: inbox@forward.starbridgemyanmar.tech
+X-Forwarded-For: barefootproject.kohphayam@gmail.com inbox@forward.starbridgemyanmar.tech
+Delivered-To: barefootproject.kohphayam@gmail.com
+Received: by 2002:a05:7412:8c90:b0:230:df9d:739b with SMTP id xh16csp5385518rdb;
+        Mon, 2 Nov 2026 05:10:23 -0800 (PST)
+X-Received: by 2002:a05:622a:114b:b0:536:7525:1a57 with SMTP id d75a77b69052e-542b3e68d7dmr164836911cf.3.1793625022793;
+        Mon, 02 Nov 2026 05:10:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793625022; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NMZqkmQlDqT1jf7oqMJXi1fto8vCon7LFLFE0eHzayGb2eHrReaV64HyOZrKJJBhye
+         DqzigWf4iNUYaVdZE2Vkw21PTRP8LLXUaychDo8EAUlSg707QGQ/6Am+H4zjyKY1d2Xn
+         I758yOqXGzRvsAYCaLU10WirZJU4HFWreNzW6u5pKESX9JOdxubdL1s//xxqez2R6yDq
+         qAkHnXdYm8MRDOde3+X2Fb0zLgnwVJEZZw4MA20KF9YKWF9qGj5eLlDJZcfPvVxzWX1B
+         Yu31E7M4AKPZcdMvRNJl+gdE2ct7gu9Df7d+m5r9fdh2VEVInQ1NEHwJ6fHoWGzFj8uz
+         Gr8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:user-agent:subject:message-id:mime-version:from:date
+         :content-transfer-encoding:dkim-signature:dkim-signature;
+        bh=Jqd1fAwU55su9f8YC6ThKIHBfz9EInRayglGLzesFq4=;
+        fh=fmGSkgp3iaOOU9Xn5qkaTPdXuz/vj/6hfDXLw0Wg3Vs=;
+        b=AR05OhX1T7FRFR/quz4FojCtrBQLo1GWkNNRWt1R9Qm0WNwwZ443Lv31vBM5eQbGRQ
+         W9EVSuEw1zvuBH3H0I/VJjW5DdjJSbxJUGnoHjo1BUIOiJpI1yDNw2gCPvU6mmlmqpje
+         bu5CU6DsPCxf25BVdMOQtoDkN3dGSIXkDb3yoYDF8nZAjQFV3vdBcWF+3ULx+wnOpCvJ
+         1ZYba3V7Iq661PMdx/usvWRusyJJUvjyaQ0FoCFngPfAYdVWvYEihBtrW03xvPw+lep4
+         Bh1V4cbC/oRN+bRcRQO85MQgVY2m6xd6jLDXOeP9+y7a7G6pNMxEaiSQfjF8pXoYiCrg
+         Rkbw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@cloudbeds.com header.s=s1 header.b=O7tU7hbB;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b="Z6EbkM/q";
+       spf=pass (google.com: domain of bounces+2234072-bb40-barefootproject.kohphayam=gmail.com@em622.cloudbeds.com designates 167.89.63.41 as permitted sender) smtp.mailfrom="bounces+2234072-bb40-barefootproject.kohphayam=gmail.com@em622.cloudbeds.com";
+       dmarc=pass (p=QUARANTINE sp=NONE dis=NONE) header.from=cloudbeds.com
+Received: from o1.ptr1425.cloudbeds.com (o1.ptr1425.cloudbeds.com. [167.89.63.41])
+        by mx.google.com with ESMTPS id d75a77b69052e-54956c9b5a4si2103821cf.341.2026.11.02.05.10.22
+        for <barefootproject.kohphayam@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 05:10:22 -0800 (PST)
+Received-SPF: pass (google.com: domain of bounces+2234072-bb40-barefootproject.kohphayam=gmail.com@em622.cloudbeds.com designates 167.89.63.41 as permitted sender) client-ip=167.89.63.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@cloudbeds.com header.s=s1 header.b=O7tU7hbB;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b="Z6EbkM/q";
+       spf=pass (google.com: domain of bounces+2234072-bb40-barefootproject.kohphayam=gmail.com@em622.cloudbeds.com designates 167.89.63.41 as permitted sender) smtp.mailfrom="bounces+2234072-bb40-barefootproject.kohphayam=gmail.com@em622.cloudbeds.com";
+       dmarc=pass (p=QUARANTINE sp=NONE dis=NONE) header.from=cloudbeds.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cloudbeds.com;
+	h=content-transfer-encoding:content-type:date:from:mime-version:subject:
+	to:cc:content-type:date:feedback-id:from:subject:to;
+	s=s1; t=1793625021;
+	bh=Jqd1fAwU55su9f8YC6ThKIHBfz9EInRayglGLzesFq4=;
+	b=O7tU7hbBSvtq3WUAfOK/+3eKMxfAguLG4BWkP9pWa7FDSbugr5T8JcYLJgYzD+rIJSmm
+	h7HULPHyYl2vBH7EX+d8vrLwWj5eKO1lCTydZH11/goF4cL5JnhOJSdceEQ1bYXiL3fkN6
+	MXUdWs/KmyUpgjOeA8/uaqJbMgvDeKxS3dCm0t3pJEYb/sOefbm3S30rL6nhNmrhrUmcG4
+	ad7CNDtVb6JIDuk2AuuR4/kmTsLUIk/iV/NDG0t3PxEKiQFdftsiB+ckuLEpdq3VpJ/+9R
+	nT7oFVdBlAOPVidLcw1cttIj5DHYsfFtdkP1Kknt658QXCY94MJ6jzwY6D0lDPEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sendgrid.info;
+	h=content-transfer-encoding:content-type:date:from:mime-version:subject:
+	to:cc:content-type:date:feedback-id:from:subject:to;
+	s=smtpapi; t=1793625021;
+	bh=Jqd1fAwU55su9f8YC6ThKIHBfz9EInRayglGLzesFq4=;
+	b=Z6EbkM/qvHQRVL0WrNzo2uC3Ij8643x9uykdjAOoJqeAxK7ndU0edePFEEsnsn6Nnm3/
+	dEbGtpZD1j2Wjyp8kMZNL9QqNX5Rh8gfXPbUCYfDqqUJTLTwId6n2vFgoI4V6ZXuX5GuPR
+	74V3yKOmbsmA9umu9WZlwzWeBF9WtoR/8=
+Received: by recvd-5fbf9c6c9f-wzqgb with SMTP id recvd-5fbf9c6c9f-wzqgb-1-6AE88BBD-20
+	2026-11-02 13:10:21.131108869 +0000 UTC m=+2923814.899552258
+Received: from MjIzNDA3Mg (unknown)
+	by geopod-ismtpd-4 (SG) with HTTP
+	id Oj0jPAeVQMKK1ni5tzxong
+	Mon, 02 Nov 2026 13:10:21.093 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=us-ascii
+Date: Mon, 02 Nov 2026 13:10:21 +0000 (UTC)
+From: Barefoot Project <admin@cloudbeds.com>
+Mime-Version: 1.0
+Message-ID: <6ae88bbd00e0b@cloudbeds.com>
+Subject: Reservation CONFIRMED - Dirk Reichensperger - Reservation
+ #2994876833557
+User-Agent: CodeIgniter
+X-Mailer: CodeIgniter
+X-Priority: 3 (Normal)
+X-Project-IsLive: true
+X-SG-EID: 
+ =?us-ascii?Q?u001=2EkIhD55=2FMt+jID1G1FJF+lmShkwmXCdlnG8NLFLsumCeriTECfg7lboctJ?=
+ =?us-ascii?Q?McWnhLaD0Hgl1zunZXIxaOzXzO+hPxUsPU1cHBY?=
+ =?us-ascii?Q?qJByZ9fkb=2FmR=2FhWIT=2FJCEjHSYbti7D7eH16qlng?=
+ =?us-ascii?Q?jCPR5NeQWGL0vHJFx6XarYTzlpSRLKPQBghTvoo?=
+ =?us-ascii?Q?SfIbR2wdUOCf=2FGHzTOUV8OOizWuMWMIqb6KW1Nm?=
+ =?us-ascii?Q?ebmGYhZxVV+QgF0SwLPNWbxqVTN6zyUJnMLH=2FUl?=
+ =?us-ascii?Q?kwXITQMIvqeFiuzhVgNepBBNTw=3D=3D?=
+X-SG-ID: 
+ =?us-ascii?Q?u001=2ESdBcvi+Evd=2FbQef8eZF3BpTL9BgbK5wfSJMJGMsmprDTxt=2FE0fBOSNtwF?=
+ =?us-ascii?Q?2WF28wecN4Ubp5Xc8xIeQE=2FhQhDDSMQXOSDTwJQ?=
+ =?us-ascii?Q?uoyYlL+VYRkYqNzVK+dE+QoLpDJRNqYpJEj=2F0hF?=
+ =?us-ascii?Q?aTgsWlDHoL1CSQPWJAuijG7PGYcnyQlnUw8GhgN?=
+ =?us-ascii?Q?JtUnHvgCTFRJYQDp+HoxnoGQtOkCyDWumKHrOfh?=
+ =?us-ascii?Q?11B1fgpNzdU8HpjydygWPNOQoglbLjh4BxPbhZT?=
+ =?us-ascii?Q?uFTSCPVFZOvIOFSIT7O9Uk4tHKZLnf8TcErxIur?=
+ =?us-ascii?Q?AJFT1lc+b2bE75MQPr3H9NjtzWR5VGrFRjYZy8r?=
+ =?us-ascii?Q?8zXUF3+W7xqyvmcwSGnR7MBESQPv2=2FIJyZav8QV?=
+ =?us-ascii?Q?p4sNSWeVcLm3itE?=
+To: "barefootproject.kohphayam@gmail.com"
+	<barefootproject.kohphayam@gmail.com>
+X-Entity-ID: u001.QISmN7sxGWoXL3DVe27TQA==
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Du=
+tf-8" />
+        <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-sc=
+ale=3D1.0"/>
+        <style type=3D"text/css">
+             p{
+                font-family:  Arial;
+                font-size:12px;
+                line-height:16px;
+                color:#252525;
+            }
+            *{
+                font-family:  Arial;
+                color:#252525;
+                font-size:12px;
+                line-height:16px;
+            }
+            a{
+                cursor:pointer;
+                text-decoration:none;
+            }
+            a:hover{
+                text-decoration:underline;
+            }
+            /* Client-specific Styles */
+         div, p, a, li, td { -webkit-text-size-adjust:none; }
+         #outlook a {padding:0;} /* Force Outlook to provide a "view in bro=
+wser" menu link. */
+         html{width: 100%; }
+         body{width:100% !important; -webkit-text-size-adjust:100%; -ms-tex=
+t-size-adjust:100%; margin:0; padding:0;}
+         /* Prevent Webkit and Windows Mobile platforms from changing defau=
+lt font sizes, while not breaking desktop design. */
+         .ExternalClass {width:100%;} /* Force Hotmail to display emails at=
+ full width */
+         .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalCl=
+ass font, .ExternalClass td, .ExternalClass div {line-height: 100%;} /* For=
+ce Hotmail to display normal line spacing. */
+         #backgroundTable {margin:0; padding:0; width:100% !important; line=
+-height: 100% !important;}
+         img {outline:none; text-decoration:none;border:none; -ms-interpola=
+tion-mode: bicubic;}
+         a img {border:none;}
+         .image_fix {display:block;}
+         p {margin: 0px 0px !important;}
+         table td {border-collapse: collapse;}
+         table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-=
+rspace:0pt; }
+         a {color: #33b9ff;text-decoration: none;text-decoration:none!impor=
+tant;}
+         /*STYLES*/
+         table[class=3Dfull] { width: 100%; clear: both; }
+         /*IPAD STYLES*/
+         @media only screen and (max-width: 640px) {
+         a[href^=3D"tel"], a[href^=3D"sms"] {
+             text-decoration: none;
+             color: #33b9ff; /* or whatever your want */
+             pointer-events: none;
+             cursor: default;
+         }
+         .mobile_link a[href^=3D"tel"], .mobile_link a[href^=3D"sms"] {
+             text-decoration: inherit;;
+             color: #33b9ff !important;
+             pointer-events: auto;
+             cursor: default;
+         }
+         table[class=3Ddevicewidth] {width: 440px!important;text-align:cent=
+er!important;}
+         table[class=3Ddevicewidthinner] {width: 420px!important;text-align=
+:center!important;}
+         }
+         /*IPHONE STYLES*/
+         @media only screen and (max-width: 480px) {
+             a[href^=3D"tel"], a[href^=3D"sms"] {
+                 text-decoration: none;
+                 color: #33b9ff; /* or whatever your want */
+                 pointer-events: none;
+                 cursor: default;
+             }
+             .mobile_link a[href^=3D"tel"], .mobile_link a[href^=3D"sms"] {
+                 text-decoration: inherit;;
+                 color: #33b9ff !important;
+                 pointer-events: auto;
+                 cursor: default;
+             }
+             table[class=3Ddevicewidth] {width: 280px!important;text-align:=
+center!important;}
+             table[class=3Ddevicewidthinner] {width: 260px!important;text-a=
+lign:center!important;}
+         }
+        </style>
+    </head>
+    <body style=3D"background:#ebebeb;width:100%;">
+        <table style=3D"margin:0 auto;max-width:600px;min-width:300px;borde=
+r-collapse: collapse;">
+            <tr>
+                <td>
+                    <table style=3D"width:100%;border-collapse: collapse;" =
+cellpadding=3D"0" cellspacing=3D"0">
+                        <tr>
+                            <td style=3D"width:50%" height=3D"60" align=3D"=
+left" valign=3D"middle">
+                                <img alt=3D"CloudBeds" height=3D"40" style=
+=3D"margin-left:5px" src=3D"https://hotels.cloudbeds.com/assets/home/images=
+/cloudbeds_flywheel_logo.png"/></td>
+                            <td style=3D"width:50%" height=3D"60" align=3D"=
+right" valign=3D"middle">
+                                <a target=3D"_blank" href=3D"http://www.clo=
+udbeds.com" style=3D"font-family: Helvetica, Arial, sans-serif;
+                                font-size: 12px;color:#1b75bb;line-height:3=
+0px;">www.cloudbeds.com</a></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+           =20
+            <tr>
+                                    <td height=3D"40" bgcolor=3D"#1a75bb" a=
+lign=3D"left" valign=3D"middle" cellpadding=3D"0" cellspacing=3D"0"
+                        style=3D"padding-left:15px;border:1px solid #1b75bb=
+;font-weight:bold;font-size:18px;color:#ffffff;font-family:Arial;">
+                        Reservation Summary                    </td>
+                            </tr>
+
+           =20
+            <tr>
+                <td style=3D"padding:17px 15px;border:1px solid #cccccc;bac=
+kground:#fff;">
+                    <table style=3D"border-collapse: collapse;padding:0;">
+                        <tr>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;width:145px;font-size:11px;font-weight:bold;color:#252525;padding:0;">
+                                Guest Name</td>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;color:#252525;padding:0;">
+                                Dirk Reichensperger</td>
+                        </tr>
+                        <tr>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;font-weight:bold;color:#252525;padding:0;">
+                                Billing Address</td>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;color:#252525;padding:0;">
+                                                            </td>
+                        </tr>
+                        <tr>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;font-weight:bold;color:#252525;padding:0;">
+                                Email</td>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;color:#252525;padding:0;">
+                                dreich.266659@guest.booking.com</td>
+                        </tr>
+                        <tr>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;font-weight:bold;color:#252525;padding:0;">
+                                Confirmation Number</td>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;color:#252525;padding:0;">
+                                2994876833557</td>
+                        </tr>
+                                                <tr>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;font-weight:bold;color:#252525;padding:0;">
+                                Source</td>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;color:#252525;padding:0;">
+                                Booking.com</td>
+                        </tr>
+                                                    <tr>
+                                <td style=3D"font-family:Arial;line-height:=
+16px;font-size:11px;font-weight:bold;color:#252525;padding:0;">
+                                    Source Reservation ID</td>
+                                <td style=3D"font-family:Arial;line-height:=
+16px;font-size:11px;color:#252525;padding:0;">
+                                    5252711125</td>
+                            </tr>
+                                            </table>
+                    <hr style=3D"border:none;height:1px;background:#eee;mar=
+gin-top:19px;margin-bottom:0;" />
+
+                    <table style=3D"width:285px;border-collapse: collapse;"=
+>
+                        <tr style=3D"height:20px;">
+                            <th style=3D"font-family:Arial;line-height:16px=
+;width:90px;font-size:11px;font-weight:bold;
+                            color:#252525;text-align:left;border-left:1px s=
+olid #eee;padding-left:5px;vertical-align:middle;">
+                                Check-in:</th>
+                            <th style=3D"font-family:Arial;line-height:16px=
+;width:88px;font-size:11px;font-weight:bold;
+                            color:#252525;text-align:left;border-left:1px s=
+olid #eee;padding-left:5px;vertical-align:middle;">
+                                Check-out:</th>
+                            <th style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;font-weight:bold;
+                            color:#252525;text-align:left;border-left:1px s=
+olid #eee;padding-left:5px;vertical-align:middle;">
+                                Days:</th>
+                        </tr>
+                        <tr>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;color:#252525;padding:4px 0 0 5px;">
+                                10/01/2027</td>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;color:#252525;padding:4px 0 0 5px;">
+                                15/01/2027</td>
+                            <td style=3D"font-family:Arial;line-height:16px=
+;font-size:11px;color:#252525;padding:4px 0 0 5px;">
+                                5</td>
+                        </tr>
+                    </table>
+
+                   =20
+                    <hr style=3D"border:none;height:1px;background:#eee;mar=
+gin:13px 0 5px;width:300px;padding:0;"/>
+                                            <table style=3D"width:285px;bor=
+der-collapse: collapse;">
+                            <tr>
+                                <td style=3D"font-family:Arial;line-height:=
+16px;font-size:11px;font-weight:bold;color:#252525;padding-left:5px;">
+                                    Room Type</td>
+                                <td style=3D"font-family:Arial;line-height:=
+16px;font-size:11px;color:#252525;padding-right:12px;text-align:right;">
+                                    Superior Queen                         =
+                                                   (Standard Rate)
+                                                                    </td>
+                            </tr>
+                            <tr>
+                                <td style=3D"font-family:Arial;line-height:=
+16px;font-size:11px;font-weight:bold;color:#252525;padding-left:5px;"></td>
+                                <td style=3D"font-family:Arial;line-height:=
+16px;font-size:11px;color:#252525;padding-right:12px;text-align:right;">
+                                    Adults: 2                              =
+      Children: 0</td>
+                            </tr>
+                        </table>
+                        <hr style=3D"border:none;height:1px;background:#eee=
+;margin:10px 0 5px;width:300px;" align=3D"left"/>
+                        <table style=3D"width:285px;border-collapse: collap=
+se;">
+                            <tr>
+                                <td style=3D"font-family:Arial;line-height:=
+16px;font-size:11px;font-weight:bold;color:#252525;padding-left:5px;">
+                                    Average Nightly Rate</td>
+                                <td style=3D"font-family:Arial;line-height:=
+16px;font-size:11px;color:#252525;padding-right:12px;text-align:right;">
+                                    THB 3,000.00</td>
+                            </tr>
+                                                                <tr>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;font-weight:bold;color:#252525;padding-left:5px=
+;">
+                                            10/01/2027 (Sunday)</td>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;color:#252525;padding-right:12px;text-align:rig=
+ht;">
+                                            THB 3,000.00</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;font-weight:bold;color:#252525;padding-left:5px=
+;">
+                                            11/01/2027 (Monday)</td>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;color:#252525;padding-right:12px;text-align:rig=
+ht;">
+                                            THB 3,000.00</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;font-weight:bold;color:#252525;padding-left:5px=
+;">
+                                            12/01/2027 (Tuesday)</td>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;color:#252525;padding-right:12px;text-align:rig=
+ht;">
+                                            THB 3,000.00</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;font-weight:bold;color:#252525;padding-left:5px=
+;">
+                                            13/01/2027 (Wednesday)</td>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;color:#252525;padding-right:12px;text-align:rig=
+ht;">
+                                            THB 3,000.00</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;font-weight:bold;color:#252525;padding-left:5px=
+;">
+                                            14/01/2027 (Thursday)</td>
+                                        <td style=3D"font-family:Arial;line=
+-height:16px;font-size:11px;color:#252525;padding-right:12px;text-align:rig=
+ht;">
+                                            THB 3,000.00</td>
+                                    </tr>
+                                                                           =
+         </table>
+                        <hr style=3D"border:none;height:1px;background:#eee=
+;margin:12px 0 8px;width:300px;padding:0;" align=3D"left"/>
+                   =20
+                   =20
+                    <table style=3D"width:285px;border-collapse: collapse;"=
+>
+                                                                       =20
+                         <tr style=3D"background:#eeeeee;">
+                            <td height=3D"24" valign=3D"middle" style=3D"fo=
+nt-family:Arial;line-height:16px;font-size:11px;font-weight:bold;color:#252=
+525;padding-left:5px;">
+                                Grand Total</td>
+                            <td height=3D"24" valign=3D"middle" style=3D"fo=
+nt-family:Arial;line-height:16px;font-size:11px;font-weight:bold;
+                            color:#1b75bb;padding-right:12px;text-align:rig=
+ht;">
+                                THB 15,000.00</td>
+                        </tr>
+                         <tr>
+                            <td height=3D"24" valign=3D"middle" style=3D"fo=
+nt-family:Arial;font-size:11px;font-weight:bold;color:#252525;padding:2px 0=
+ 0 5px;">
+                                Deposit Amount</td>
+                            <td height=3D"24" valign=3D"middle" style=3D"fo=
+nt-family:Arial;font-size:11px;color:#252525;padding:2px 12px 0 0;text-alig=
+n:right;">
+                                THB 15,000.00</td>
+                        </tr>
+                        <tr>
+                            <td height=3D"24" valign=3D"middle" style=3D"fo=
+nt-family:Arial;font-size:11px;font-weight:bold;color:#252525;padding:2px 0=
+ 0 5px;">
+                                Amount Paid</td>
+                            <td height=3D"24" valign=3D"middle" style=3D"fo=
+nt-family:Arial;font-size:11px;color:#252525;padding:2px 12px 0 0;text-alig=
+n:right;">
+                                THB 0.00</td>
+                        </tr>
+                         <tr style=3D"background:#eeeeee;">
+                            <td height=3D"24" valign=3D"middle" style=3D"fo=
+nt-family:Arial;font-size:11px;font-weight:bold;color:#252525;padding-left:=
+5px;">
+                                Balance Due</td>
+                            <td height=3D"24" valign=3D"middle" style=3D"fo=
+nt-family:Arial;font-size:11px;font-weight:bold;color:#1b75bb;padding-right=
+:12px;text-align:right;">
+                                THB 15,000.00</td>
+                        </tr>
+                    </table>
+                    <hr style=3D"border:none;height:1px;background:#eee;mar=
+gin:21px 0 15px 0;padding:0;"/>
+
+                                            <p style=3D"font-family:Arial;f=
+ont-size:12px;line-height:16px;margin-left:3px;">If you'd like more informa=
+tion about the reservation, it's also securely stored in your <a target=3D"=
+_blank" href=3D"http://www.cloudbeds.com">Cloudbeds</a> account.</p>
+                   =20
+                    <table align=3D"center" cellspacing=3D"0" cellpadding=
+=3D"0" border=3D"0" class=3D"devicewidth" style=3D"width:100%;">
+                       <tbody>
+                          <tr>
+                             <td align=3D"center" height=3D"15" style=3D"fo=
+nt-size:1px; line-height:1px;">&nbsp;</td>
+                          </tr>
+                       </tbody>
+                    </table>
+
+                                            <table height=3D"32" bgcolor=3D=
+"#1a75bb;"
+                               align=3D"left" valign=3D"middle" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" style=3D"margin-top:15px;background:#=
+1a75bb;" st-button=3D"learnmore">
+                           <tbody>
+                              <tr><td height=3D"9" align=3D"center" style=
+=3D"font-size:1px; line-height:1px;">&nbsp;</td></tr>
+                              <tr>
+                                 <td height=3D"14" align=3D"center" valign=
+=3D"middle" style=3D"font-family: Helvetica, Arial, sans-serif; font-size: =
+12px; font-weight:bold;
+                                 color: #ffffff; text-align:center; line-he=
+ight: 14px; ; -webkit-text-size-adjust:none;margin-left:10px;margin-right:1=
+0px;" st-title=3D"fulltext-btn">
+                                     <a style=3D"padding:9px 20px !importan=
+t; text-decoration: none;color: #ffffff; text-align:center;" target=3D"_bla=
+nk" href=3D"https://hotels.cloudbeds.com/connect/217602#/reservations/19056=
+3467">
+                                         View Reservation</a>
+                                 </td>
+                              </tr>
+                              <tr><td height=3D"9" align=3D"center" style=
+=3D"font-size:1px; line-height:1px;">&nbsp;</td></tr>
+                           </tbody>
+                        </table>
+                   =20
+                    <table align=3D"center" cellspacing=3D"0" cellpadding=
+=3D"0" border=3D"0" class=3D"devicewidth" style=3D"width:100%;">
+                       <tbody>
+                          <tr>
+                             <td align=3D"center" height=3D"10" style=3D"fo=
+nt-size:1px; line-height:1px;">&nbsp;</td>
+                          </tr>
+                       </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style=3D"padding:0;">
+                    <table style=3D"width:100%;border-collapse: collapse;" =
+cellpadding=3D"0" cellspacing=3D"0">
+                        <tr>
+                            <td style=3D"width:50%"><img alt=3D"" style=3D"=
+margin-left:5px;display: block;" height=3D"8" src=3D"https://hotels.cloudbe=
+ds.com/assets/home/images/emleft.png"/></td>
+                            <td align=3D"right" style=3D"width:50%"><img al=
+t=3D"" style=3D"margin-right:5px;display: block;" height=3D"8" src=3D"https=
+://hotels.cloudbeds.com/assets/home/images/emright.png"/></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style=3D"margin-top:15px;">&copy; 2026 <a target=3D"=
+_blank" href=3D"https://www.cloudbeds.com" style=3D"text-decoration:underli=
+ne;color:#1b75bb;">Cloudbeds</a>. All Rights Reserved.</p>
+                </td>
+            </tr>
+            <tr>
+                <td style=3D"height:45px;"></td>
+            </tr>
+        </table>
+    <img src=3D"http://url1092.cloudbeds.com/wf/open?upn=3Du001.RGBSJqwvp-2=
+B-2FG0ZPrp0ukyY4sQscBLQ7HPIITE-2BpvBW9wTBt8GIviBPUstYzhX9d1EXH7ha-2F5DwqlxB=
+fyt9WlHJoQxWbLmZBwVOVXg6mC2Vn1OjgquNR6smVXh9oZA4twsSKLEsEOYZZPQYEVYYLrs7Y-2=
+BkcNK2qlGVUQFHlTrweCDReFquQjt-2Fvt4sF9QeB33ZWJ-2FhQuoTFZuh56qbWU1fu-2Bb24Ip=
+HoXPvOWKR5RQzvKLX1MbpsuxgeIxhS-2F4PgHfydTl8Zd-2FREL0GJ9kac3Hwa8kECcxh3zDW1g=
+Ah0l9ZqI-2FepRjnwe1iUhVQIN5nln0G9iCEtIQLdJ3dT4vqddBvbJqTrKp5ZAr3hmIzCt3SF2t=
+RpbJpuE-2BjdN6KFIL0X9Qppqlr7AQcSU2kRprQBHoI7jdh-2F-2F2gIa6yZRotlIHMcYOEJZUl=
+XVbDnq7WwOWSRtXMPsfpwu5zDnbd1M50UMlHAZeJJmv5yr5IY89021z5dJdoTbGDM2pf-2BH7my=
+yzofeguBQm-2Fpyl6Y4bFjoEJ9NVUZjQTRpvXm5osBj3cZg0kU8IMBsbXllCkO-2B3M-2FbgRnR=
+M" alt=3D"" width=3D"1" height=3D"1" border=3D"0" style=3D"height:1px !impo=
+rtant;width:1px !important;border-width:0 !important;margin-top:0 !importan=
+t;margin-bottom:0 !important;margin-right:0 !important;margin-left:0 !impor=
+tant;padding-top:0 !important;padding-bottom:0 !important;padding-right:0 !=
+important;padding-left:0 !important;"/></body>
+</html>

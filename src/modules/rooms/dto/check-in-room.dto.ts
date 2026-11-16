@@ -6,6 +6,7 @@ export class CheckInRoomDto {
   @ApiPropertyOptional({ format: 'uuid' }) @IsOptional() @IsUUID() clientRequestId?: string;
   @ApiProperty({ example: 'Jordan Lee' }) @IsString() @IsNotEmpty() @MaxLength(120) primaryGuestName!: string;
   @ApiPropertyOptional({ type: [String], example: ['Jordan Lee', 'Taylor Lee'] }) @IsOptional() @IsArray() @ArrayMaxSize(20) @IsString({ each: true }) occupants?: string[];
+  @ApiPropertyOptional({ example: '2026-10-30T05:00:00.000Z' }) @IsOptional() @IsDateString() checkedInAt?: string;
   @ApiPropertyOptional({ example: '2026-10-28T00:00:00.000Z' }) @IsOptional() @IsDateString() expectedCheckoutAt?: string;
   @ApiPropertyOptional({ example: 'Peanut allergy; vegetarian' }) @IsOptional() @IsString() @MaxLength(500) guestNotes?: string;
   @ApiPropertyOptional({ default: false }) @IsOptional() @IsBoolean() cashOnly?: boolean;

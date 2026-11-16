@@ -312,9 +312,9 @@ export type RoomMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type RoomScalarRelationFilter = {
-  is?: Prisma.RoomWhereInput
-  isNot?: Prisma.RoomWhereInput
+export type RoomNullableScalarRelationFilter = {
+  is?: Prisma.RoomWhereInput | null
+  isNot?: Prisma.RoomWhereInput | null
 }
 
 export type EnumRoomStatusFieldUpdateOperationsInput = {
@@ -327,10 +327,12 @@ export type RoomCreateNestedOneWithoutStaysInput = {
   connect?: Prisma.RoomWhereUniqueInput
 }
 
-export type RoomUpdateOneRequiredWithoutStaysNestedInput = {
+export type RoomUpdateOneWithoutStaysNestedInput = {
   create?: Prisma.XOR<Prisma.RoomCreateWithoutStaysInput, Prisma.RoomUncheckedCreateWithoutStaysInput>
   connectOrCreate?: Prisma.RoomCreateOrConnectWithoutStaysInput
   upsert?: Prisma.RoomUpsertWithoutStaysInput
+  disconnect?: Prisma.RoomWhereInput | boolean
+  delete?: Prisma.RoomWhereInput | boolean
   connect?: Prisma.RoomWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoomUpdateToOneWithWhereWithoutStaysInput, Prisma.RoomUpdateWithoutStaysInput>, Prisma.RoomUncheckedUpdateWithoutStaysInput>
 }

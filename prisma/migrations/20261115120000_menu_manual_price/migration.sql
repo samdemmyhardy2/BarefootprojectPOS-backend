@@ -1,0 +1,1 @@
+ALTER TABLE "MenuItem" ADD COLUMN "manualPrice" BOOLEAN NOT NULL DEFAULT false;

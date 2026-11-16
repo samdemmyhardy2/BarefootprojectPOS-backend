@@ -4,6 +4,7 @@ import { ArrayMaxSize, IsArray, IsBoolean, IsDateString, IsNumber, IsOptional, I
 
 export class UpdateRoomStayDto {
   @ApiPropertyOptional({ example: 'Jordan Lee' }) @IsOptional() @IsString() @MaxLength(120) primaryGuestName?: string;
+  @ApiPropertyOptional({ example: '2026-10-30T02:48:00.000Z' }) @IsOptional() @IsDateString() checkedInAt?: string;
   @ApiPropertyOptional({ example: '2026-10-28T00:00:00.000Z' }) @IsOptional() @IsDateString() expectedCheckoutAt?: string | null;
   @ApiPropertyOptional({ example: 'Peanut allergy; vegetarian' }) @IsOptional() @IsString() @MaxLength(500) guestNotes?: string | null;
   @ApiPropertyOptional() @IsOptional() @IsBoolean() cashOnly?: boolean;

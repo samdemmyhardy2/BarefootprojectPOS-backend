@@ -1,0 +1,3466 @@
+{
+  "summary": {
+    "base": "http://192.168.1.22:8000/api",
+    "total": 126,
+    "failed": 2,
+    "serverErrors": [],
+    "slow": [],
+    "cleanup": [
+      "order 64baf685-7351-4dc9-8ee8-a87ddac3a7c7 -> 200",
+      "room af9d99fb-028e-4bec-963c-004fb59167c8 -> 200",
+      "group aab155f0-0d93-400a-b00e-3f030b76de9a -> 200",
+      "table 362eded6-bd51-4f57-874e-ed62ae324fc6 -> 200",
+      "user a236798c-698a-42a8-a347-cef6b5cdba38 -> 200"
+    ],
+    "hints": {
+      "imports": {
+        "configured": true,
+        "connected": true,
+        "mailbox": "INBOX",
+        "concurrency": 3,
+        "pending": 0,
+        "processing": 0,
+        "failed": 0,
+        "lastError": null,
+        "imports": {
+          "type": "array",
+          "length": 23,
+          "firstKeys": [
+            "id",
+            "messageId",
+            "mailbox",
+            "uid",
+            "subject",
+            "fromAddress",
+            "receivedAt",
+            "status",
+            "error",
+            "confirmationNumber",
+            "source",
+            "noticeKind",
+            "noticeAt",
+            "attempts",
+            "nextAttemptAt",
+            "stayId",
+            "createdAt",
+            "processedAt"
+          ]
+        }
+      },
+      "wideCalendar": {
+        "from": "2026-11-04",
+        "to": "2027-03-15",
+        "rooms": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "roomNumber",
+            "status",
+            "stays"
+          ]
+        }
+      },
+      "narrowCalendar": {
+        "from": "2026-11-04",
+        "to": "2026-11-18",
+        "rooms": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        }
+      },
+      "pagedMenu": {
+        "data": {
+          "type": "array",
+          "length": 18,
+          "firstKeys": [
+            "id",
+            "name",
+            "description",
+            "price",
+            "imageUrl",
+            "allergens",
+            "allergensMy",
+            "allergensTh",
+            "dietaryInfo",
+            "dietaryInfoMy",
+            "dietaryInfoTh",
+            "availableExtras",
+            "availableExtrasMy",
+            "availableExtrasTh",
+            "position",
+            "categoryId",
+            "prepStation",
+            "createdAt",
+            "updatedAt",
+            "category",
+            "modifierGroups"
+          ]
+        },
+        "page": 1,
+        "limit": 18,
+        "total": 18,
+        "totalPages": 1
+      }
+    }
+  },
+  "results": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health",
+      "status": 200,
+      "ms": 35,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "status": "ok",
+        "database": "ok"
+      }
+    },
+    {
+      "name": "root",
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": [
+        200,
+        404
+      ],
+      "error": null,
+      "sample": "Hello World!"
+    },
+    {
+      "name": "invalid login",
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "ms": 192,
+      "ok": true,
+      "expect": [
+        401
+      ],
+      "error": null,
+      "sample": {
+        "message": "Invalid credentials",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "empty login",
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 400,
+      "ms": 2,
+      "ok": true,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 5,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "sql-like email",
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        400,
+        401
+      ],
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 2,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "me without token",
+      "method": "GET",
+      "path": "/auth/me",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        401
+      ],
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "bad bearer",
+      "method": "GET",
+      "path": "/auth/me",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        401
+      ],
+      "error": null,
+      "sample": {
+        "message": "Invalid or expired token",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /categories",
+      "method": "GET",
+      "path": "/categories",
+      "status": 200,
+      "ms": 6,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 5,
+        "firstKeys": [
+          "id",
+          "name",
+          "items"
+        ]
+      }
+    },
+    {
+      "name": "unauth /menu-items",
+      "method": "GET",
+      "path": "/menu-items",
+      "status": 200,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 18,
+        "firstKeys": [
+          "id",
+          "name",
+          "description",
+          "price",
+          "imageUrl",
+          "allergens",
+          "allergensMy",
+          "allergensTh",
+          "dietaryInfo",
+          "dietaryInfoMy",
+          "dietaryInfoTh",
+          "availableExtras",
+          "availableExtrasMy",
+          "availableExtrasTh",
+          "position",
+          "categoryId",
+          "prepStation",
+          "createdAt",
+          "updatedAt",
+          "category",
+          "modifierGroups"
+        ]
+      }
+    },
+    {
+      "name": "unauth /modifier-groups",
+      "method": "GET",
+      "path": "/modifier-groups",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "unauth /rooms",
+      "method": "GET",
+      "path": "/rooms",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /tables",
+      "method": "GET",
+      "path": "/tables",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /orders",
+      "method": "GET",
+      "path": "/orders",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /orders/kitchen/prep-queue",
+      "method": "GET",
+      "path": "/orders/kitchen/prep-queue",
+      "status": 200,
+      "ms": 6,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "unauth /analytics/overview",
+      "method": "GET",
+      "path": "/analytics/overview",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /employees",
+      "method": "GET",
+      "path": "/employees",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /restaurant-settings",
+      "method": "GET",
+      "path": "/restaurant-settings",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /printing/status",
+      "method": "GET",
+      "path": "/printing/status",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /technical/status",
+      "method": "GET",
+      "path": "/technical/status",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "unauth /tasks",
+      "method": "GET",
+      "path": "/tasks",
+      "status": 401,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Access token missing",
+        "error": "Unauthorized",
+        "statusCode": 401
+      }
+    },
+    {
+      "name": "public kitchen pickup",
+      "method": "PATCH",
+      "path": "/orders/kitchen/tickets/00000000-0000-4000-8000-000000000099/pickup",
+      "status": 404,
+      "ms": 2,
+      "ok": true,
+      "expect": [
+        401,
+        403,
+        404
+      ],
+      "error": null,
+      "sample": {
+        "message": "Prep ticket not found",
+        "error": "Not Found",
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "public order pickup",
+      "method": "PATCH",
+      "path": "/orders/kitchen/orders/00000000-0000-4000-8000-000000000099/pickup",
+      "status": 404,
+      "ms": 3,
+      "ok": true,
+      "expect": [
+        401,
+        403,
+        404
+      ],
+      "error": null,
+      "sample": {
+        "message": "Order not found",
+        "error": "Not Found",
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "login admin@restaurant.com",
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 201,
+      "ms": 203,
+      "ok": true,
+      "expect": [
+        200,
+        201
+      ],
+      "error": null,
+      "sample": {
+        "access_token": "[redacted string len=392]"
+      }
+    },
+    {
+      "name": "login waiter1@restaurant.com",
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 201,
+      "ms": 179,
+      "ok": true,
+      "expect": [
+        200,
+        201
+      ],
+      "error": null,
+      "sample": {
+        "access_token": "[redacted string len=392]"
+      }
+    },
+    {
+      "name": "admin me",
+      "method": "GET",
+      "path": "/auth/me",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "id": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "name": "Restaurant Admin",
+        "email": "admin@restaurant.com",
+        "role": "ADMIN",
+        "jobTitle": "Waiter",
+        "avatarUrl": null
+      }
+    },
+    {
+      "name": "waiter me",
+      "method": "GET",
+      "path": "/auth/me",
+      "status": 200,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "id": "c41d9e93-7352-454d-ae43-42bec14eb494",
+        "name": "Alex Morgan",
+        "email": "waiter1@restaurant.com",
+        "role": "EMPLOYEE",
+        "jobTitle": "Waiter",
+        "avatarUrl": null
+      }
+    },
+    {
+      "name": "admin /rooms",
+      "method": "GET",
+      "path": "/rooms",
+      "status": 200,
+      "ms": 6,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /rooms/calendar?from=2026-11-04&to=2026-11-18",
+      "method": "GET",
+      "path": "/rooms/calendar?from=2026-11-04&to=2026-11-18",
+      "status": 200,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "from": "2026-11-04",
+        "to": "2026-11-18",
+        "rooms": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        }
+      }
+    },
+    {
+      "name": "admin /rooms/calendar?from=2026-11-04&to=2027-03-15",
+      "method": "GET",
+      "path": "/rooms/calendar?from=2026-11-04&to=2027-03-15",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "from": "2026-11-04",
+        "to": "2027-03-15",
+        "rooms": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "roomNumber",
+            "status",
+            "stays"
+          ]
+        }
+      }
+    },
+    {
+      "name": "admin /rooms/cloudbeds/calendar?from=2026-11-04&to=2027-03-15",
+      "method": "GET",
+      "path": "/rooms/cloudbeds/calendar?from=2026-11-04&to=2027-03-15",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Choose a calendar range of 62 days or less",
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "admin /rooms/email-imports",
+      "method": "GET",
+      "path": "/rooms/email-imports",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "configured": true,
+        "connected": true,
+        "mailbox": "INBOX",
+        "concurrency": 3,
+        "pending": 0,
+        "processing": 0,
+        "failed": 0,
+        "lastError": null,
+        "imports": {
+          "type": "array",
+          "length": 23,
+          "firstKeys": [
+            "id",
+            "messageId",
+            "mailbox",
+            "uid",
+            "subject",
+            "fromAddress",
+            "receivedAt",
+            "status",
+            "error",
+            "confirmationNumber",
+            "source",
+            "noticeKind",
+            "noticeAt",
+            "attempts",
+            "nextAttemptAt",
+            "stayId",
+            "createdAt",
+            "processedAt"
+          ]
+        }
+      }
+    },
+    {
+      "name": "admin /tables",
+      "method": "GET",
+      "path": "/tables",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 10,
+        "firstKeys": [
+          "id",
+          "tableNumber",
+          "capacity",
+          "status",
+          "shape",
+          "positionX",
+          "positionY",
+          "width",
+          "height",
+          "sectionId",
+          "createdAt",
+          "updatedAt",
+          "assignedRoomStays",
+          "splits"
+        ]
+      }
+    },
+    {
+      "name": "admin /tables/sections",
+      "method": "GET",
+      "path": "/tables/sections",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 1,
+        "firstKeys": [
+          "id",
+          "name",
+          "position",
+          "createdAt",
+          "updatedAt"
+        ]
+      }
+    },
+    {
+      "name": "admin /categories",
+      "method": "GET",
+      "path": "/categories",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 5,
+        "firstKeys": [
+          "id",
+          "name",
+          "items"
+        ]
+      }
+    },
+    {
+      "name": "admin /menu-items",
+      "method": "GET",
+      "path": "/menu-items",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 18,
+        "firstKeys": [
+          "id",
+          "name",
+          "description",
+          "price",
+          "imageUrl",
+          "allergens",
+          "allergensMy",
+          "allergensTh",
+          "dietaryInfo",
+          "dietaryInfoMy",
+          "dietaryInfoTh",
+          "availableExtras",
+          "availableExtrasMy",
+          "availableExtrasTh",
+          "position",
+          "categoryId",
+          "prepStation",
+          "createdAt",
+          "updatedAt",
+          "category",
+          "modifierGroups"
+        ]
+      }
+    },
+    {
+      "name": "admin /menu-items?page=2&limit=10",
+      "method": "GET",
+      "path": "/menu-items?page=2&limit=10",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "data": {
+          "type": "array",
+          "length": 18,
+          "firstKeys": [
+            "id",
+            "name",
+            "description",
+            "price",
+            "imageUrl",
+            "allergens",
+            "allergensMy",
+            "allergensTh",
+            "dietaryInfo",
+            "dietaryInfoMy",
+            "dietaryInfoTh",
+            "availableExtras",
+            "availableExtrasMy",
+            "availableExtrasTh",
+            "position",
+            "categoryId",
+            "prepStation",
+            "createdAt",
+            "updatedAt",
+            "category",
+            "modifierGroups"
+          ]
+        },
+        "page": 1,
+        "limit": 18,
+        "total": 18,
+        "totalPages": 1
+      }
+    },
+    {
+      "name": "admin /menu-items?keyword=tea",
+      "method": "GET",
+      "path": "/menu-items?keyword=tea",
+      "status": 200,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 3,
+        "firstKeys": [
+          "id",
+          "name",
+          "description",
+          "price",
+          "imageUrl",
+          "allergens",
+          "allergensMy",
+          "allergensTh",
+          "dietaryInfo",
+          "dietaryInfoMy",
+          "dietaryInfoTh",
+          "availableExtras",
+          "availableExtrasMy",
+          "availableExtrasTh",
+          "position",
+          "categoryId",
+          "prepStation",
+          "createdAt",
+          "updatedAt",
+          "category",
+          "modifierGroups"
+        ]
+      }
+    },
+    {
+      "name": "admin /modifier-groups",
+      "method": "GET",
+      "path": "/modifier-groups",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /orders",
+      "method": "GET",
+      "path": "/orders",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /orders/page?offset=0&limit=10",
+      "method": "GET",
+      "path": "/orders/page?offset=0&limit=10",
+      "status": 200,
+      "ms": 12,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "items": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "total": 0,
+        "totalAmount": 0,
+        "summary": {
+          "keys": [
+            "totalAmount",
+            "totalCount",
+            "roomAmount",
+            "roomCount",
+            "cashAmount",
+            "cashCount"
+          ]
+        },
+        "offset": 0,
+        "limit": 10,
+        "hasMore": false
+      }
+    },
+    {
+      "name": "admin /orders/page?offset=-1",
+      "method": "GET",
+      "path": "/orders/page?offset=-1",
+      "status": 400,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "admin /orders/ready",
+      "method": "GET",
+      "path": "/orders/ready",
+      "status": 200,
+      "ms": 4,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /orders/pickup",
+      "method": "GET",
+      "path": "/orders/pickup",
+      "status": 200,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /orders/kitchen/prep-queue",
+      "method": "GET",
+      "path": "/orders/kitchen/prep-queue",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /orders/bar/prep-queue",
+      "method": "GET",
+      "path": "/orders/bar/prep-queue",
+      "status": 200,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /orders/cook/queue",
+      "method": "GET",
+      "path": "/orders/cook/queue",
+      "status": 200,
+      "ms": 4,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /analytics/overview",
+      "method": "GET",
+      "path": "/analytics/overview",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 4,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "admin /analytics/overview?from=2026-11-01&to=2026-11-04",
+      "method": "GET",
+      "path": "/analytics/overview?from=2026-11-01&to=2026-11-04",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 4,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "admin /employees",
+      "method": "GET",
+      "path": "/employees",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 2,
+        "firstKeys": [
+          "id",
+          "name",
+          "email",
+          "role",
+          "jobTitle",
+          "avatarUrl",
+          "isOnline",
+          "createdAt",
+          "updatedAt"
+        ]
+      }
+    },
+    {
+      "name": "admin /employees/roles",
+      "method": "GET",
+      "path": "/employees/roles",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 10,
+        "firstKeys": "string"
+      }
+    },
+    {
+      "name": "admin /employees/me/shifts",
+      "method": "GET",
+      "path": "/employees/me/shifts",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /employees/shifts",
+      "method": "GET",
+      "path": "/employees/shifts",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /tasks",
+      "method": "GET",
+      "path": "/tasks",
+      "status": 200,
+      "ms": 4,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "admin /tasks/assignees",
+      "method": "GET",
+      "path": "/tasks/assignees",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 2,
+        "firstKeys": [
+          "id",
+          "name",
+          "jobTitle",
+          "avatarUrl"
+        ]
+      }
+    },
+    {
+      "name": "admin /printing/status",
+      "method": "GET",
+      "path": "/printing/status",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "printers": 1,
+        "defaultPrinter": {
+          "keys": [
+            "id",
+            "name",
+            "manufacturer",
+            "model",
+            "ipAddress",
+            "macAddress",
+            "port",
+            "connectionType",
+            "paperWidthMm",
+            "resolutionDpi",
+            "isDefault",
+            "enabled",
+            "purpose",
+            "lastSeenAt",
+            "lastCheckedAt",
+            "lastCheckOk",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "lastJob": null,
+        "dryRun": false
+      }
+    },
+    {
+      "name": "admin /printing/printers",
+      "method": "GET",
+      "path": "/printing/printers",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 1,
+        "firstKeys": [
+          "id",
+          "name",
+          "manufacturer",
+          "model",
+          "ipAddress",
+          "macAddress",
+          "port",
+          "connectionType",
+          "paperWidthMm",
+          "resolutionDpi",
+          "isDefault",
+          "enabled",
+          "purpose",
+          "lastSeenAt",
+          "lastCheckedAt",
+          "lastCheckOk",
+          "createdAt",
+          "updatedAt"
+        ]
+      }
+    },
+    {
+      "name": "admin /restaurant-settings",
+      "method": "GET",
+      "path": "/restaurant-settings",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "restaurant",
+        "name": "Table & Thyme",
+        "logoUrl": null,
+        "vatPercent": 0,
+        "createdAt": "2026-11-04T08:35:57.847Z",
+        "updatedAt": "2026-11-04T08:35:57.847Z"
+      }
+    },
+    {
+      "name": "admin /technical/status",
+      "method": "GET",
+      "path": "/technical/status",
+      "status": 200,
+      "ms": 103,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "checkedAt": "2026-11-04T02:29:13.481Z",
+        "services": {
+          "keys": [
+            "backend",
+            "postgresql",
+            "nginx"
+          ]
+        },
+        "resources": {
+          "keys": [
+            "cpu",
+            "memory",
+            "disk",
+            "network"
+          ]
+        }
+      }
+    },
+    {
+      "name": "calendar inverted",
+      "method": "GET",
+      "path": "/rooms/calendar?from=2026-12-01&to=2026-11-01",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "The calendar start date must be on or before the end date",
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "calendar bad date",
+      "method": "GET",
+      "path": "/rooms/calendar?from=04-11-2026&to=2026-11-18",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "missing room",
+      "method": "GET",
+      "path": "/rooms/00000000-0000-4000-8000-000000000099/stays",
+      "status": 404,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        404
+      ],
+      "error": null,
+      "sample": {
+        "message": "Room not found",
+        "error": "Not Found",
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "bad uuid",
+      "method": "GET",
+      "path": "/rooms/not-a-uuid",
+      "status": 404,
+      "ms": 1,
+      "ok": false,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": "Cannot GET /api/rooms/not-a-uuid",
+        "error": "Not Found",
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "missing menu item",
+      "method": "GET",
+      "path": "/menu-items/00000000-0000-4000-8000-000000000099",
+      "status": 404,
+      "ms": 3,
+      "ok": true,
+      "expect": [
+        404
+      ],
+      "error": null,
+      "sample": {
+        "message": "Menu item not found",
+        "error": "Not Found",
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "missing order",
+      "method": "GET",
+      "path": "/orders/00000000-0000-4000-8000-000000000099",
+      "status": 404,
+      "ms": 3,
+      "ok": true,
+      "expect": [
+        404
+      ],
+      "error": null,
+      "sample": {
+        "message": "Order #00000000-0000-4000-8000-000000000099 not found",
+        "error": "Not Found",
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "waiter /rooms",
+      "method": "GET",
+      "path": "/rooms",
+      "status": 403,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Your job role does not have permission to perform this action",
+        "error": "Forbidden",
+        "statusCode": 403
+      }
+    },
+    {
+      "name": "waiter /employees",
+      "method": "GET",
+      "path": "/employees",
+      "status": 403,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "You do not have permission to access this resource",
+        "error": "Forbidden",
+        "statusCode": 403
+      }
+    },
+    {
+      "name": "waiter /analytics/overview",
+      "method": "GET",
+      "path": "/analytics/overview",
+      "status": 403,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Your job role does not have permission to perform this action",
+        "error": "Forbidden",
+        "statusCode": 403
+      }
+    },
+    {
+      "name": "waiter /printing/printers",
+      "method": "GET",
+      "path": "/printing/printers",
+      "status": 403,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "You do not have permission to access this resource",
+        "error": "Forbidden",
+        "statusCode": 403
+      }
+    },
+    {
+      "name": "waiter /technical/status",
+      "method": "GET",
+      "path": "/technical/status",
+      "status": 403,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "You do not have permission to access this resource",
+        "error": "Forbidden",
+        "statusCode": 403
+      }
+    },
+    {
+      "name": "waiter /tables",
+      "method": "GET",
+      "path": "/tables",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 10,
+        "firstKeys": [
+          "id",
+          "tableNumber",
+          "capacity",
+          "status",
+          "shape",
+          "positionX",
+          "positionY",
+          "width",
+          "height",
+          "sectionId",
+          "createdAt",
+          "updatedAt",
+          "assignedRoomStays",
+          "splits"
+        ]
+      }
+    },
+    {
+      "name": "waiter /orders",
+      "method": "GET",
+      "path": "/orders",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "waiter /orders/kitchen/prep-queue",
+      "method": "GET",
+      "path": "/orders/kitchen/prep-queue",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "waiter /menu",
+      "method": "GET",
+      "path": "/menu",
+      "status": 404,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Cannot GET /api/menu",
+        "error": "Not Found",
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "waiter /restaurant-settings",
+      "method": "GET",
+      "path": "/restaurant-settings",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "restaurant",
+        "name": "Table & Thyme",
+        "logoUrl": null,
+        "vatPercent": 0,
+        "createdAt": "2026-11-04T08:35:57.847Z",
+        "updatedAt": "2026-11-04T08:35:57.847Z"
+      }
+    },
+    {
+      "name": "waiter /tasks",
+      "method": "GET",
+      "path": "/tasks",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "waiter create room",
+      "method": "POST",
+      "path": "/rooms",
+      "status": 403,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        403
+      ],
+      "error": null,
+      "sample": {
+        "message": "You do not have permission to access this resource",
+        "error": "Forbidden",
+        "statusCode": 403
+      }
+    },
+    {
+      "name": "register missing",
+      "method": "POST",
+      "path": "/auth/register",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 6,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "register duplicate",
+      "method": "POST",
+      "path": "/auth/register",
+      "status": 409,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        409
+      ],
+      "error": null,
+      "sample": {
+        "message": "Email already registered",
+        "error": "Conflict",
+        "statusCode": 409
+      }
+    },
+    {
+      "name": "register public employee",
+      "method": "POST",
+      "path": "/auth/register",
+      "status": 201,
+      "ms": 58,
+      "ok": true,
+      "expect": [
+        201
+      ],
+      "error": null,
+      "sample": {
+        "access_token": "[redacted string len=419]"
+      }
+    },
+    {
+      "name": "public registrant profile",
+      "method": "GET",
+      "path": "/auth/me",
+      "status": 200,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "id": "a236798c-698a-42a8-a347-cef6b5cdba38",
+        "name": "QA Audit Public",
+        "email": "qa-audit-1793759353514@example.invalid",
+        "role": "EMPLOYEE",
+        "jobTitle": "Waiter",
+        "avatarUrl": null
+      }
+    },
+    {
+      "name": "public registrant tables",
+      "method": "GET",
+      "path": "/tables",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 10,
+        "firstKeys": [
+          "id",
+          "tableNumber",
+          "capacity",
+          "status",
+          "shape",
+          "positionX",
+          "positionY",
+          "width",
+          "height",
+          "sectionId",
+          "createdAt",
+          "updatedAt",
+          "assignedRoomStays",
+          "splits"
+        ]
+      }
+    },
+    {
+      "name": "public registrant orders",
+      "method": "GET",
+      "path": "/orders",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 0,
+        "firstKeys": "undefined"
+      }
+    },
+    {
+      "name": "create room empty",
+      "method": "POST",
+      "path": "/rooms",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 3,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "create QA room",
+      "method": "POST",
+      "path": "/rooms",
+      "status": 201,
+      "ms": 2,
+      "ok": true,
+      "expect": [
+        201
+      ],
+      "error": null,
+      "sample": {
+        "id": "af9d99fb-028e-4bec-963c-004fb59167c8",
+        "roomNumber": "QA-AUDIT-1793759353514",
+        "status": "AVAILABLE",
+        "createdAt": "2026-11-04T02:29:13.581Z",
+        "updatedAt": "2026-11-04T02:29:13.581Z"
+      }
+    },
+    {
+      "name": "duplicate room",
+      "method": "POST",
+      "path": "/rooms",
+      "status": 409,
+      "ms": 22,
+      "ok": true,
+      "expect": [
+        409
+      ],
+      "error": null,
+      "sample": {
+        "message": "Room number already exists",
+        "error": "Conflict",
+        "statusCode": 409
+      }
+    },
+    {
+      "name": "occupied manual",
+      "method": "PATCH",
+      "path": "/rooms/af9d99fb-028e-4bec-963c-004fb59167c8/status",
+      "status": 400,
+      "ms": 5,
+      "ok": true,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": "Rooms become occupied through guest check-in",
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "maintenance",
+      "method": "PATCH",
+      "path": "/rooms/af9d99fb-028e-4bec-963c-004fb59167c8/status",
+      "status": 200,
+      "ms": 4,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "id": "af9d99fb-028e-4bec-963c-004fb59167c8",
+        "roomNumber": "QA-AUDIT-1793759353514",
+        "status": "MAINTENANCE",
+        "createdAt": "2026-11-04T02:29:13.581Z",
+        "updatedAt": "2026-11-04T02:29:13.612Z"
+      }
+    },
+    {
+      "name": "available again",
+      "method": "PATCH",
+      "path": "/rooms/af9d99fb-028e-4bec-963c-004fb59167c8/status",
+      "status": 200,
+      "ms": 4,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "id": "af9d99fb-028e-4bec-963c-004fb59167c8",
+        "roomNumber": "QA-AUDIT-1793759353514",
+        "status": "AVAILABLE",
+        "createdAt": "2026-11-04T02:29:13.581Z",
+        "updatedAt": "2026-11-04T02:29:13.615Z"
+      }
+    },
+    {
+      "name": "check in QA guest",
+      "method": "POST",
+      "path": "/rooms/af9d99fb-028e-4bec-963c-004fb59167c8/check-in",
+      "status": 201,
+      "ms": 17,
+      "ok": true,
+      "expect": [
+        201
+      ],
+      "error": null,
+      "sample": {
+        "id": "6f7aad03-ed06-4700-aeac-75d50cbddb92",
+        "roomId": "af9d99fb-028e-4bec-963c-004fb59167c8",
+        "primaryGuestName": "QA Audit Guest",
+        "guestEmail": null,
+        "bookingSource": null,
+        "confirmationNumber": null,
+        "sourceReservationId": null,
+        "cloudbedsReservationId": null,
+        "roomType": null,
+        "assignmentReason": null,
+        "adults": null,
+        "children": null,
+        "nights": null,
+        "currency": null,
+        "averageNightlyRate": null,
+        "grandTotal": null,
+        "depositAmount": null,
+        "amountPaid": null,
+        "balanceDue": 0,
+        "payment": null,
+        "checkedInAt": "2026-11-04T08:00:00.000Z",
+        "expectedCheckoutAt": "2026-11-06T04:00:00.000Z",
+        "checkedOutAt": null,
+        "cancelledAt": null,
+        "guestNotes": "QA audit disposable stay",
+        "cashOnly": true,
+        "chargeLimit": "100",
+        "createdAt": "2026-11-04T02:29:13.624Z",
+        "room": {
+          "keys": [
+            "id",
+            "roomNumber",
+            "status",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "occupants": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "stayId",
+            "name",
+            "createdAt"
+          ]
+        },
+        "charges": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "payments": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "orders": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "grossTotal": 0,
+        "folioTotal": 0
+      }
+    },
+    {
+      "name": "overlap check-in",
+      "method": "POST",
+      "path": "/rooms/af9d99fb-028e-4bec-963c-004fb59167c8/check-in",
+      "status": 409,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "Room is already occupied",
+        "error": "Conflict",
+        "statusCode": 409
+      }
+    },
+    {
+      "name": "room choices",
+      "method": "GET",
+      "path": "/rooms/stays/6f7aad03-ed06-4700-aeac-75d50cbddb92/room-choices",
+      "status": 200,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 1,
+        "firstKeys": [
+          "id",
+          "roomNumber",
+          "status",
+          "suggested",
+          "available",
+          "reason"
+        ]
+      }
+    },
+    {
+      "name": "folio charge",
+      "method": "POST",
+      "path": "/rooms/stays/6f7aad03-ed06-4700-aeac-75d50cbddb92/charges",
+      "status": 409,
+      "ms": 4,
+      "ok": false,
+      "expect": [
+        201
+      ],
+      "error": null,
+      "sample": {
+        "message": "This guest stay is set to cash only",
+        "error": "Conflict",
+        "statusCode": 409
+      }
+    },
+    {
+      "name": "bad charge kind",
+      "method": "POST",
+      "path": "/rooms/stays/6f7aad03-ed06-4700-aeac-75d50cbddb92/charges",
+      "status": 400,
+      "ms": 2,
+      "ok": true,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "negative price",
+      "method": "POST",
+      "path": "/rooms/stays/6f7aad03-ed06-4700-aeac-75d50cbddb92/charges",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "timeline",
+      "method": "GET",
+      "path": "/rooms/stays/6f7aad03-ed06-4700-aeac-75d50cbddb92/timeline",
+      "status": 200,
+      "ms": 6,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "id": "6f7aad03-ed06-4700-aeac-75d50cbddb92",
+        "roomId": "af9d99fb-028e-4bec-963c-004fb59167c8",
+        "primaryGuestName": "QA Audit Guest",
+        "guestEmail": null,
+        "bookingSource": null,
+        "confirmationNumber": null,
+        "sourceReservationId": null,
+        "cloudbedsReservationId": null,
+        "roomType": null,
+        "assignmentReason": null,
+        "adults": null,
+        "children": null,
+        "nights": null,
+        "currency": null,
+        "averageNightlyRate": null,
+        "grandTotal": null,
+        "depositAmount": null,
+        "amountPaid": null,
+        "balanceDue": 0,
+        "payment": null,
+        "checkedInAt": "2026-11-04T08:00:00.000Z",
+        "expectedCheckoutAt": "2026-11-06T04:00:00.000Z",
+        "checkedOutAt": null,
+        "cancelledAt": null,
+        "guestNotes": "QA audit disposable stay",
+        "cashOnly": true,
+        "chargeLimit": "100",
+        "createdAt": "2026-11-04T02:29:13.624Z",
+        "room": {
+          "keys": [
+            "id",
+            "roomNumber",
+            "status",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "occupants": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "stayId",
+            "name",
+            "createdAt"
+          ]
+        },
+        "charges": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "payments": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "orders": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "folioTotal": 0,
+        "grossTotal": 0,
+        "paidTotal": 0
+      }
+    },
+    {
+      "name": "settle folio cash",
+      "method": "POST",
+      "path": "/rooms/stays/6f7aad03-ed06-4700-aeac-75d50cbddb92/settle",
+      "status": 409,
+      "ms": 4,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "There is no open room tab to settle",
+        "error": "Conflict",
+        "statusCode": 409
+      }
+    },
+    {
+      "name": "settle again",
+      "method": "POST",
+      "path": "/rooms/stays/6f7aad03-ed06-4700-aeac-75d50cbddb92/settle",
+      "status": 409,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "There is no open room tab to settle",
+        "error": "Conflict",
+        "statusCode": 409
+      }
+    },
+    {
+      "name": "calendar after check-in",
+      "method": "GET",
+      "path": "/rooms/calendar?from=2026-11-01&to=2026-11-10",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "from": "2026-11-01",
+        "to": "2026-11-10",
+        "rooms": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "roomNumber",
+            "status",
+            "stays"
+          ]
+        }
+      }
+    },
+    {
+      "name": "checkout stay",
+      "method": "POST",
+      "path": "/rooms/stays/6f7aad03-ed06-4700-aeac-75d50cbddb92/check-out",
+      "status": 201,
+      "ms": 8,
+      "ok": true,
+      "expect": [
+        200,
+        201
+      ],
+      "error": null,
+      "sample": {
+        "id": "6f7aad03-ed06-4700-aeac-75d50cbddb92",
+        "roomId": "af9d99fb-028e-4bec-963c-004fb59167c8",
+        "primaryGuestName": "QA Audit Guest",
+        "guestEmail": null,
+        "bookingSource": null,
+        "confirmationNumber": null,
+        "sourceReservationId": null,
+        "cloudbedsReservationId": null,
+        "roomType": null,
+        "assignmentReason": null,
+        "adults": null,
+        "children": null,
+        "nights": null,
+        "currency": null,
+        "averageNightlyRate": null,
+        "grandTotal": null,
+        "depositAmount": null,
+        "amountPaid": null,
+        "balanceDue": 0,
+        "payment": null,
+        "checkedInAt": "2026-11-04T08:00:00.000Z",
+        "expectedCheckoutAt": "2026-11-06T04:00:00.000Z",
+        "checkedOutAt": "2026-11-04T02:29:13.668Z",
+        "cancelledAt": null,
+        "guestNotes": "QA audit disposable stay",
+        "cashOnly": true,
+        "chargeLimit": "100",
+        "createdAt": "2026-11-04T02:29:13.624Z",
+        "room": {
+          "keys": [
+            "id",
+            "roomNumber",
+            "status",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "occupants": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "stayId",
+            "name",
+            "createdAt"
+          ]
+        },
+        "charges": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "payments": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "orders": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        },
+        "folioTotal": 0,
+        "grossTotal": 0,
+        "paidTotal": 0
+      }
+    },
+    {
+      "name": "menu for order",
+      "method": "GET",
+      "path": "/menu-items",
+      "status": 200,
+      "ms": 4,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 18,
+        "firstKeys": [
+          "id",
+          "name",
+          "description",
+          "price",
+          "imageUrl",
+          "allergens",
+          "allergensMy",
+          "allergensTh",
+          "dietaryInfo",
+          "dietaryInfoMy",
+          "dietaryInfoTh",
+          "availableExtras",
+          "availableExtrasMy",
+          "availableExtrasTh",
+          "position",
+          "categoryId",
+          "prepStation",
+          "createdAt",
+          "updatedAt",
+          "category",
+          "modifierGroups"
+        ]
+      }
+    },
+    {
+      "name": "tables for order",
+      "method": "GET",
+      "path": "/tables",
+      "status": 200,
+      "ms": 2,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 10,
+        "firstKeys": [
+          "id",
+          "tableNumber",
+          "capacity",
+          "status",
+          "shape",
+          "positionX",
+          "positionY",
+          "width",
+          "height",
+          "sectionId",
+          "createdAt",
+          "updatedAt",
+          "assignedRoomStays",
+          "splits"
+        ]
+      }
+    },
+    {
+      "name": "order missing items",
+      "method": "POST",
+      "path": "/orders",
+      "status": 400,
+      "ms": 2,
+      "ok": true,
+      "expect": [
+        400
+      ],
+      "error": null,
+      "sample": {
+        "message": "Order must contain at least one item",
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "create QA order",
+      "method": "POST",
+      "path": "/orders",
+      "status": 201,
+      "ms": 17,
+      "ok": true,
+      "expect": [
+        201
+      ],
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "number": 1,
+        "type": "DINE_IN",
+        "customerName": null,
+        "customerPhone": null,
+        "tableId": "85cf18ff-ad76-40eb-adec-9631de1d1b12",
+        "tableSplitId": null,
+        "tableSnapshot": {
+          "keys": [
+            "tableNumber"
+          ]
+        },
+        "roomStayId": null,
+        "roomGuestsSnapshot": null,
+        "paymentMethod": "CASH",
+        "paymentStatus": "UNPAID",
+        "paidAt": null,
+        "paidById": null,
+        "waiterId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "servedById": null,
+        "status": "PENDING",
+        "totalAmount": "13",
+        "vatPercent": "0",
+        "preparingAt": null,
+        "readyAt": null,
+        "servedAt": null,
+        "createdAt": "2026-11-04T02:29:13.692Z",
+        "updatedAt": "2026-11-04T02:29:13.692Z",
+        "items": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "menuItemId",
+            "itemSnapshot",
+            "quantity",
+            "unitPrice",
+            "removeIngredients",
+            "addExtras",
+            "selectedAllergens",
+            "modifierSelections",
+            "specialNotes",
+            "subtotal",
+            "menuItem",
+            "kitchenFlag"
+          ]
+        },
+        "table": {
+          "keys": [
+            "id",
+            "tableNumber",
+            "capacity",
+            "status",
+            "shape",
+            "positionX",
+            "positionY",
+            "width",
+            "height",
+            "sectionId",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "waiter": {
+          "keys": [
+            "id",
+            "name",
+            "email"
+          ]
+        },
+        "roomStay": null,
+        "prepTickets": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "station",
+            "status",
+            "items",
+            "preparingAt",
+            "readyAt",
+            "createdAt",
+            "updatedAt"
+          ]
+        }
+      }
+    },
+    {
+      "name": "duplicate client request",
+      "method": "POST",
+      "path": "/orders",
+      "status": 201,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "type": "DINE_IN",
+        "items": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "menuItem",
+            "quantity",
+            "subtotal",
+            "addExtras",
+            "unitPrice",
+            "menuItemId",
+            "itemSnapshot",
+            "specialNotes",
+            "removeIngredients",
+            "selectedAllergens",
+            "modifierSelections",
+            "kitchenFlag"
+          ]
+        },
+        "table": {
+          "keys": [
+            "id",
+            "shape",
+            "width",
+            "height",
+            "status",
+            "capacity",
+            "createdAt",
+            "positionX",
+            "positionY",
+            "sectionId",
+            "updatedAt",
+            "tableNumber"
+          ]
+        },
+        "number": 1,
+        "paidAt": null,
+        "status": "PENDING",
+        "waiter": {
+          "keys": [
+            "id",
+            "name",
+            "email"
+          ]
+        },
+        "readyAt": null,
+        "tableId": "85cf18ff-ad76-40eb-adec-9631de1d1b12",
+        "paidById": null,
+        "roomStay": null,
+        "servedAt": null,
+        "waiterId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "createdAt": "2026-11-04T02:29:13.692Z",
+        "updatedAt": "2026-11-04T02:29:13.692Z",
+        "roomStayId": null,
+        "servedById": null,
+        "vatPercent": "0",
+        "prepTickets": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "items",
+            "status",
+            "orderId",
+            "readyAt",
+            "station",
+            "createdAt",
+            "updatedAt",
+            "preparingAt"
+          ]
+        },
+        "preparingAt": null,
+        "totalAmount": "13",
+        "customerName": null,
+        "tableSplitId": null,
+        "customerPhone": null,
+        "paymentMethod": "CASH",
+        "paymentStatus": "UNPAID",
+        "tableSnapshot": {
+          "keys": [
+            "tableNumber"
+          ]
+        },
+        "roomGuestsSnapshot": null
+      }
+    },
+    {
+      "name": "order detail",
+      "method": "GET",
+      "path": "/orders/64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+      "status": 200,
+      "ms": 4,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "number": 1,
+        "type": "DINE_IN",
+        "customerName": null,
+        "customerPhone": null,
+        "tableId": "85cf18ff-ad76-40eb-adec-9631de1d1b12",
+        "tableSplitId": null,
+        "tableSnapshot": {
+          "keys": [
+            "tableNumber"
+          ]
+        },
+        "roomStayId": null,
+        "roomGuestsSnapshot": null,
+        "paymentMethod": "CASH",
+        "paymentStatus": "UNPAID",
+        "paidAt": null,
+        "paidById": null,
+        "waiterId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "servedById": null,
+        "status": "PENDING",
+        "totalAmount": "13",
+        "vatPercent": "0",
+        "preparingAt": null,
+        "readyAt": null,
+        "servedAt": null,
+        "createdAt": "2026-11-04T02:29:13.692Z",
+        "updatedAt": "2026-11-04T02:29:13.692Z",
+        "items": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "menuItemId",
+            "itemSnapshot",
+            "quantity",
+            "unitPrice",
+            "removeIngredients",
+            "addExtras",
+            "selectedAllergens",
+            "modifierSelections",
+            "specialNotes",
+            "subtotal",
+            "menuItem",
+            "kitchenFlag"
+          ]
+        },
+        "prepTickets": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "station",
+            "status",
+            "items",
+            "preparingAt",
+            "readyAt",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "table": {
+          "keys": [
+            "id",
+            "tableNumber",
+            "capacity",
+            "status",
+            "shape",
+            "positionX",
+            "positionY",
+            "width",
+            "height",
+            "sectionId",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "roomStay": null,
+        "waiter": {
+          "keys": [
+            "id",
+            "name"
+          ]
+        },
+        "servedBy": null,
+        "paidBy": null
+      }
+    },
+    {
+      "name": "kitchen flag",
+      "method": "PATCH",
+      "path": "/orders/64baf685-7351-4dc9-8ee8-a87ddac3a7c7/items/388e0fcc-f400-45b8-9008-f0f2e99bcb80/kitchen-flag",
+      "status": 200,
+      "ms": 12,
+      "ok": true,
+      "expect": [
+        200
+      ],
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "number": 1,
+        "type": "DINE_IN",
+        "customerName": null,
+        "customerPhone": null,
+        "tableId": "85cf18ff-ad76-40eb-adec-9631de1d1b12",
+        "tableSplitId": null,
+        "tableSnapshot": {
+          "keys": [
+            "tableNumber"
+          ]
+        },
+        "roomStayId": null,
+        "roomGuestsSnapshot": null,
+        "paymentMethod": "CASH",
+        "paymentStatus": "UNPAID",
+        "paidAt": null,
+        "paidById": null,
+        "waiterId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "servedById": null,
+        "status": "PENDING",
+        "totalAmount": "13",
+        "vatPercent": "0",
+        "preparingAt": null,
+        "readyAt": null,
+        "servedAt": null,
+        "createdAt": "2026-11-04T02:29:13.692Z",
+        "updatedAt": "2026-11-04T02:29:13.692Z",
+        "items": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "menuItemId",
+            "itemSnapshot",
+            "quantity",
+            "unitPrice",
+            "removeIngredients",
+            "addExtras",
+            "selectedAllergens",
+            "modifierSelections",
+            "specialNotes",
+            "subtotal",
+            "menuItem",
+            "kitchenFlag"
+          ]
+        },
+        "prepTickets": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "station",
+            "status",
+            "items",
+            "preparingAt",
+            "readyAt",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "table": {
+          "keys": [
+            "id",
+            "tableNumber",
+            "capacity",
+            "status",
+            "shape",
+            "positionX",
+            "positionY",
+            "width",
+            "height",
+            "sectionId",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "roomStay": null,
+        "waiter": {
+          "keys": [
+            "id",
+            "name"
+          ]
+        },
+        "servedBy": null,
+        "paidBy": null
+      }
+    },
+    {
+      "name": "prepare order",
+      "method": "PATCH",
+      "path": "/orders/64baf685-7351-4dc9-8ee8-a87ddac3a7c7/prepare",
+      "status": 200,
+      "ms": 6,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "number": 1,
+        "type": "DINE_IN",
+        "customerName": null,
+        "customerPhone": null,
+        "tableId": "85cf18ff-ad76-40eb-adec-9631de1d1b12",
+        "tableSplitId": null,
+        "tableSnapshot": {
+          "keys": [
+            "tableNumber"
+          ]
+        },
+        "roomStayId": null,
+        "roomGuestsSnapshot": null,
+        "paymentMethod": "CASH",
+        "paymentStatus": "UNPAID",
+        "paidAt": null,
+        "paidById": null,
+        "waiterId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "servedById": null,
+        "status": "PREPARING",
+        "totalAmount": "13",
+        "vatPercent": "0",
+        "preparingAt": "2026-11-04T02:29:13.720Z",
+        "readyAt": null,
+        "servedAt": null,
+        "createdAt": "2026-11-04T02:29:13.692Z",
+        "updatedAt": "2026-11-04T02:29:13.720Z",
+        "items": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "menuItemId",
+            "itemSnapshot",
+            "quantity",
+            "unitPrice",
+            "removeIngredients",
+            "addExtras",
+            "selectedAllergens",
+            "modifierSelections",
+            "specialNotes",
+            "subtotal",
+            "menuItem",
+            "kitchenFlag"
+          ]
+        },
+        "prepTickets": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "station",
+            "status",
+            "items",
+            "preparingAt",
+            "readyAt",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "table": {
+          "keys": [
+            "id",
+            "tableNumber",
+            "capacity",
+            "status",
+            "shape",
+            "positionX",
+            "positionY",
+            "width",
+            "height",
+            "sectionId",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "roomStay": null,
+        "waiter": {
+          "keys": [
+            "id",
+            "name"
+          ]
+        },
+        "servedBy": null,
+        "paidBy": null
+      }
+    },
+    {
+      "name": "ready order",
+      "method": "PATCH",
+      "path": "/orders/64baf685-7351-4dc9-8ee8-a87ddac3a7c7/ready",
+      "status": 200,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "number": 1,
+        "type": "DINE_IN",
+        "customerName": null,
+        "customerPhone": null,
+        "tableId": "85cf18ff-ad76-40eb-adec-9631de1d1b12",
+        "tableSplitId": null,
+        "tableSnapshot": {
+          "keys": [
+            "tableNumber"
+          ]
+        },
+        "roomStayId": null,
+        "roomGuestsSnapshot": null,
+        "paymentMethod": "CASH",
+        "paymentStatus": "UNPAID",
+        "paidAt": null,
+        "paidById": null,
+        "waiterId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "servedById": null,
+        "status": "READY",
+        "totalAmount": "13",
+        "vatPercent": "0",
+        "preparingAt": "2026-11-04T02:29:13.720Z",
+        "readyAt": "2026-11-04T02:29:13.725Z",
+        "servedAt": null,
+        "createdAt": "2026-11-04T02:29:13.692Z",
+        "updatedAt": "2026-11-04T02:29:13.726Z",
+        "items": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "menuItemId",
+            "itemSnapshot",
+            "quantity",
+            "unitPrice",
+            "removeIngredients",
+            "addExtras",
+            "selectedAllergens",
+            "modifierSelections",
+            "specialNotes",
+            "subtotal",
+            "menuItem",
+            "kitchenFlag"
+          ]
+        },
+        "prepTickets": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "station",
+            "status",
+            "items",
+            "preparingAt",
+            "readyAt",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "table": {
+          "keys": [
+            "id",
+            "tableNumber",
+            "capacity",
+            "status",
+            "shape",
+            "positionX",
+            "positionY",
+            "width",
+            "height",
+            "sectionId",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "roomStay": null,
+        "waiter": {
+          "keys": [
+            "id",
+            "name"
+          ]
+        },
+        "servedBy": null,
+        "paidBy": null
+      }
+    },
+    {
+      "name": "served order",
+      "method": "PATCH",
+      "path": "/orders/64baf685-7351-4dc9-8ee8-a87ddac3a7c7/served",
+      "status": 200,
+      "ms": 7,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "number": 1,
+        "type": "DINE_IN",
+        "customerName": null,
+        "customerPhone": null,
+        "tableId": "85cf18ff-ad76-40eb-adec-9631de1d1b12",
+        "tableSplitId": null,
+        "tableSnapshot": {
+          "keys": [
+            "tableNumber"
+          ]
+        },
+        "roomStayId": null,
+        "roomGuestsSnapshot": null,
+        "paymentMethod": "CASH",
+        "paymentStatus": "UNPAID",
+        "paidAt": null,
+        "paidById": null,
+        "waiterId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "servedById": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "status": "SERVED",
+        "totalAmount": "13",
+        "vatPercent": "0",
+        "preparingAt": "2026-11-04T02:29:13.720Z",
+        "readyAt": "2026-11-04T02:29:13.725Z",
+        "servedAt": "2026-11-04T02:29:13.730Z",
+        "createdAt": "2026-11-04T02:29:13.692Z",
+        "updatedAt": "2026-11-04T02:29:13.731Z",
+        "items": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "menuItemId",
+            "itemSnapshot",
+            "quantity",
+            "unitPrice",
+            "removeIngredients",
+            "addExtras",
+            "selectedAllergens",
+            "modifierSelections",
+            "specialNotes",
+            "subtotal",
+            "menuItem",
+            "kitchenFlag"
+          ]
+        },
+        "prepTickets": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "station",
+            "status",
+            "items",
+            "preparingAt",
+            "readyAt",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "table": {
+          "keys": [
+            "id",
+            "tableNumber",
+            "capacity",
+            "status",
+            "shape",
+            "positionX",
+            "positionY",
+            "width",
+            "height",
+            "sectionId",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "roomStay": null,
+        "waiter": {
+          "keys": [
+            "id",
+            "name"
+          ]
+        },
+        "servedBy": {
+          "keys": [
+            "id",
+            "name"
+          ]
+        },
+        "paidBy": null
+      }
+    },
+    {
+      "name": "revert order",
+      "method": "PATCH",
+      "path": "/orders/64baf685-7351-4dc9-8ee8-a87ddac3a7c7/revert",
+      "status": 200,
+      "ms": 5,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "number": 1,
+        "type": "DINE_IN",
+        "customerName": null,
+        "customerPhone": null,
+        "tableId": "85cf18ff-ad76-40eb-adec-9631de1d1b12",
+        "tableSplitId": null,
+        "tableSnapshot": {
+          "keys": [
+            "tableNumber"
+          ]
+        },
+        "roomStayId": null,
+        "roomGuestsSnapshot": null,
+        "paymentMethod": "CASH",
+        "paymentStatus": "UNPAID",
+        "paidAt": null,
+        "paidById": null,
+        "waiterId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "servedById": null,
+        "status": "READY",
+        "totalAmount": "13",
+        "vatPercent": "0",
+        "preparingAt": "2026-11-04T02:29:13.720Z",
+        "readyAt": "2026-11-04T02:29:13.725Z",
+        "servedAt": null,
+        "createdAt": "2026-11-04T02:29:13.692Z",
+        "updatedAt": "2026-11-04T02:29:13.738Z",
+        "items": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "menuItemId",
+            "itemSnapshot",
+            "quantity",
+            "unitPrice",
+            "removeIngredients",
+            "addExtras",
+            "selectedAllergens",
+            "modifierSelections",
+            "specialNotes",
+            "subtotal",
+            "menuItem",
+            "kitchenFlag"
+          ]
+        },
+        "prepTickets": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "orderId",
+            "station",
+            "status",
+            "items",
+            "preparingAt",
+            "readyAt",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "table": {
+          "keys": [
+            "id",
+            "tableNumber",
+            "capacity",
+            "status",
+            "shape",
+            "positionX",
+            "positionY",
+            "width",
+            "height",
+            "sectionId",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "roomStay": null,
+        "waiter": {
+          "keys": [
+            "id",
+            "name"
+          ]
+        },
+        "servedBy": null,
+        "paidBy": null
+      }
+    },
+    {
+      "name": "receipt preview",
+      "method": "GET",
+      "path": "/printing/receipts/64baf685-7351-4dc9-8ee8-a87ddac3a7c7/preview",
+      "status": 200,
+      "ms": 80,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "keys": [
+          "orderId",
+          "width",
+          "height",
+          "pngBase64",
+          "html"
+        ],
+        "byteNote": "binary fields redacted by summarize"
+      }
+    },
+    {
+      "name": "checkout before served",
+      "method": "POST",
+      "path": "/tables/85cf18ff-ad76-40eb-adec-9631de1d1b12/checkout",
+      "status": 409,
+      "ms": 8,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": "All table orders must be served before checkout",
+        "error": "Conflict",
+        "statusCode": 409
+      }
+    },
+    {
+      "name": "waiter denied kitchen prepare random",
+      "method": "PATCH",
+      "path": "/orders/00000000-0000-4000-8000-000000000099/prepare",
+      "status": 403,
+      "ms": 4,
+      "ok": true,
+      "expect": [
+        403,
+        404
+      ],
+      "error": null,
+      "sample": {
+        "message": "Your job role does not have permission to perform this action",
+        "error": "Forbidden",
+        "statusCode": 403
+      }
+    },
+    {
+      "name": "create modifier group",
+      "method": "POST",
+      "path": "/modifier-groups",
+      "status": 201,
+      "ms": 8,
+      "ok": true,
+      "expect": [
+        201
+      ],
+      "error": null,
+      "sample": {
+        "id": "aab155f0-0d93-400a-b00e-3f030b76de9a",
+        "name": "QA Audit Spice 1793759353514",
+        "nameMy": "",
+        "nameTh": "",
+        "category": "General",
+        "icon": "Utensils",
+        "appearance": "RADIO",
+        "madeAt": "SAME_AS_DISH",
+        "required": true,
+        "selectionType": "SINGLE",
+        "minPicks": 1,
+        "maxPicks": 1,
+        "includedPicks": 0,
+        "extraPickPrice": "0",
+        "allowDuplicates": false,
+        "position": 0,
+        "createdAt": "2026-11-04T02:29:13.837Z",
+        "updatedAt": "2026-11-04T02:29:13.837Z",
+        "options": {
+          "type": "array",
+          "length": 2,
+          "firstKeys": [
+            "id",
+            "groupId",
+            "name",
+            "nameMy",
+            "nameTh",
+            "priceAdjustment",
+            "defaultSelected",
+            "active",
+            "position",
+            "opensGroupId",
+            "createdAt",
+            "updatedAt"
+          ]
+        },
+        "menuItems": {
+          "type": "array",
+          "length": 0,
+          "firstKeys": "undefined"
+        }
+      }
+    },
+    {
+      "name": "modifier unauth still listed",
+      "method": "GET",
+      "path": "/modifier-groups",
+      "status": 200,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "type": "array",
+        "length": 1,
+        "firstKeys": [
+          "id",
+          "name",
+          "nameMy",
+          "nameTh",
+          "category",
+          "icon",
+          "appearance",
+          "madeAt",
+          "required",
+          "selectionType",
+          "minPicks",
+          "maxPicks",
+          "includedPicks",
+          "extraPickPrice",
+          "allowDuplicates",
+          "position",
+          "createdAt",
+          "updatedAt",
+          "options",
+          "menuItems"
+        ]
+      }
+    },
+    {
+      "name": "create task",
+      "method": "POST",
+      "path": "/tasks",
+      "status": 400,
+      "ms": 1,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "message": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": "string"
+        },
+        "error": "Bad Request",
+        "statusCode": 400
+      }
+    },
+    {
+      "name": "create QA table",
+      "method": "POST",
+      "path": "/tables",
+      "status": 201,
+      "ms": 4,
+      "ok": true,
+      "expect": [
+        201
+      ],
+      "error": null,
+      "sample": {
+        "id": "362eded6-bd51-4f57-874e-ed62ae324fc6",
+        "tableNumber": "QA-353514",
+        "capacity": 2,
+        "status": "AVAILABLE",
+        "shape": "ROUND",
+        "positionX": 2,
+        "positionY": 0,
+        "width": 2,
+        "height": 2,
+        "sectionId": "00000000-0000-4000-8000-000000000001",
+        "createdAt": "2026-11-04T02:29:13.849Z",
+        "updatedAt": "2026-11-04T02:29:13.849Z"
+      }
+    },
+    {
+      "name": "shift check-in",
+      "method": "POST",
+      "path": "/employees/me/check-in",
+      "status": 201,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "14cd0afe-fa0d-49f5-8c32-879289f7bdce",
+        "employeeId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "checkedInAt": "2026-11-04T02:29:13.852Z",
+        "checkedOutAt": null,
+        "createdAt": "2026-11-04T02:29:13.852Z"
+      }
+    },
+    {
+      "name": "shift break start",
+      "method": "POST",
+      "path": "/employees/me/break/start",
+      "status": 201,
+      "ms": 3,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "a2420ba3-8546-46d2-b935-b8c9b793f691",
+        "employeeShiftId": "14cd0afe-fa0d-49f5-8c32-879289f7bdce",
+        "startedAt": "2026-11-04T02:29:13.855Z",
+        "endedAt": null,
+        "createdAt": "2026-11-04T02:29:13.855Z"
+      }
+    },
+    {
+      "name": "shift break end",
+      "method": "POST",
+      "path": "/employees/me/break/end",
+      "status": 201,
+      "ms": 2,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "a2420ba3-8546-46d2-b935-b8c9b793f691",
+        "employeeShiftId": "14cd0afe-fa0d-49f5-8c32-879289f7bdce",
+        "startedAt": "2026-11-04T02:29:13.855Z",
+        "endedAt": "2026-11-04T02:29:13.857Z",
+        "createdAt": "2026-11-04T02:29:13.855Z"
+      }
+    },
+    {
+      "name": "shift check-out",
+      "method": "POST",
+      "path": "/employees/me/check-out",
+      "status": 201,
+      "ms": 4,
+      "ok": true,
+      "expect": null,
+      "error": null,
+      "sample": {
+        "id": "14cd0afe-fa0d-49f5-8c32-879289f7bdce",
+        "employeeId": "f8d78c42-df96-48e1-9c47-c8f0903ac2c6",
+        "checkedInAt": "2026-11-04T02:29:13.852Z",
+        "checkedOutAt": "2026-11-04T02:29:13.860Z",
+        "createdAt": "2026-11-04T02:29:13.852Z",
+        "breaks": {
+          "type": "array",
+          "length": 1,
+          "firstKeys": [
+            "id",
+            "employeeShiftId",
+            "startedAt",
+            "endedAt",
+            "createdAt"
+          ]
+        }
+      }
+    },
+    {
+      "name": "cleanup order 64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+      "method": "DELETE",
+      "path": "/orders/64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+      "status": 200,
+      "ms": 7,
+      "ok": true,
+      "expect": [
+        200,
+        204,
+        404,
+        409
+      ],
+      "error": null,
+      "sample": {
+        "id": "64baf685-7351-4dc9-8ee8-a87ddac3a7c7",
+        "deleted": true
+      }
+    },
+    {
+      "name": "cleanup room af9d99fb-028e-4bec-963c-004fb59167c8",
+      "method": "DELETE",
+      "path": "/rooms/af9d99fb-028e-4bec-963c-004fb59167c8?deleteHistory=true",
+      "status": 200,
+      "ms": 7,
+      "ok": true,
+      "expect": [
+        200,
+        204,
+        404
+      ],
+      "error": null,
+      "sample": {
+        "id": "af9d99fb-028e-4bec-963c-004fb59167c8",
+        "deleted": true,
+        "historyDeleted": true
+      }
+    },
+    {
+      "name": "cleanup group aab155f0-0d93-400a-b00e-3f030b76de9a",
+      "method": "DELETE",
+      "path": "/modifier-groups/aab155f0-0d93-400a-b00e-3f030b76de9a",
+      "status": 200,
+      "ms": 6,
+      "ok": true,
+      "expect": [
+        200,
+        204,
+        404,
+        409
+      ],
+      "error": null,
+      "sample": {
+        "id": "aab155f0-0d93-400a-b00e-3f030b76de9a"
+      }
+    },
+    {
+      "name": "cleanup table 362eded6-bd51-4f57-874e-ed62ae324fc6",
+      "method": "DELETE",
+      "path": "/tables/362eded6-bd51-4f57-874e-ed62ae324fc6",
+      "status": 200,
+      "ms": 8,
+      "ok": true,
+      "expect": [
+        200,
+        204,
+        404,
+        409
+      ],
+      "error": null,
+      "sample": {
+        "id": "362eded6-bd51-4f57-874e-ed62ae324fc6"
+      }
+    },
+    {
+      "name": "cleanup user a236798c-698a-42a8-a347-cef6b5cdba38",
+      "method": "DELETE",
+      "path": "/employees/a236798c-698a-42a8-a347-cef6b5cdba38",
+      "status": 200,
+      "ms": 6,
+      "ok": true,
+      "expect": [
+        200,
+        204,
+        404,
+        409
+      ],
+      "error": null,
+      "sample": {
+        "id": "a236798c-698a-42a8-a347-cef6b5cdba38",
+        "deleted": true
+      }
+    }
+  ]
+}

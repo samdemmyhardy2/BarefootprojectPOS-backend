@@ -61,7 +61,11 @@ export const ModelName = {
   Table: 'Table',
   Room: 'Room',
   RoomStay: 'RoomStay',
+  EmailSyncRun: 'EmailSyncRun',
+  InboundEmail: 'InboundEmail',
+  ReservationNight: 'ReservationNight',
   RoomOccupant: 'RoomOccupant',
+  CommissionItem: 'CommissionItem',
   RoomCharge: 'RoomCharge',
   RoomPayment: 'RoomPayment',
   Category: 'Category',
@@ -70,7 +74,11 @@ export const ModelName = {
   ModifierOption: 'ModifierOption',
   MenuItemModifierGroup: 'MenuItemModifierGroup',
   Order: 'Order',
+  TableSplit: 'TableSplit',
   OrderPrepTicket: 'OrderPrepTicket',
+  TableBill: 'TableBill',
+  Printer: 'Printer',
+  PrintJob: 'PrintJob',
   ClientSubmission: 'ClientSubmission',
   OrderItem: 'OrderItem'
 } as const
@@ -111,6 +119,7 @@ export const RestaurantSettingScalarFieldEnum = {
   id: 'id',
   name: 'name',
   logoUrl: 'logoUrl',
+  vatPercent: 'vatPercent',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -207,9 +216,27 @@ export const RoomStayScalarFieldEnum = {
   id: 'id',
   roomId: 'roomId',
   primaryGuestName: 'primaryGuestName',
+  guestEmail: 'guestEmail',
+  bookingSource: 'bookingSource',
+  confirmationNumber: 'confirmationNumber',
+  sourceReservationId: 'sourceReservationId',
+  cloudbedsReservationId: 'cloudbedsReservationId',
+  roomType: 'roomType',
+  assignmentReason: 'assignmentReason',
+  adults: 'adults',
+  children: 'children',
+  nights: 'nights',
+  currency: 'currency',
+  averageNightlyRate: 'averageNightlyRate',
+  grandTotal: 'grandTotal',
+  depositAmount: 'depositAmount',
+  amountPaid: 'amountPaid',
+  balanceDue: 'balanceDue',
+  payment: 'payment',
   checkedInAt: 'checkedInAt',
   expectedCheckoutAt: 'expectedCheckoutAt',
   checkedOutAt: 'checkedOutAt',
+  cancelledAt: 'cancelledAt',
   guestNotes: 'guestNotes',
   cashOnly: 'cashOnly',
   chargeLimit: 'chargeLimit',
@@ -217,6 +244,86 @@ export const RoomStayScalarFieldEnum = {
 } as const
 
 export type RoomStayScalarFieldEnum = (typeof RoomStayScalarFieldEnum)[keyof typeof RoomStayScalarFieldEnum]
+
+
+export const EmailSyncRunScalarFieldEnum = {
+  id: 'id',
+  trigger: 'trigger',
+  status: 'status',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  imapConnected: 'imapConnected',
+  scanned: 'scanned',
+  discovered: 'discovered',
+  nested: 'nested',
+  duplicates: 'duplicates',
+  confirmed: 'confirmed',
+  modified: 'modified',
+  cancelled: 'cancelled',
+  payments: 'payments',
+  imported: 'imported',
+  updated: 'updated',
+  canceled: 'canceled',
+  skipped: 'skipped',
+  unmatched: 'unmatched',
+  failed: 'failed',
+  parts: 'parts',
+  attachments: 'attachments',
+  maxDepth: 'maxDepth',
+  uniqueEmails: 'uniqueEmails',
+  processedAttachments: 'processedAttachments',
+  failedAttachments: 'failedAttachments',
+  unprocessedAttachments: 'unprocessedAttachments',
+  lastUid: 'lastUid',
+  error: 'error',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailSyncRunScalarFieldEnum = (typeof EmailSyncRunScalarFieldEnum)[keyof typeof EmailSyncRunScalarFieldEnum]
+
+
+export const InboundEmailScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  mailbox: 'mailbox',
+  uid: 'uid',
+  subject: 'subject',
+  fromAddress: 'fromAddress',
+  receivedAt: 'receivedAt',
+  rawMime: 'rawMime',
+  status: 'status',
+  error: 'error',
+  confirmationNumber: 'confirmationNumber',
+  source: 'source',
+  noticeKind: 'noticeKind',
+  noticeAt: 'noticeAt',
+  outcome: 'outcome',
+  guestName: 'guestName',
+  cloudbedsReservationId: 'cloudbedsReservationId',
+  parentMessageId: 'parentMessageId',
+  nestingDepth: 'nestingDepth',
+  attachmentFilename: 'attachmentFilename',
+  attemptLog: 'attemptLog',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  stayId: 'stayId',
+  syncRunId: 'syncRunId',
+  createdAt: 'createdAt',
+  processedAt: 'processedAt'
+} as const
+
+export type InboundEmailScalarFieldEnum = (typeof InboundEmailScalarFieldEnum)[keyof typeof InboundEmailScalarFieldEnum]
+
+
+export const ReservationNightScalarFieldEnum = {
+  id: 'id',
+  stayId: 'stayId',
+  night: 'night',
+  amount: 'amount',
+  currency: 'currency'
+} as const
+
+export type ReservationNightScalarFieldEnum = (typeof ReservationNightScalarFieldEnum)[keyof typeof ReservationNightScalarFieldEnum]
 
 
 export const RoomOccupantScalarFieldEnum = {
@@ -229,6 +336,17 @@ export const RoomOccupantScalarFieldEnum = {
 export type RoomOccupantScalarFieldEnum = (typeof RoomOccupantScalarFieldEnum)[keyof typeof RoomOccupantScalarFieldEnum]
 
 
+export const CommissionItemScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  price: 'price',
+  commission: 'commission',
+  createdAt: 'createdAt'
+} as const
+
+export type CommissionItemScalarFieldEnum = (typeof CommissionItemScalarFieldEnum)[keyof typeof CommissionItemScalarFieldEnum]
+
+
 export const RoomChargeScalarFieldEnum = {
   id: 'id',
   stayId: 'stayId',
@@ -238,10 +356,15 @@ export const RoomChargeScalarFieldEnum = {
   quantity: 'quantity',
   unitPrice: 'unitPrice',
   amount: 'amount',
+  commissionItemId: 'commissionItemId',
+  commissionAmount: 'commissionAmount',
   signedByName: 'signedByName',
   signatureData: 'signatureData',
   occurredAt: 'occurredAt',
   settledAt: 'settledAt',
+  billId: 'billId',
+  billNumber: 'billNumber',
+  lines: 'lines',
   createdAt: 'createdAt'
 } as const
 
@@ -275,6 +398,7 @@ export const MenuItemScalarFieldEnum = {
   name: 'name',
   description: 'description',
   price: 'price',
+  manualPrice: 'manualPrice',
   imageUrl: 'imageUrl',
   allergens: 'allergens',
   allergensMy: 'allergensMy',
@@ -348,10 +472,13 @@ export type MenuItemModifierGroupScalarFieldEnum = (typeof MenuItemModifierGroup
 
 export const OrderScalarFieldEnum = {
   id: 'id',
+  number: 'number',
   type: 'type',
   customerName: 'customerName',
   customerPhone: 'customerPhone',
   tableId: 'tableId',
+  tableSplitId: 'tableSplitId',
+  tableSnapshot: 'tableSnapshot',
   roomStayId: 'roomStayId',
   roomGuestsSnapshot: 'roomGuestsSnapshot',
   paymentMethod: 'paymentMethod',
@@ -362,6 +489,7 @@ export const OrderScalarFieldEnum = {
   servedById: 'servedById',
   status: 'status',
   totalAmount: 'totalAmount',
+  vatPercent: 'vatPercent',
   preparingAt: 'preparingAt',
   readyAt: 'readyAt',
   servedAt: 'servedAt',
@@ -370,6 +498,18 @@ export const OrderScalarFieldEnum = {
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const TableSplitScalarFieldEnum = {
+  id: 'id',
+  tableId: 'tableId',
+  label: 'label',
+  roomStayId: 'roomStayId',
+  position: 'position',
+  createdAt: 'createdAt'
+} as const
+
+export type TableSplitScalarFieldEnum = (typeof TableSplitScalarFieldEnum)[keyof typeof TableSplitScalarFieldEnum]
 
 
 export const OrderPrepTicketScalarFieldEnum = {
@@ -385,6 +525,70 @@ export const OrderPrepTicketScalarFieldEnum = {
 } as const
 
 export type OrderPrepTicketScalarFieldEnum = (typeof OrderPrepTicketScalarFieldEnum)[keyof typeof OrderPrepTicketScalarFieldEnum]
+
+
+export const TableBillScalarFieldEnum = {
+  id: 'id',
+  tableId: 'tableId',
+  number: 'number',
+  status: 'status',
+  method: 'method',
+  stayId: 'stayId',
+  amount: 'amount',
+  vatPercent: 'vatPercent',
+  signedByName: 'signedByName',
+  signatureData: 'signatureData',
+  paidAt: 'paidAt',
+  chargeId: 'chargeId',
+  lines: 'lines',
+  createdAt: 'createdAt'
+} as const
+
+export type TableBillScalarFieldEnum = (typeof TableBillScalarFieldEnum)[keyof typeof TableBillScalarFieldEnum]
+
+
+export const PrinterScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  manufacturer: 'manufacturer',
+  model: 'model',
+  ipAddress: 'ipAddress',
+  macAddress: 'macAddress',
+  port: 'port',
+  connectionType: 'connectionType',
+  paperWidthMm: 'paperWidthMm',
+  resolutionDpi: 'resolutionDpi',
+  isDefault: 'isDefault',
+  enabled: 'enabled',
+  purpose: 'purpose',
+  lastSeenAt: 'lastSeenAt',
+  lastCheckedAt: 'lastCheckedAt',
+  lastCheckOk: 'lastCheckOk',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PrinterScalarFieldEnum = (typeof PrinterScalarFieldEnum)[keyof typeof PrinterScalarFieldEnum]
+
+
+export const PrintJobScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  printerId: 'printerId',
+  requestedById: 'requestedById',
+  idempotencyKey: 'idempotencyKey',
+  status: 'status',
+  error: 'error',
+  dryRun: 'dryRun',
+  retryCount: 'retryCount',
+  renderedAt: 'renderedAt',
+  sentAt: 'sentAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PrintJobScalarFieldEnum = (typeof PrintJobScalarFieldEnum)[keyof typeof PrintJobScalarFieldEnum]
 
 
 export const ClientSubmissionScalarFieldEnum = {
@@ -403,6 +607,7 @@ export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   menuItemId: 'menuItemId',
+  itemSnapshot: 'itemSnapshot',
   quantity: 'quantity',
   unitPrice: 'unitPrice',
   removeIngredients: 'removeIngredients',
@@ -410,7 +615,9 @@ export const OrderItemScalarFieldEnum = {
   selectedAllergens: 'selectedAllergens',
   modifierSelections: 'modifierSelections',
   specialNotes: 'specialNotes',
-  subtotal: 'subtotal'
+  subtotal: 'subtotal',
+  removedAt: 'removedAt',
+  removalReason: 'removalReason'
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]

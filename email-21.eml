@@ -1,0 +1,325 @@
+Return-Path: <barefootproject.kohphayam+caf_=inbox=forward.starbridgemyanmar.tech@gmail.com>
+X-Original-To: inbox@forward.starbridgemyanmar.tech
+Delivered-To: inbox@forward.starbridgemyanmar.tech
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	by mail.starbridgemyanmar.tech (Postfix) with ESMTPS id BF197C844E
+	for <inbox@forward.starbridgemyanmar.tech>; Tue,  3 Nov 2026 12:29:28 +0000 (UTC)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6ae305e3bd9so7060072a12.0
+        for <inbox@forward.starbridgemyanmar.tech>; Tue, 03 Nov 2026 04:29:28 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; t=1793708966; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=V2Y+/PFjCIwfmkLdAGMiswKmB3Kd5nu2xhg0ez2k8oBLdZLERwc7DiXs1sF3H4tBvA
+         FlmMlrybj0IrzlzsJ6zUxhL4TURHscHrn5ycqkxR4PaV30yF0RMxhprCH1W/JXgrZ9Ci
+         JJNhVOveMJReAWQkH4ZU0qucJRUF7EsR8KMmRtWns7aUPtq8eR870BTKtX/vFokip/u7
+         Ak2/eaQ/PO5Hsd+q+I6WMoAJy7kSNEflzJJ/K1YHE9TrnbdJ5ZJPp/gsugEfPU1WDlam
+         JDrqSkkAfgMbfb19InGBtZm96SofqpUxEHchde8KbhZbMMfRYGE7sFql4Ex5s2TJn0vB
+         I0gg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:in-reply-to:references:message-id:date:subject:mime-version:from
+         :content-transfer-encoding:dkim-signature:delivered-to;
+        bh=IR4Y7rQ7BXrlsUgZsZszNSZsLitcKTqRhQAXwIPF8bQ=;
+        fh=xBgGmLZPdMmeiV8Zrorxsf++y6qUIX+LqM4ZLeiAzv0=;
+        b=U5LN3fc9y1jUm4Iq45ecy8JwhIbT8qgNP5usAa3/zbyODb60cn2YYtqQaE1qoLF40H
+         j7GbZxogFGe0LnXjyrPt4mFptbr46yxaE//+h+9UPcgpYqRwg4EQg3WstF39+RNEqhdR
+         YxFdW3iDywR+FdOIjju+BjFx7PA5NNIkQ98wyNgIB1Al2qKou/q4zEFZtiMeisl2bfIS
+         +WMdI9rIYLnankiyRLcz8/X6R3OiepPrXhhf0pq7sBSjDX3QGxoRT0dSjftvzZbGE0v8
+         6kq5DCfdh17F51uNqJx3G2FHz8nauhyf7lgKCRUEZPo+JMIVmsBA6g8vxzh+cpU9SlEO
+         yHKg==;
+        darn=forward.starbridgemyanmar.tech
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=wy8+QXXD;
+       spf=pass (google.com: domain of kathrin.gautschi@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=kathrin.gautschi@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793708966; x=1794313766;
+        h=to:in-reply-to:references:message-id:date:subject:mime-version:from
+         :content-transfer-encoding:content-type:x-gm-gg:dkim-signature
+         :delivered-to:x-forwarded-for:x-forwarded-to:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IR4Y7rQ7BXrlsUgZsZszNSZsLitcKTqRhQAXwIPF8bQ=;
+        b=pxzd96EdiY8sUcrndba5Ehh8/s680RTHPLCwOz2iSAJ7tPjmbVUbGiiUefKntycD0J
+         o14xugTNecXLGRG52wYM1DGDnIgYI1qDAA8mdvUUAi9ULb7r661sZb7RuB4yJhUInTgG
+         zY0DpSSg/Ys5etS/Crszwcli2sccDEKbCPKAnrXYyz0UweHLBicLg9CsaHz3MOknv/jj
+         X+4Hoo8H0ocidtW+ZVgB1bSQFwwPdqDbiqFqm4L3QzMXDXcKMyU1WV774j0VCeqQgZ5m
+         DOqyLkVKgtatereI5sbUmKfA7uG5ovs++Jy8BHQ6YEP3tkvTb2AeZ9RsovSOccLajAoy
+         lr7Q==
+X-Forwarded-Encrypted: i=2; AKwUvBxyxdtqZfjZHLme5YxbYBsg4hTu1albrIdLnEMFM5CO6QMM0Ig6K3cjqKQV2U3zlSseno/6Qw==@forward.starbridgemyanmar.tech
+X-Gm-Message-State: APuU4Z/jgNwax7jZup3nbgItBoYQ0Wgn/o/zT5zbbZWAOSZHmPedpjMh
+	47YS0tucylix1ThEPwG5VRdjwuGwb88tCloA0ZHYcdlDD2T0DoH1GV/CO8b2h9/uhpfOihXr3rL
+	Oql9XxosjD4m9avzmVlUECrrE81GpZqAk+/Kwma2s0P46Z6f4Z0/uqURVRr3Cmw==
+X-Received: by 2002:a05:6402:a510:10b0:6b1:c2d3:6a79 with SMTP id 4fb4d7f45d1cf-6b4d4384eb5mr6335309a12.12.1793708966001;
+        Tue, 03 Nov 2026 04:29:26 -0800 (PST)
+X-Forwarded-To: inbox@forward.starbridgemyanmar.tech
+X-Forwarded-For: barefootproject.kohphayam@gmail.com inbox@forward.starbridgemyanmar.tech
+Delivered-To: barefootproject.kohphayam@gmail.com
+Received: by 2002:a05:7412:dc87:b0:230:df9d:739b with SMTP id jo7csp665029rdb;
+        Tue, 3 Nov 2026 04:29:23 -0800 (PST)
+X-Received: by 2002:a05:600c:6212:b0:4b0:a7aa:843 with SMTP id 5b1f17b1804b1-4b0a7aa0a54mr133513125e9.25.1793708963075;
+        Tue, 03 Nov 2026 04:29:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793708963; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OmryIevnkTyxsSFEu1iVqmCjzASYsv66aN7TYTbXx8rlbTXF3WIYhizdWVU/eOvyPb
+         yZ5mHAx0aWLAe2eJdOP9c6VfENnOdbay0bSz4sj+EQU2BHwzKiD7BicmJDfduL1fQG8W
+         Zs+TnYmJ/I5SY3/uYreX9tbHIOQrAhMC3xfp44v2h4WME+KYn0/98SjfqlWd2AvZJpd1
+         m3PYlo+mRyIPjDvmrj8lLNN+CA7G/pKlDfo6zWqhPqz7vgA+vdssqf0aqw8lrqPD16KD
+         12noAb2dppF/z2pZxSWRD10RkZVdHVJsJUKpaF2Gut+GHD8GCLQ3Gtd8I7dBnUax9b/V
+         nhfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:in-reply-to:references:message-id:date:subject:mime-version:from
+         :content-transfer-encoding:dkim-signature;
+        bh=IR4Y7rQ7BXrlsUgZsZszNSZsLitcKTqRhQAXwIPF8bQ=;
+        fh=UfDtCsN7hL/CzU727dZZ1v86dukNVj1o3rcddn/e6Nk=;
+        b=jSA68D3PfBXq+fHAQsdUrelVcFRRsqIgHNxoRQx6b3Y3Cdrp4C7HGJV/UJjIz+yZXy
+         lK2v+UiOHHPxsh3kDKhbdCJtXqN8Vko333+pkQY47ecsyMgvKYFXvIlD515A/7NKODQu
+         c9N5AvCH45RHL28urHElMaZaIQXRGukZh0Gq3NqMoTdapbl/SChpf/wjOkZRKx2xt/D5
+         wPFCjkE2x86DzvKa+kBADUqGk3ku2RPwj1AzYofwDhXRu0yvunfTX2T6RBeiheqU9FIG
+         orA+3xP9K+bMRWWKi33tbHQqZQLPpt0/n8o/GDkIM7ZfcEKyQWxjeDe/wfZC8P1upXUC
+         UZtA==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=wy8+QXXD;
+       spf=pass (google.com: domain of kathrin.gautschi@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=kathrin.gautschi@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 5b1f17b1804b1-4b2b1db40a7sor4352005e9.12.2026.11.03.04.29.22
+        for <barefootproject.kohphayam@gmail.com>
+        (Google Transport Security);
+        Tue, 03 Nov 2026 04:29:23 -0800 (PST)
+Received-SPF: pass (google.com: domain of kathrin.gautschi@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=wy8+QXXD;
+       spf=pass (google.com: domain of kathrin.gautschi@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=kathrin.gautschi@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793708962; x=1794313762; dara=google.com;
+        h=to:in-reply-to:references:message-id:date:subject:mime-version:from
+         :content-transfer-encoding:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IR4Y7rQ7BXrlsUgZsZszNSZsLitcKTqRhQAXwIPF8bQ=;
+        b=wy8+QXXDM0dR+FoWRiPMcHS/E6Sm/n4HmuBtQTQm9R9qdXPiU02QFHhf9dxHPTqxb8
+         OJI65ZHMiYuS1w1PtTsyL4eb2GrLdGw+G/ch9s1ph2ocFD+wuA+xPAp8I/scfEq9kq8W
+         8yep0tpZ8kGj8c9TMfrKmcX/ABVlEgg4cks3NNViKltI+yLt6YhNEw6t2ImpSZTRCAlt
+         h1qtaBdzSGDU3Ya+IRoDRp4RhDy3QRnAnrt0Iy2W6b2YgNn/rs6TGlSV49mBngUqtl4f
+         bUzO5+7gFTtUawqUdDnHF5ALM3qKYQ7SvZyNOjLdcuugVjiCa12gNWhYPNrxGx3qFylK
+         o5FA==
+X-Gm-Gg: AYBFou3uvPGFrsTWD4Eik9SH6/HYi4F2IW1fHEjKvOtVT6kOH3By+5oizZru8UJG+p9
+	qSSUZzDxPNXgEURnv/HajsuiqGHTAuCfmJ2A3j9UJ8PBePMFcGyQh1imOMdIivFXg38riKdHbYP
+	xODcGvRCCmyGnFjyUhqtfQ151u/mYJuNKghhydmvcwDzZC43CMGI62IUH9lEEW4CbeAfl5uPtLi
+	Qcl68Yq3Oq793o8TFSx+UvNRhdlTG+8B5uut59OjT1T+YrW/+lOT2muoR9BCX3IKcsXpq+dmv4l
+	dh7W+K9JJy1diPeVEND2+zFq0Xifw67AipN3pm7i5+igWf5yqXiU7n4I1fYi3+QxJZCEQ4E3mYl
+	j3pSRfrK3TW/EPFqydqPGZK5KY+PvO3t/ORjW4YGEX3aJ1SFy0HNkMUr1WWOW6gtAKpUOY3yKnh
+	pDR4RnDi2U7UBDXxRuRALIPJQdvTc2M2QDrMKInFERQDsSvOtqmsn+C6MkFfs9xwJw9Oh3ILVfP
+	iHfLED7OhseIRyXvAtQ/S9lDiHzrG3uwPiBhXD2x0G2NNRWyuHdfyUkRrfnQsdRZoWG5ZIEUXD5
+	NtGmc3DuncVcw4qqp8W1k/J6JxaFkcluehWkPVhohMzzrlO4Oh7CZsbQHbyfqzo7g14DiKKw5rx
+	UrcpQmnsMCQ==
+X-Received: by 2002:a05:600c:1f94:b0:4a8:f2ad:a9e5 with SMTP id 5b1f17b1804b1-4ac1548f591mr293748545e9.3.1793708962419;
+        Tue, 03 Nov 2026 04:29:22 -0800 (PST)
+Received: from smtpclient.apple (xdsl-31-165-145-8.adslplus.ch. [31.165.145.8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4b2a5372d8bsm60135035e9.0.2026.11.03.04.29.21
+        for <barefootproject.kohphayam@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2026 04:29:21 -0800 (PST)
+Content-Type: multipart/alternative; boundary=Apple-Mail-AF3FD29C-B294-4FD0-9942-4B340C5D5F95
+Content-Transfer-Encoding: 7bit
+From: Kathy Gautschi <kathrin.gautschi@gmail.com>
+Mime-Version: 1.0 (1.0)
+Subject: Re: Check availability Feb 2027
+Date: Tue, 3 Nov 2026 13:29:11 +0100
+Message-Id: <F976B881-AAFE-41F7-B768-8550C5614718@gmail.com>
+References: <77CECF57-22E8-4E61-9049-7D15FFBEE557@gmail.com>
+In-Reply-To: <77CECF57-22E8-4E61-9049-7D15FFBEE557@gmail.com>
+To: Project Barefoot <barefootproject.kohphayam@gmail.com>
+X-Mailer: iPhone Mail (23G71)
+
+
+--Apple-Mail-AF3FD29C-B294-4FD0-9942-4B340C5D5F95
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+Thank you so much for your quick response. For how many people totally are t=
+hese villas?
+
+Best regards and thanks for helping,
+Kathy
+
+> Am 03.11.2026 um 11:49 schrieb Barefoot Project <barefootproject.kohphayam=
+@gmail.com>:
+>=20
+> =EF=BB=BFHello kathy
+>=20
+> Hope you are well
+>=20
+> We only have2 rooms available during=20
+>=20
+> 15 feb - 19 feb=20
+> 2 villa
+>=20
+> 13 feb - 17 feb
+> 1 villa=20
+> 1 superior queen=20
+>=20
+> Noted: the villa is bungalow with ac
+>=20
+> Have a lovely day
+>=20
+> barefoot project
+> =F0=9F=90=B6=F0=9F=91=A9=F0=9F=8F=BD=E2=80=8D=F0=9F=A6=B3=F0=9F=A7=94=F0=9F=
+=8F=BB=E2=80=8D=E2=99=82=EF=B8=8F=F0=9F=90=A5=F0=9F=AA=A9=F0=9F=92=96=F0=9F=8C=
+=B8=F0=9F=8E=80
+>=20
+>> On 3 Nov 2026, at 05:29, Kathy Gautschi <kathrin.gautschi@gmail.com> wrot=
+e:
+>>=20
+>> Dear Barefootproject Team,
+>>=20
+>> I was wondering if you have any rooms available between 13 and 25 Februar=
+y 2027for a stay of 3 or 4 nights.
+>>=20
+>> We are a group of 8 adults and are flexible regarding room arrangements, w=
+hether double rooms or rooms for four people.
+>>=20
+>> Would you kindly check your availability for us?
+>>=20
+>> We would absolutely love the opportunity to stay at your beautiful place a=
+nd enjoy some time in such a wonderful setting.
+>>=20
+>> I look forward to hearing from you.
+>>=20
+>>=20
+>>=20
+>> Many thanks in advance and kind regards,
+>>=20
+>> Kathrin
+>>=20
+>>=20
+>=20
+
+--Apple-Mail-AF3FD29C-B294-4FD0-9942-4B340C5D5F95
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html class=3D"apple-mail-supports-explicit-dark-mode"><head><meta http-equi=
+v=3D"content-type" content=3D"text/html; charset=3Dutf-8"></head><body dir=3D=
+"auto">Hello,<div><br></div><div>Thank you so much for your quick response. =
+For how many people totally are these villas?</div><div><br></div><div>Best r=
+egards and thanks for helping,</div><div>Kathy<div dir=3D"ltr"><br><blockquo=
+te type=3D"cite">Am 03.11.2026 um 11:49 schrieb Barefoot Project &lt;barefoo=
+tproject.kohphayam@gmail.com&gt;:<br><br></blockquote></div><blockquote type=
+=3D"cite"><div dir=3D"ltr">=EF=BB=BF<meta http-equiv=3D"content-type" conten=
+t=3D"text/html; charset=3Dutf-8">Hello kathy<div><br></div><div>Hope you are=
+ well</div><div><br></div><div>We only have2 rooms available during&nbsp;</d=
+iv><div><br></div><div>15 feb - 19 feb&nbsp;</div><div>2 villa</div><div><br=
+></div><div>13 feb - 17 feb</div><div>1 villa&nbsp;</div><div>1 superior que=
+en&nbsp;</div><div><br></div><div>Noted: the villa is bungalow with ac</div>=
+<div><br></div><div>Have a lovely day</div><div><br id=3D"lineBreakAtBeginni=
+ngOfMessage"><div>
+<meta charset=3D"UTF-8"><div dir=3D"auto" style=3D"caret-color: rgb(0, 0, 0)=
+; color: rgb(0, 0, 0); letter-spacing: normal; orphans: 2; text-align: start=
+; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; wo=
+rd-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-line: none;=
+ text-decoration-thickness: auto; text-decoration-style: solid; overflow-wra=
+p: break-word; -webkit-nbsp-mode: space; line-break: after-white-space;"><di=
+v dir=3D"auto" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lett=
+er-spacing: normal; text-align: start; text-indent: 0px; text-transform: non=
+e; white-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; t=
+ext-decoration: none; overflow-wrap: break-word; -webkit-nbsp-mode: space; l=
+ine-break: after-white-space;"><div dir=3D"auto" style=3D"caret-color: rgb(0=
+, 0, 0); color: rgb(0, 0, 0); letter-spacing: normal; text-align: start; tex=
+t-indent: 0px; text-transform: none; white-space: normal; word-spacing: 0px;=
+ -webkit-text-stroke-width: 0px; text-decoration: none; overflow-wrap: break=
+-word; -webkit-nbsp-mode: space; line-break: after-white-space;"><div dir=3D=
+"auto" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); letter-spaci=
+ng: normal; text-align: start; text-indent: 0px; text-transform: none; white=
+-space: normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-deco=
+ration: none; overflow-wrap: break-word; -webkit-nbsp-mode: space; line-brea=
+k: after-white-space;"><div>barefoot project<br>=F0=9F=90=B6=F0=9F=91=A9=F0=9F=
+=8F=BD=E2=80=8D=F0=9F=A6=B3=F0=9F=A7=94=F0=9F=8F=BB=E2=80=8D=E2=99=82=EF=B8=8F=
+=F0=9F=90=A5=F0=9F=AA=A9=F0=9F=92=96=F0=9F=8C=B8=F0=9F=8E=80</div></div></di=
+v></div></div>
+</div>
+<div><br><blockquote type=3D"cite"><div>On 3 Nov 2026, at 05:29, Kathy Gauts=
+chi &lt;kathrin.gautschi@gmail.com&gt; wrote:</div><br class=3D"Apple-interc=
+hange-newline"><div><meta http-equiv=3D"content-type" content=3D"text/html; c=
+harset=3Dutf-8"><div dir=3D"auto"><p style=3D"-webkit-text-size-adjust: auto=
+; margin: 0px 0px 12px; font-width: normal; font-size: 19px; line-height: no=
+rmal; font-family: &quot;Times New Roman&quot;; font-size-adjust: none; font=
+-kerning: auto; font-variant-alternates: normal; font-variant-ligatures: nor=
+mal; font-variant-numeric: normal; font-variant-east-asian: normal; font-var=
+iant-position: normal; font-feature-settings: normal; font-optical-sizing: a=
+uto; font-variation-settings: normal; -webkit-text-stroke-color: rgb(0, 0, 0=
+);"><span style=3D"font-kerning: none;">Dear Barefootproject Team,</span></p=
+><p style=3D"-webkit-text-size-adjust: auto; margin: 0px 0px 12px; font-widt=
+h: normal; font-size: 19px; line-height: normal; font-family: &quot;Times Ne=
+w Roman&quot;; font-size-adjust: none; font-kerning: auto; font-variant-alte=
+rnates: normal; font-variant-ligatures: normal; font-variant-numeric: normal=
+; font-variant-east-asian: normal; font-variant-position: normal; font-featu=
+re-settings: normal; font-optical-sizing: auto; font-variation-settings: nor=
+mal; -webkit-text-stroke-color: rgb(0, 0, 0);"><span style=3D"font-kerning: n=
+one;">I was wondering if you have any rooms available between 13 and&nbsp;<s=
+pan dir=3D"ltr">25 February 2027</span>for a stay of 3 or 4 nights.</span></=
+p><p style=3D"-webkit-text-size-adjust: auto; margin: 0px 0px 12px; font-wid=
+th: normal; font-size: 19px; line-height: normal; font-family: &quot;Times N=
+ew Roman&quot;; font-size-adjust: none; font-kerning: auto; font-variant-alt=
+ernates: normal; font-variant-ligatures: normal; font-variant-numeric: norma=
+l; font-variant-east-asian: normal; font-variant-position: normal; font-feat=
+ure-settings: normal; font-optical-sizing: auto; font-variation-settings: no=
+rmal; -webkit-text-stroke-color: rgb(0, 0, 0);"><span style=3D"font-kerning:=
+ none;">We are a group of 8 adults and are flexible regarding room arrangeme=
+nts, whether double rooms or rooms for four people.</span></p><p style=3D"-w=
+ebkit-text-size-adjust: auto; margin: 0px 0px 12px; font-width: normal; font=
+-size: 19px; line-height: normal; font-family: &quot;Times New Roman&quot;; f=
+ont-size-adjust: none; font-kerning: auto; font-variant-alternates: normal; f=
+ont-variant-ligatures: normal; font-variant-numeric: normal; font-variant-ea=
+st-asian: normal; font-variant-position: normal; font-feature-settings: norm=
+al; font-optical-sizing: auto; font-variation-settings: normal; -webkit-text=
+-stroke-color: rgb(0, 0, 0);"><span style=3D"font-kerning: none;">Would you k=
+indly check your availability for us?</span></p><p style=3D"-webkit-text-siz=
+e-adjust: auto; margin: 0px 0px 12px; font-width: normal; font-size: 19px; l=
+ine-height: normal; font-family: &quot;Times New Roman&quot;; font-size-adju=
+st: none; font-kerning: auto; font-variant-alternates: normal; font-variant-=
+ligatures: normal; font-variant-numeric: normal; font-variant-east-asian: no=
+rmal; font-variant-position: normal; font-feature-settings: normal; font-opt=
+ical-sizing: auto; font-variation-settings: normal; -webkit-text-stroke-colo=
+r: rgb(0, 0, 0);"><span style=3D"font-kerning: none;">We would absolutely lo=
+ve the opportunity to stay at your beautiful place and enjoy some time in su=
+ch a wonderful setting.</span></p><p style=3D"-webkit-text-size-adjust: auto=
+; margin: 0px 0px 12px; font-width: normal; font-size: 19px; line-height: no=
+rmal; font-family: &quot;Times New Roman&quot;; font-size-adjust: none; font=
+-kerning: auto; font-variant-alternates: normal; font-variant-ligatures: nor=
+mal; font-variant-numeric: normal; font-variant-east-asian: normal; font-var=
+iant-position: normal; font-feature-settings: normal; font-optical-sizing: a=
+uto; font-variation-settings: normal; -webkit-text-stroke-color: rgb(0, 0, 0=
+);"><span style=3D"font-kerning: none;">I look forward to hearing from you.<=
+/span></p><p style=3D"-webkit-text-size-adjust: auto; margin: 0px 0px 12px; f=
+ont-width: normal; font-size: 19px; line-height: normal; font-family: &quot;=
+Times New Roman&quot;; font-size-adjust: none; font-kerning: auto; font-vari=
+ant-alternates: normal; font-variant-ligatures: normal; font-variant-numeric=
+: normal; font-variant-east-asian: normal; font-variant-position: normal; fo=
+nt-feature-settings: normal; font-optical-sizing: auto; font-variation-setti=
+ngs: normal; -webkit-text-stroke-color: rgb(0, 0, 0);"><span style=3D"font-k=
+erning: none;"><br></span></p><p style=3D"-webkit-text-size-adjust: auto; ma=
+rgin: 0px 0px 12px; font-width: normal; font-size: 19px; line-height: normal=
+; font-family: &quot;Times New Roman&quot;; font-size-adjust: none; font-ker=
+ning: auto; font-variant-alternates: normal; font-variant-ligatures: normal;=
+ font-variant-numeric: normal; font-variant-east-asian: normal; font-variant=
+-position: normal; font-feature-settings: normal; font-optical-sizing: auto;=
+ font-variation-settings: normal; -webkit-text-stroke-color: rgb(0, 0, 0);">=
+<span style=3D"font-kerning: none;">Many thanks in advance and kind regards,=
+</span></p><p style=3D"-webkit-text-size-adjust: auto; margin: 0px 0px 12px;=
+ font-width: normal; font-size: 19px; line-height: normal; font-family: &quo=
+t;Times New Roman&quot;; font-size-adjust: none; font-kerning: auto; font-va=
+riant-alternates: normal; font-variant-ligatures: normal; font-variant-numer=
+ic: normal; font-variant-east-asian: normal; font-variant-position: normal; f=
+ont-feature-settings: normal; font-optical-sizing: auto; font-variation-sett=
+ings: normal; -webkit-text-stroke-color: rgb(0, 0, 0);"><span style=3D"font-=
+kerning: none;">Kathrin</span></p><div dir=3D"ltr"><br></div></div></div></b=
+lockquote></div><br></div></div></blockquote></div></body></html>=
+
+--Apple-Mail-AF3FD29C-B294-4FD0-9942-4B340C5D5F95--

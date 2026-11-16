@@ -55,6 +55,15 @@ enum RoomStatus {
   ARCHIVED
 }
 
+enum InboundEmailStatus {
+  PROCESSED
+  DUPLICATE
+  FAILED
+  SKIPPED
+  PENDING
+  PROCESSING
+}
+
 enum RoomChargeKind {
   ROOM_FEE
   WATER
@@ -87,6 +96,14 @@ enum TaskStatus {
   COMPLETED
 }
 
+enum PrintJobStatus {
+  PENDING
+  RENDERING
+  PRINTING
+  COMPLETED
+  FAILED
+}
+
 model User {
   id        String   @id @default(uuid())
   name      String
@@ -108,11 +125,12 @@ model User {
 }
 
 model RestaurantSetting {
-  id        String   @id @default("restaurant")
-  name      String   @default("Table & Thyme")
-  logoUrl   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default("restaurant")
+  name       String   @default("Table & Thyme")
+  logoUrl    String?
+  vatPercent Decimal  @default(0) @db.Decimal(5, 2)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Task {
@@ -189,6 +207,8 @@ model Table {
   section     FloorSection @relation(fields: [sectionId], references: [id])
   assignedRoomStays  RoomStay[]  @relation("TableRoomAssignments")
   orders      Order[]
+  bills       TableBill[]
+  splits      TableSplit[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
@@ -206,13 +226,32 @@ model Room {
 
 model RoomStay {
   id              String        @id @default(uuid())
-  roomId          String
-  room            Room          @relation(fields: [roomId], references: [id])
+  roomId          String?
+  room            Room?         @relation(fields: [roomId], references: [id])
   primaryGuestName String
+  guestEmail      String?
+  bookingSource   String?
+  confirmationNumber String?
+  sourceReservationId String?
+  cloudbedsReservationId String?
+  roomType        String?
+  assignmentReason String?
+  adults          Int?
+  children        Int?
+  nights          Int?
+  currency        String?
+  averageNightlyRate Decimal? @db.Decimal(12, 2)
+  grandTotal      Decimal?      @db.Decimal(12, 2)
+  depositAmount   Decimal?      @db.Decimal(12, 2)
+  amountPaid      Decimal?      @db.Decimal(12, 2)
+  balanceDue      Decimal?      @db.Decimal(12, 2)
+  payment         Json?
+  nightlyRates    ReservationNight[]
   occupants       RoomOccupant[]
   checkedInAt     DateTime      @default(now())
   expectedCheckoutAt DateTime?
   checkedOutAt    DateTime?
+  cancelledAt     DateTime?
   guestNotes      String?
   cashOnly        Boolean       @default(false)
   chargeLimit     Decimal?      @db.Decimal(10, 2)
@@ -220,9 +259,99 @@ model RoomStay {
   payments        RoomPayment[]
   orders          Order[]
   assignedTables  Table[]       @relation("TableRoomAssignments")
+  tableSplits     TableSplit[]
+  emails          InboundEmail[]
   createdAt       DateTime      @default(now())
 
+  @@unique([bookingSource, confirmationNumber])
   @@index([roomId, checkedOutAt])
+  @@index([sourceReservationId])
+  @@index([cloudbedsReservationId])
+}
+
+model EmailSyncRun {
+  id                      String         @id @default(uuid())
+  trigger                 String
+  status                  String
+  startedAt               DateTime       @default(now())
+  finishedAt              DateTime?
+  imapConnected           Boolean        @default(false)
+  scanned                 Int            @default(0)
+  discovered              Int            @default(0)
+  nested                  Int            @default(0)
+  duplicates              Int            @default(0)
+  confirmed               Int            @default(0)
+  modified                Int            @default(0)
+  cancelled               Int            @default(0)
+  payments                Int            @default(0)
+  imported                Int            @default(0)
+  updated                 Int            @default(0)
+  canceled                Int            @default(0)
+  skipped                 Int            @default(0)
+  unmatched               Int            @default(0)
+  failed                  Int            @default(0)
+  parts                   Int            @default(0)
+  attachments             Int            @default(0)
+  maxDepth                Int            @default(0)
+  uniqueEmails            Int            @default(0)
+  processedAttachments    Int            @default(0)
+  failedAttachments       Int            @default(0)
+  unprocessedAttachments  Int            @default(0)
+  lastUid                 Int?
+  error                   String?
+  emails                  InboundEmail[]
+  createdAt               DateTime       @default(now())
+
+  @@index([startedAt])
+}
+
+model InboundEmail {
+  id                 String             @id @default(uuid())
+  messageId          String             @unique
+  mailbox            String
+  uid                Int?
+  subject            String?
+  fromAddress        String?
+  receivedAt         DateTime?
+  rawMime            String             @db.Text
+  status             InboundEmailStatus
+  error              String?
+  confirmationNumber String?
+  source             String?
+  noticeKind         String?
+  noticeAt           DateTime?
+  outcome            String?
+  guestName          String?
+  cloudbedsReservationId String?
+  parentMessageId    String?
+  nestingDepth       Int?
+  attachmentFilename String?
+  attemptLog         Json?
+  attempts           Int                @default(0)
+  nextAttemptAt      DateTime?
+  stayId             String?
+  stay               RoomStay?          @relation(fields: [stayId], references: [id], onDelete: SetNull)
+  syncRunId          String?
+  syncRun            EmailSyncRun?      @relation(fields: [syncRunId], references: [id], onDelete: SetNull)
+  createdAt          DateTime           @default(now())
+  processedAt        DateTime?
+
+  @@index([status, createdAt])
+  @@index([status, nextAttemptAt])
+  @@index([confirmationNumber])
+  @@index([cloudbedsReservationId])
+  @@index([syncRunId])
+}
+
+model ReservationNight {
+  id       String   @id @default(uuid())
+  stayId   String
+  stay     RoomStay @relation(fields: [stayId], references: [id], onDelete: Cascade)
+  night    DateTime @db.Date
+  amount   Decimal  @db.Decimal(12, 2)
+  currency String
+
+  @@index([stayId, night])
 }
 
 model RoomOccupant {
@@ -231,6 +360,15 @@ model RoomOccupant {
   stay      RoomStay @relation(fields: [stayId], references: [id], onDelete: Cascade)
   name      String
   createdAt DateTime @default(now())
+}
+
+model CommissionItem {
+  id         String       @id @default(uuid())
+  name       String
+  price      Decimal      @db.Decimal(10, 2)
+  commission Decimal      @db.Decimal(10, 2)
+  createdAt  DateTime     @default(now())
+  charges    RoomCharge[]
 }
 
 model RoomCharge {
@@ -244,10 +382,16 @@ model RoomCharge {
   quantity    Int            @default(1)
   unitPrice   Decimal        @db.Decimal(10, 2)
   amount      Decimal        @db.Decimal(10, 2)
+  commissionItemId String?
+  commissionItem   CommissionItem? @relation(fields: [commissionItemId], references: [id], onDelete: SetNull)
+  commissionAmount Decimal?  @db.Decimal(10, 2)
   signedByName String?
   signatureData String?      @db.Text
   occurredAt  DateTime       @default(now())
   settledAt   DateTime?
+  billId      String?
+  billNumber  Int?
+  lines       Json?
   createdAt   DateTime       @default(now())
 
   @@index([stayId, occurredAt])
@@ -279,6 +423,7 @@ model MenuItem {
   name        String
   description String?
   price       Decimal     @db.Decimal(10, 2)
+  manualPrice Boolean     @default(false)
   imageUrl    String?
   allergens   String[] @default([])
   allergensMy String[] @default([])
@@ -309,6 +454,7 @@ enum ModifierSelectionType {
 enum PrepStation {
   KITCHEN
   BAR
+  NONE
 }
 
 enum ModifierMadeAt {
@@ -381,11 +527,15 @@ model MenuItemModifierGroup {
 
 model Order {
   id          String      @id @default(uuid())
+  number      Int         @unique
   type        OrderType   @default(DINE_IN)
   customerName String?
   customerPhone String?
   tableId     String?
-  table       Table?      @relation(fields: [tableId], references: [id])
+  table       Table?      @relation(fields: [tableId], references: [id], onDelete: SetNull)
+  tableSplitId String?
+  tableSplit  TableSplit? @relation(fields: [tableSplitId], references: [id], onDelete: SetNull)
+  tableSnapshot Json?
   roomStayId  String?
   roomStay    RoomStay?   @relation(fields: [roomStayId], references: [id], onDelete: SetNull)
   roomGuestsSnapshot Json?
@@ -401,15 +551,33 @@ model Order {
   servedBy    User?       @relation("ServedOrders", fields: [servedById], references: [id], onDelete: SetNull)
   status      OrderStatus @default(PENDING)
   totalAmount Decimal     @db.Decimal(10, 2)
+  vatPercent  Decimal     @default(0) @db.Decimal(5, 2)
   preparingAt DateTime?
   readyAt     DateTime?
   servedAt    DateTime?
   items       OrderItem[]
   prepTickets OrderPrepTicket[]
+  printJobs   PrintJob[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   @@index([type, status, createdAt])
+  @@index([tableSplitId])
+}
+
+model TableSplit {
+  id         String    @id @default(uuid())
+  tableId    String
+  table      Table     @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  label      String
+  roomStayId String?
+  roomStay   RoomStay? @relation(fields: [roomStayId], references: [id], onDelete: SetNull)
+  position   Int       @default(0)
+  orders     Order[]
+  createdAt  DateTime  @default(now())
+
+  @@unique([tableId, label])
+  @@index([tableId])
 }
 
 model OrderPrepTicket {
@@ -424,8 +592,74 @@ model OrderPrepTicket {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
-  @@unique([orderId, station])
+  @@index([orderId, station])
   @@index([station, status, createdAt])
+}
+
+model TableBill {
+  id            String    @id @default(uuid())
+  tableId       String
+  table         Table     @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  number        Int
+  status        String
+  method        String?
+  stayId        String?
+  amount        Decimal   @db.Decimal(10, 2)
+  vatPercent    Decimal   @default(0) @db.Decimal(5, 2)
+  signedByName  String?
+  signatureData String?   @db.Text
+  paidAt        DateTime?
+  chargeId      String?
+  lines         Json
+  createdAt     DateTime  @default(now())
+
+  @@index([tableId, status])
+}
+
+model Printer {
+  id             String    @id @default(uuid())
+  name           String
+  manufacturer   String    @default("")
+  model          String    @default("")
+  ipAddress      String
+  macAddress     String    @default("")
+  port           Int       @default(9100)
+  connectionType String    @default("RAW")
+  paperWidthMm   Int       @default(80)
+  resolutionDpi  Int       @default(203)
+  isDefault      Boolean   @default(false)
+  enabled        Boolean   @default(true)
+  purpose        String    @default("RECEIPT")
+  lastSeenAt     DateTime?
+  lastCheckedAt  DateTime?
+  lastCheckOk    Boolean?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  jobs           PrintJob[]
+
+  @@index([enabled, isDefault])
+}
+
+model PrintJob {
+  id             String         @id @default(uuid())
+  orderId        String?
+  order          Order?         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  printerId      String
+  printer        Printer        @relation(fields: [printerId], references: [id], onDelete: Cascade)
+  requestedById  String
+  idempotencyKey String?        @unique
+  status         PrintJobStatus @default(PENDING)
+  error          String?
+  dryRun         Boolean        @default(false)
+  retryCount     Int            @default(0)
+  renderedAt     DateTime?
+  sentAt         DateTime?
+  completedAt    DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([orderId, createdAt])
+  @@index([status, createdAt])
 }
 
 model ClientSubmission {
@@ -443,8 +677,9 @@ model OrderItem {
   id                String   @id @default(uuid())
   orderId           String
   order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  menuItemId        String
-  menuItem          MenuItem @relation(fields: [menuItemId], references: [id])
+  menuItemId        String?
+  menuItem          MenuItem? @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+  itemSnapshot      Json?
   quantity          Int
   unitPrice         Decimal  @db.Decimal(10, 2)
   removeIngredients String? // e.g. "No peanuts, No onions"
@@ -453,4 +688,6 @@ model OrderItem {
   modifierSelections Json     @default("[]")
   specialNotes      String?
   subtotal          Decimal  @db.Decimal(10, 2)
+  removedAt         DateTime?
+  removalReason     String?
 }

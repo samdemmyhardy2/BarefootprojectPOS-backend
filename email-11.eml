@@ -1,0 +1,166 @@
+Return-Path: <barefootproject.kohphayam+caf_=inbox=forward.starbridgemyanmar.tech@gmail.com>
+X-Original-To: inbox@forward.starbridgemyanmar.tech
+Delivered-To: inbox@forward.starbridgemyanmar.tech
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	by mail.starbridgemyanmar.tech (Postfix) with ESMTPS id EDF1AC844E
+	for <inbox@forward.starbridgemyanmar.tech>; Mon,  2 Nov 2026 11:31:42 +0000 (UTC)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6b1aa377c61so3520097a12.3
+        for <inbox@forward.starbridgemyanmar.tech>; Mon, 02 Nov 2026 03:31:42 -0800 (PST)
+ARC-Seal: i=3; a=rsa-sha256; t=1793619100; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=HqjQfZ41lJ7eI4e/G4v1lSb5rbI6+e+dMxW7Hq/C9/fEetgiylc1oXkByNiJOlGmY3
+         3tk1FheNW4dA4Lj+3YUoPwAFS92yb3JxNnYE7GE3QQG032C9oBeWwhw2di/MhsI0dYiY
+         NnxzD3v0BRDrhc6we6I34JRyKcrggtxGnSYrCkOnqP3a3ozEDth2v6Rm2MLCnPnAsuP2
+         aWUzOwBXsbMw1pPRnF+tS+mcnYWHPbaQqtwL8YjGtTgT/UjcR76+4Se5QOIt9S3TqmuF
+         rTUuOfTjjbejB09+mAimnHAfVErSQerFbsom900hgon2sJBCnW7OjXwbYAsC43AbqG5Z
+         fyYg==
+ARC-Message-Signature: i=3; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature
+         :delivered-to;
+        bh=PZwBf5c4c2duEGNq6X08zFdloNxxQqraTyGip2gyurs=;
+        fh=INtXTf3X57TVTeD0ECyRSzY2ZVFhsi98qeTYiJeQmXY=;
+        b=dQuI4z9I1c7isiSMXE2BR9oQGFrsytGkDCRzwD0bS60Ix8y3VwWmqfHblOhEpgBGY+
+         W0dYOciecH2S031QuJj9wU7pUi9RpVoJ2d9EPF9lAMASGiAUTexxHE5jmHGf7WyxqUrF
+         q9ke62RZbGlI7V+Nru0bgKMuBLzvE6ChOx/USQC+MGl3o2NXl7Aah+5kyjX2J5E0DDQ+
+         NhrS8u7fFU9vDt1vPZAghKF6axbiqWmTMpCNUAWOUgOV1B7leOFVRfStnB7qN90xdefh
+         TDSCd+mNElXx3uEfTJl1ZvpJN2WGdu1brgsS+uTSlIEcJwS277QC3nTgeo1FFb7I+SF4
+         3AzQ==;
+        darn=forward.starbridgemyanmar.tech
+ARC-Authentication-Results: i=3; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=B8a9oVET;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of samdemmyhardy@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=samdemmyhardy@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793619100; x=1794223900;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :dkim-signature:delivered-to:x-forwarded-for:x-forwarded-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PZwBf5c4c2duEGNq6X08zFdloNxxQqraTyGip2gyurs=;
+        b=OsDpET877wP5/KFtMSmD4e1Qyp6HFiAoZmaedh7TRBkkrR9HEt7ZqtwmqyVribtpeX
+         ZasKDJ3T1O0sTA1UgWn5yopsTgMot7D002gH6Vm7YqC01wYuzSa+8dhNaFGEhTFv4LB0
+         6NIgFvyMBR/Y+Nwol7bAfiDOhrsUvue9XKDIXldRzhiza1UmBWIOnFqtUoEsQkowwKkY
+         /J4yH0Hf5Mh2IkBZvoERAid/GT94TP9Z0fNoYVjWx5YNo5A7BaNeq16KvUahcqvPwdJG
+         7PWlfeINFDW8n8efs4o8dN/hCcorX76zrmiOw6DNHnp3QyzC/GNmZuJ+etHwBONIjZWW
+         wcqA==
+X-Forwarded-Encrypted: i=3; AKwUvBzbfEeOis6kM3jH0yqA2jFi4rXtK+X86XGdGCGYsP2daQ0xhWg1pxNezmiE2z4vhyjfQHN+ag==@forward.starbridgemyanmar.tech
+X-Gm-Message-State: APuU4Z98m+W5jr+I94rU+d1FBigmlWPcv2HoHMuTGEANj8QM1XDy5BYS
+	QIR+R+smFVsAhzTmzuwuy+pDNP0m9j1hci5NdrnVfuQMfuygcfaF7bYaAxJ9H7HGlv9fxgHpbeb
+	IcexnNRgf4QBgwyAjfm8yd9AcWcV184qlEoG8JabfGW+ZjRkvDAFDpwPKY47SxA==
+X-Received: by 2002:a05:6402:2486:b0:6b4:1037:2b87 with SMTP id 4fb4d7f45d1cf-6b4d4d85a38mr6496448a12.31.1793619100169;
+        Mon, 02 Nov 2026 03:31:40 -0800 (PST)
+X-Forwarded-To: inbox@forward.starbridgemyanmar.tech
+X-Forwarded-For: barefootproject.kohphayam@gmail.com inbox@forward.starbridgemyanmar.tech
+Delivered-To: barefootproject.kohphayam@gmail.com
+Received: by 2002:a05:7412:8c90:b0:230:df9d:739b with SMTP id xh16csp5298736rdb;
+        Mon, 2 Nov 2026 03:31:39 -0800 (PST)
+X-Received: by 2002:a05:690c:8f:b0:8b1:86ae:8ff6 with SMTP id 00721157ae682-8b2b658c773mr55832567b3.15.1793619098893;
+        Mon, 02 Nov 2026 03:31:38 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; t=1793619098; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=figE2JIqbTNPqUMp/IfzGHz5e5L/0OBRHvJtQe20FWqM280z8pRnXzR8wmKY44GGJ9
+         S4V9+O9KBOg7nH+806jUXX6/f2akZBGGlOoknOTYtRDJfq3Qp9lrt0sOR/TNU0G8jxZO
+         V4yTge6pqSH17NObEeVwOr8PwYirkQJjZ1IrsU/KASv0vG1MfKvk1QDUz2pMtopNVNur
+         0BNlegUJYPLPZKz8KCQlzoAk+Cg4B/f8ZsNfwXBB82DgRVAmaad190ATa6s0PCe+jFLD
+         HWcO8ajzWy2THarhEh8ZoUd+XxQZE+7ipjeuc573NeZYxRNlaOjRa1eTX48JJqE+WGuQ
+         0rjQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=PZwBf5c4c2duEGNq6X08zFdloNxxQqraTyGip2gyurs=;
+        fh=+MYYFVSSXp5PZF1Wslny1HLyPY5wP2diwAv/ZqtVPpQ=;
+        b=e54D3G8mmaxrpLC5qty9cQCZW3/C5kw7oVFJl7oxlN/2edz1fzvpKk9Tab4GUcX89l
+         9k2NUNHf3jI5mJnnPG9uR+zC4hdqmcB2iWKQ2jRV5xewxxR0yTVkE0nLwZUDkSHeR4ow
+         5mBoTRotBmJMDOZoYEBj1lZmoi0Ece0d4laSzhPm/9Rfe96ElrauiyTBky6j50RpJIGp
+         4wUsfAMtyNUYiR3mUoSbP6WgI35o/fGH/crdGmAAODeJ0I0NolLkqCpBcE6oAAZah3oG
+         pyQHYhXeJCFHILxHIf13PDZYuzEMYwA0btL/4WiGFsGOJXCbs/HV3n7llBjOcsW6ob+b
+         BIew==;
+        dara=google.com
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=B8a9oVET;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of samdemmyhardy@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=samdemmyhardy@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 00721157ae682-8b2b4a6b31asor71530467b3.4.2026.11.02.03.31.38
+        for <barefootproject.kohphayam@gmail.com>
+        (Google Transport Security);
+        Mon, 02 Nov 2026 03:31:38 -0800 (PST)
+Received-SPF: pass (google.com: domain of samdemmyhardy@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20260707 header.b=B8a9oVET;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of samdemmyhardy@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=samdemmyhardy@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1793619098; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qu/RABG0Xeai0KpEH3teitY3VQBE3NtUUye9/S/7hkH4BeXev35AMpEItHS5vzaoGQ
+         GQLpYRv3DPrXgnDhePs00Iiz6oBX2XDgyE1VJ4KTj+MlzqdQ6NH4sIzdjXByobtlldI/
+         UgCOHjRDWLKsCI0EF0+dKd6I228hve+P/+gdMNUENUjd9nrKQu/bo0HWawne89EBl2L8
+         Y9Dj8K1KM3F3lQrI7/unDP1qCaoOg2hQJ59DynHa2fqC0btRSZMPrn3jpC7BltiJvxUg
+         EvK21A0kCYnh1aG82W8oKCqLRmrUTsMOP7pqXso/3wtpbP3fZKxsQd68NgJ0r7J9854D
+         N0yQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=PZwBf5c4c2duEGNq6X08zFdloNxxQqraTyGip2gyurs=;
+        fh=+MYYFVSSXp5PZF1Wslny1HLyPY5wP2diwAv/ZqtVPpQ=;
+        b=epUb/Z7m0Em7htQlEqRC5VXGmDc3NbsQV2tDn+8muCXC0RGyuxdOb+cvbo2DuJSlaD
+         sKjIb+j6419e5gPI41iVawpbS7xqE4zHvewen8zfiBfBc3BkUHrpMnyY/tZZXwZ6Mc59
+         /0W279SCiQw48wqnMTg0jUETvX3Mmel6BlAOPpFFzn8+ym8HewrNeRRa7lsd/VVvyv6C
+         thJfOkvZhNPscUM0/cSmtJG7gfXPXSZt3BdEtEFFMxYL+Q5xlgNsWWYuSfFayjPs1NDt
+         4bANI9mH+BnlK8eU9Imezw/D793lsOnzHrBaKDntn+KMATQT2XlMp4GHFPbY0EaHZkBu
+         bl4w==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793619098; x=1794223898; dara=google.com;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=PZwBf5c4c2duEGNq6X08zFdloNxxQqraTyGip2gyurs=;
+        b=B8a9oVETudQfyoESpKwlovCWWKDST+Rxe1TlDmZzPY2cS7lV9EuaxQS+Rz+UuHQ4Dq
+         eyyVdS8+9HfjXM67r3citVmzqCF4MnP0Yb36B8o/s5t+wn4cmq+MEYlyhRprGKzbuhIE
+         pHjaxJDP6bXaB0p0SYNIQfsTbTULGb6Vy2OfDrzeRXRg4Upu+TtT93GBTTYpJI3CmZIw
+         0tBHOZOuewbnZqiTCzyHJGvf3yP2pFfiX5iVNt2b/DbGF6K+L1AvTsYLcWy/klaT4EJr
+         fiFYg59lensc0uU/xOf5+bLGZVCEVRNir2KEjxrMKA983xUX38HwN0HdFcuNiVfqLPgf
+         5nvA==
+X-Gm-Gg: AYBFou2GVnD3Cg2DUSVf+vnJLhvWnvtGTTfrFWlobjbuZHHwPc2S3lsgClaYcNB3tyM
+	s+Awabnum219jtPpEcqz2+X0KIicuXe1MDpMnFSge+8DhuwIT7KZ6Oa+NNgtUut6NtPfCNLWiqX
+	0+Ti2SrupxMtUyou+3gfeUd2sf0HgZse5CDR3pjVxeC9YoMzvvYn4mQkt3S3TyzluR44RoSPp16
+	HTanGbr15r4KIGy/uIen+mXDhSvNB6DDYbhiF7ShjIRO9BS1CFMVcIbxogqK4lu/rWMd/J4FcR2
+	zMAGipBHcn78jER9eP3+/INwPAOX0/qCAEgi1b/UUFQUF4Jpg+t3icMJikXw3K89W9501Faowf/
+	suzXZFt1ZBfGRuZXbOYvO38O7id0jMbycm+i150wTvhP0roatLZDMrBUPrGjP5bRI8E4CzA==
+X-Received: by 2002:a05:690c:6d81:b0:8b1:c7fc:2b96 with SMTP id
+ 00721157ae682-8b2b67c5898mr58001387b3.105.1793619098321; Mon, 02 Nov 2026
+ 03:31:38 -0800 (PST)
+MIME-Version: 1.0
+From: Sam Hardy <samdemmyhardy@gmail.com>
+Date: Mon, 2 Nov 2026 18:31:26 +0700
+X-Gm-Features: AclHuK-Jt93TBd3xy-VytsxWDfSHpDkQ0xvfYggerGGbRo7rWDMNEYV9oCm43c8
+Message-ID: <CABQmejA1DfkGzPRQ+P7FDPt=AoXu-PT61_NtXhEi4kmhu8Gfvg@mail.gmail.com>
+Subject: test
+To: Barefoot Project <barefootproject.kohphayam@gmail.com>
+Content-Type: multipart/alternative; boundary="00000000000037ca3a065f497db6"
+
+--00000000000037ca3a065f497db6
+Content-Type: text/plain; charset="UTF-8"
+
+-- 
+Sam Hardy
+
+Whatsapp: +66 (0) 98 282 7110
+
+--00000000000037ca3a065f497db6
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><br clear=3D"all"></div><div><br></div><span class=3D=
+"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_sign=
+ature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><font color=3D"#=
+444444">Sam Hardy</font><div><font color=3D"#444444"><br></font></div><div>=
+<font color=3D"#444444">Whatsapp: +66 (0) 98 282 7110</font></div></div></d=
+iv></div>
+
+--00000000000037ca3a065f497db6--

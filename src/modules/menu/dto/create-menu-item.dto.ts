@@ -1,7 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { ArrayMaxSize, IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, IsUUID, MaxLength, Min, ValidateIf } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsBoolean, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Matches, MaxLength, Min, ValidateIf } from 'class-validator';
 import { PrepStation } from 'prisma/generated/prisma/enums';
+import { uploadPath } from '../../../common/upload-path';
 import { MatchesFoodLabelLanguages } from './food-label-languages.validator';
 
 export class CreateMenuItemDto {
@@ -17,13 +18,18 @@ export class CreateMenuItemDto {
   description?: string;
 
   @ApiProperty({ example: 12.5, minimum: 0.01 })
-  @Type(() => Number) @IsNumber({ maxDecimalPlaces: 2 }) @Min(0.01)
+  @Type(() => Number) @IsNumber({ maxDecimalPlaces: 2 }) @Min(0)
   price!: number;
 
-  @ApiPropertyOptional({ example: 'https://cdn.example.com/calamari.jpg' })
-  // Local development uploads use http://localhost URLs, which are valid
-  // image URLs even though they do not have a public DNS suffix.
-  @IsOptional() @IsUrl({ require_protocol: true, require_tld: false })
+  @ApiPropertyOptional({ description: 'Staff type the amount when this dish is ordered.' })
+  @IsOptional() @IsBoolean()
+  manualPrice?: boolean;
+
+  @ApiPropertyOptional({ example: '/uploads/images/calamari.jpg' })
+  @Transform(({ value }) => typeof value === 'string' ? uploadPath(value) : value)
+  @IsOptional() @IsString() @MaxLength(2048)
+  @ValidateIf((dto: CreateMenuItemDto) => typeof dto.imageUrl === 'string' && dto.imageUrl.length > 0)
+  @Matches(/^(?:\/uploads\/|https?:\/\/)/, { message: 'imageUrl must be an uploaded file path or an HTTP(S) URL' })
   imageUrl?: string;
 
   @ApiPropertyOptional({ type: [String], example: ['Milk', 'Wheat', 'Peanuts'], description: 'Individual known allergens; shown to staff and guests.' })

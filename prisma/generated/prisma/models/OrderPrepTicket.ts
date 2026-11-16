@@ -228,7 +228,6 @@ export type OrderPrepTicketOrderByWithRelationInput = {
 
 export type OrderPrepTicketWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  orderId_station?: Prisma.OrderPrepTicketOrderIdStationCompoundUniqueInput
   AND?: Prisma.OrderPrepTicketWhereInput | Prisma.OrderPrepTicketWhereInput[]
   OR?: Prisma.OrderPrepTicketWhereInput[]
   NOT?: Prisma.OrderPrepTicketWhereInput | Prisma.OrderPrepTicketWhereInput[]
@@ -241,7 +240,7 @@ export type OrderPrepTicketWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"OrderPrepTicket"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OrderPrepTicket"> | Date | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
-}, "id" | "orderId_station">
+}, "id">
 
 export type OrderPrepTicketOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -364,11 +363,6 @@ export type OrderPrepTicketListRelationFilter = {
 
 export type OrderPrepTicketOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type OrderPrepTicketOrderIdStationCompoundUniqueInput = {
-  orderId: string
-  station: $Enums.PrepStation
 }
 
 export type OrderPrepTicketCountOrderByAggregateInput = {

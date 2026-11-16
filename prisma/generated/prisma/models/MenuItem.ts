@@ -41,6 +41,7 @@ export type MenuItemMinAggregateOutputType = {
   name: string | null
   description: string | null
   price: runtime.Decimal | null
+  manualPrice: boolean | null
   imageUrl: string | null
   position: number | null
   categoryId: string | null
@@ -54,6 +55,7 @@ export type MenuItemMaxAggregateOutputType = {
   name: string | null
   description: string | null
   price: runtime.Decimal | null
+  manualPrice: boolean | null
   imageUrl: string | null
   position: number | null
   categoryId: string | null
@@ -67,6 +69,7 @@ export type MenuItemCountAggregateOutputType = {
   name: number
   description: number
   price: number
+  manualPrice: number
   imageUrl: number
   allergens: number
   allergensMy: number
@@ -101,6 +104,7 @@ export type MenuItemMinAggregateInputType = {
   name?: true
   description?: true
   price?: true
+  manualPrice?: true
   imageUrl?: true
   position?: true
   categoryId?: true
@@ -114,6 +118,7 @@ export type MenuItemMaxAggregateInputType = {
   name?: true
   description?: true
   price?: true
+  manualPrice?: true
   imageUrl?: true
   position?: true
   categoryId?: true
@@ -127,6 +132,7 @@ export type MenuItemCountAggregateInputType = {
   name?: true
   description?: true
   price?: true
+  manualPrice?: true
   imageUrl?: true
   allergens?: true
   allergensMy?: true
@@ -236,6 +242,7 @@ export type MenuItemGroupByOutputType = {
   name: string
   description: string | null
   price: runtime.Decimal
+  manualPrice: boolean
   imageUrl: string | null
   allergens: string[]
   allergensMy: string[]
@@ -281,6 +288,7 @@ export type MenuItemWhereInput = {
   name?: Prisma.StringFilter<"MenuItem"> | string
   description?: Prisma.StringNullableFilter<"MenuItem"> | string | null
   price?: Prisma.DecimalFilter<"MenuItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFilter<"MenuItem"> | boolean
   imageUrl?: Prisma.StringNullableFilter<"MenuItem"> | string | null
   allergens?: Prisma.StringNullableListFilter<"MenuItem">
   allergensMy?: Prisma.StringNullableListFilter<"MenuItem">
@@ -306,6 +314,7 @@ export type MenuItemOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
+  manualPrice?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   allergens?: Prisma.SortOrder
   allergensMy?: Prisma.SortOrder
@@ -334,6 +343,7 @@ export type MenuItemWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"MenuItem"> | string
   description?: Prisma.StringNullableFilter<"MenuItem"> | string | null
   price?: Prisma.DecimalFilter<"MenuItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFilter<"MenuItem"> | boolean
   imageUrl?: Prisma.StringNullableFilter<"MenuItem"> | string | null
   allergens?: Prisma.StringNullableListFilter<"MenuItem">
   allergensMy?: Prisma.StringNullableListFilter<"MenuItem">
@@ -359,6 +369,7 @@ export type MenuItemOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
+  manualPrice?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   allergens?: Prisma.SortOrder
   allergensMy?: Prisma.SortOrder
@@ -389,6 +400,7 @@ export type MenuItemScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"MenuItem"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"MenuItem"> | string | null
   price?: Prisma.DecimalWithAggregatesFilter<"MenuItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolWithAggregatesFilter<"MenuItem"> | boolean
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"MenuItem"> | string | null
   allergens?: Prisma.StringNullableListFilter<"MenuItem">
   allergensMy?: Prisma.StringNullableListFilter<"MenuItem">
@@ -411,6 +423,7 @@ export type MenuItemCreateInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -435,6 +448,7 @@ export type MenuItemUncheckedCreateInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -459,6 +473,7 @@ export type MenuItemUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -483,6 +498,7 @@ export type MenuItemUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -507,6 +523,7 @@ export type MenuItemCreateManyInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -529,6 +546,7 @@ export type MenuItemUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -550,6 +568,7 @@ export type MenuItemUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -590,6 +609,7 @@ export type MenuItemCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  manualPrice?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   allergens?: Prisma.SortOrder
   allergensMy?: Prisma.SortOrder
@@ -617,6 +637,7 @@ export type MenuItemMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  manualPrice?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   position?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
@@ -630,6 +651,7 @@ export type MenuItemMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  manualPrice?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   position?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
@@ -646,6 +668,11 @@ export type MenuItemSumOrderByAggregateInput = {
 export type MenuItemScalarRelationFilter = {
   is?: Prisma.MenuItemWhereInput
   isNot?: Prisma.MenuItemWhereInput
+}
+
+export type MenuItemNullableScalarRelationFilter = {
+  is?: Prisma.MenuItemWhereInput | null
+  isNot?: Prisma.MenuItemWhereInput | null
 }
 
 export type MenuItemCreateNestedManyWithoutCategoryInput = {
@@ -795,10 +822,12 @@ export type MenuItemCreateNestedOneWithoutOrderItemsInput = {
   connect?: Prisma.MenuItemWhereUniqueInput
 }
 
-export type MenuItemUpdateOneRequiredWithoutOrderItemsNestedInput = {
+export type MenuItemUpdateOneWithoutOrderItemsNestedInput = {
   create?: Prisma.XOR<Prisma.MenuItemCreateWithoutOrderItemsInput, Prisma.MenuItemUncheckedCreateWithoutOrderItemsInput>
   connectOrCreate?: Prisma.MenuItemCreateOrConnectWithoutOrderItemsInput
   upsert?: Prisma.MenuItemUpsertWithoutOrderItemsInput
+  disconnect?: Prisma.MenuItemWhereInput | boolean
+  delete?: Prisma.MenuItemWhereInput | boolean
   connect?: Prisma.MenuItemWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.MenuItemUpdateToOneWithWhereWithoutOrderItemsInput, Prisma.MenuItemUpdateWithoutOrderItemsInput>, Prisma.MenuItemUncheckedUpdateWithoutOrderItemsInput>
 }
@@ -808,6 +837,7 @@ export type MenuItemCreateWithoutCategoryInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -831,6 +861,7 @@ export type MenuItemUncheckedCreateWithoutCategoryInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -883,6 +914,7 @@ export type MenuItemScalarWhereInput = {
   name?: Prisma.StringFilter<"MenuItem"> | string
   description?: Prisma.StringNullableFilter<"MenuItem"> | string | null
   price?: Prisma.DecimalFilter<"MenuItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFilter<"MenuItem"> | boolean
   imageUrl?: Prisma.StringNullableFilter<"MenuItem"> | string | null
   allergens?: Prisma.StringNullableListFilter<"MenuItem">
   allergensMy?: Prisma.StringNullableListFilter<"MenuItem">
@@ -905,6 +937,7 @@ export type MenuItemCreateWithoutModifierGroupsInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -928,6 +961,7 @@ export type MenuItemUncheckedCreateWithoutModifierGroupsInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -967,6 +1001,7 @@ export type MenuItemUpdateWithoutModifierGroupsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -990,6 +1025,7 @@ export type MenuItemUncheckedUpdateWithoutModifierGroupsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -1013,6 +1049,7 @@ export type MenuItemCreateWithoutOrderItemsInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -1036,6 +1073,7 @@ export type MenuItemUncheckedCreateWithoutOrderItemsInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -1075,6 +1113,7 @@ export type MenuItemUpdateWithoutOrderItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -1098,6 +1137,7 @@ export type MenuItemUncheckedUpdateWithoutOrderItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -1121,6 +1161,7 @@ export type MenuItemCreateManyCategoryInput = {
   name: string
   description?: string | null
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: boolean
   imageUrl?: string | null
   allergens?: Prisma.MenuItemCreateallergensInput | string[]
   allergensMy?: Prisma.MenuItemCreateallergensMyInput | string[]
@@ -1142,6 +1183,7 @@ export type MenuItemUpdateWithoutCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -1165,6 +1207,7 @@ export type MenuItemUncheckedUpdateWithoutCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -1188,6 +1231,7 @@ export type MenuItemUncheckedUpdateManyWithoutCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  manualPrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allergens?: Prisma.MenuItemUpdateallergensInput | string[]
   allergensMy?: Prisma.MenuItemUpdateallergensMyInput | string[]
@@ -1249,6 +1293,7 @@ export type MenuItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name?: boolean
   description?: boolean
   price?: boolean
+  manualPrice?: boolean
   imageUrl?: boolean
   allergens?: boolean
   allergensMy?: boolean
@@ -1275,6 +1320,7 @@ export type MenuItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   description?: boolean
   price?: boolean
+  manualPrice?: boolean
   imageUrl?: boolean
   allergens?: boolean
   allergensMy?: boolean
@@ -1298,6 +1344,7 @@ export type MenuItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   description?: boolean
   price?: boolean
+  manualPrice?: boolean
   imageUrl?: boolean
   allergens?: boolean
   allergensMy?: boolean
@@ -1321,6 +1368,7 @@ export type MenuItemSelectScalar = {
   name?: boolean
   description?: boolean
   price?: boolean
+  manualPrice?: boolean
   imageUrl?: boolean
   allergens?: boolean
   allergensMy?: boolean
@@ -1338,7 +1386,7 @@ export type MenuItemSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MenuItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "imageUrl" | "allergens" | "allergensMy" | "allergensTh" | "dietaryInfo" | "dietaryInfoMy" | "dietaryInfoTh" | "availableExtras" | "availableExtrasMy" | "availableExtrasTh" | "position" | "categoryId" | "prepStation" | "createdAt" | "updatedAt", ExtArgs["result"]["menuItem"]>
+export type MenuItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "manualPrice" | "imageUrl" | "allergens" | "allergensMy" | "allergensTh" | "dietaryInfo" | "dietaryInfoMy" | "dietaryInfoTh" | "availableExtras" | "availableExtrasMy" | "availableExtrasTh" | "position" | "categoryId" | "prepStation" | "createdAt" | "updatedAt", ExtArgs["result"]["menuItem"]>
 export type MenuItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   modifierGroups?: boolean | Prisma.MenuItem$modifierGroupsArgs<ExtArgs>
@@ -1364,6 +1412,7 @@ export type $MenuItemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     name: string
     description: string | null
     price: runtime.Decimal
+    manualPrice: boolean
     imageUrl: string | null
     allergens: string[]
     allergensMy: string[]
@@ -1809,6 +1858,7 @@ export interface MenuItemFieldRefs {
   readonly name: Prisma.FieldRef<"MenuItem", 'String'>
   readonly description: Prisma.FieldRef<"MenuItem", 'String'>
   readonly price: Prisma.FieldRef<"MenuItem", 'Decimal'>
+  readonly manualPrice: Prisma.FieldRef<"MenuItem", 'Boolean'>
   readonly imageUrl: Prisma.FieldRef<"MenuItem", 'String'>
   readonly allergens: Prisma.FieldRef<"MenuItem", 'String[]'>
   readonly allergensMy: Prisma.FieldRef<"MenuItem", 'String[]'>

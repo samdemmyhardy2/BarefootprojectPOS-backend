@@ -30,12 +30,16 @@ export type RoomChargeAvgAggregateOutputType = {
   quantity: number | null
   unitPrice: runtime.Decimal | null
   amount: runtime.Decimal | null
+  commissionAmount: runtime.Decimal | null
+  billNumber: number | null
 }
 
 export type RoomChargeSumAggregateOutputType = {
   quantity: number | null
   unitPrice: runtime.Decimal | null
   amount: runtime.Decimal | null
+  commissionAmount: runtime.Decimal | null
+  billNumber: number | null
 }
 
 export type RoomChargeMinAggregateOutputType = {
@@ -47,10 +51,14 @@ export type RoomChargeMinAggregateOutputType = {
   quantity: number | null
   unitPrice: runtime.Decimal | null
   amount: runtime.Decimal | null
+  commissionItemId: string | null
+  commissionAmount: runtime.Decimal | null
   signedByName: string | null
   signatureData: string | null
   occurredAt: Date | null
   settledAt: Date | null
+  billId: string | null
+  billNumber: number | null
   createdAt: Date | null
 }
 
@@ -63,10 +71,14 @@ export type RoomChargeMaxAggregateOutputType = {
   quantity: number | null
   unitPrice: runtime.Decimal | null
   amount: runtime.Decimal | null
+  commissionItemId: string | null
+  commissionAmount: runtime.Decimal | null
   signedByName: string | null
   signatureData: string | null
   occurredAt: Date | null
   settledAt: Date | null
+  billId: string | null
+  billNumber: number | null
   createdAt: Date | null
 }
 
@@ -79,10 +91,15 @@ export type RoomChargeCountAggregateOutputType = {
   quantity: number
   unitPrice: number
   amount: number
+  commissionItemId: number
+  commissionAmount: number
   signedByName: number
   signatureData: number
   occurredAt: number
   settledAt: number
+  billId: number
+  billNumber: number
+  lines: number
   createdAt: number
   _all: number
 }
@@ -92,12 +109,16 @@ export type RoomChargeAvgAggregateInputType = {
   quantity?: true
   unitPrice?: true
   amount?: true
+  commissionAmount?: true
+  billNumber?: true
 }
 
 export type RoomChargeSumAggregateInputType = {
   quantity?: true
   unitPrice?: true
   amount?: true
+  commissionAmount?: true
+  billNumber?: true
 }
 
 export type RoomChargeMinAggregateInputType = {
@@ -109,10 +130,14 @@ export type RoomChargeMinAggregateInputType = {
   quantity?: true
   unitPrice?: true
   amount?: true
+  commissionItemId?: true
+  commissionAmount?: true
   signedByName?: true
   signatureData?: true
   occurredAt?: true
   settledAt?: true
+  billId?: true
+  billNumber?: true
   createdAt?: true
 }
 
@@ -125,10 +150,14 @@ export type RoomChargeMaxAggregateInputType = {
   quantity?: true
   unitPrice?: true
   amount?: true
+  commissionItemId?: true
+  commissionAmount?: true
   signedByName?: true
   signatureData?: true
   occurredAt?: true
   settledAt?: true
+  billId?: true
+  billNumber?: true
   createdAt?: true
 }
 
@@ -141,10 +170,15 @@ export type RoomChargeCountAggregateInputType = {
   quantity?: true
   unitPrice?: true
   amount?: true
+  commissionItemId?: true
+  commissionAmount?: true
   signedByName?: true
   signatureData?: true
   occurredAt?: true
   settledAt?: true
+  billId?: true
+  billNumber?: true
+  lines?: true
   createdAt?: true
   _all?: true
 }
@@ -244,10 +278,15 @@ export type RoomChargeGroupByOutputType = {
   quantity: number
   unitPrice: runtime.Decimal
   amount: runtime.Decimal
+  commissionItemId: string | null
+  commissionAmount: runtime.Decimal | null
   signedByName: string | null
   signatureData: string | null
   occurredAt: Date
   settledAt: Date | null
+  billId: string | null
+  billNumber: number | null
+  lines: runtime.JsonValue | null
   createdAt: Date
   _count: RoomChargeCountAggregateOutputType | null
   _avg: RoomChargeAvgAggregateOutputType | null
@@ -283,13 +322,19 @@ export type RoomChargeWhereInput = {
   quantity?: Prisma.IntFilter<"RoomCharge"> | number
   unitPrice?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
+  commissionAmount?: Prisma.DecimalNullableFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
   signatureData?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
   occurredAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
   settledAt?: Prisma.DateTimeNullableFilter<"RoomCharge"> | Date | string | null
+  billId?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
+  billNumber?: Prisma.IntNullableFilter<"RoomCharge"> | number | null
+  lines?: Prisma.JsonNullableFilter<"RoomCharge">
   createdAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
   stay?: Prisma.XOR<Prisma.RoomStayScalarRelationFilter, Prisma.RoomStayWhereInput>
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
+  commissionItem?: Prisma.XOR<Prisma.CommissionItemNullableScalarRelationFilter, Prisma.CommissionItemWhereInput> | null
 }
 
 export type RoomChargeOrderByWithRelationInput = {
@@ -301,13 +346,19 @@ export type RoomChargeOrderByWithRelationInput = {
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  commissionItemId?: Prisma.SortOrderInput | Prisma.SortOrder
+  commissionAmount?: Prisma.SortOrderInput | Prisma.SortOrder
   signedByName?: Prisma.SortOrderInput | Prisma.SortOrder
   signatureData?: Prisma.SortOrderInput | Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
   settledAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  billId?: Prisma.SortOrderInput | Prisma.SortOrder
+  billNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  lines?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   stay?: Prisma.RoomStayOrderByWithRelationInput
   order?: Prisma.OrderOrderByWithRelationInput
+  commissionItem?: Prisma.CommissionItemOrderByWithRelationInput
 }
 
 export type RoomChargeWhereUniqueInput = Prisma.AtLeast<{
@@ -322,13 +373,19 @@ export type RoomChargeWhereUniqueInput = Prisma.AtLeast<{
   quantity?: Prisma.IntFilter<"RoomCharge"> | number
   unitPrice?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
+  commissionAmount?: Prisma.DecimalNullableFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
   signatureData?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
   occurredAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
   settledAt?: Prisma.DateTimeNullableFilter<"RoomCharge"> | Date | string | null
+  billId?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
+  billNumber?: Prisma.IntNullableFilter<"RoomCharge"> | number | null
+  lines?: Prisma.JsonNullableFilter<"RoomCharge">
   createdAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
   stay?: Prisma.XOR<Prisma.RoomStayScalarRelationFilter, Prisma.RoomStayWhereInput>
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
+  commissionItem?: Prisma.XOR<Prisma.CommissionItemNullableScalarRelationFilter, Prisma.CommissionItemWhereInput> | null
 }, "id" | "orderId">
 
 export type RoomChargeOrderByWithAggregationInput = {
@@ -340,10 +397,15 @@ export type RoomChargeOrderByWithAggregationInput = {
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  commissionItemId?: Prisma.SortOrderInput | Prisma.SortOrder
+  commissionAmount?: Prisma.SortOrderInput | Prisma.SortOrder
   signedByName?: Prisma.SortOrderInput | Prisma.SortOrder
   signatureData?: Prisma.SortOrderInput | Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
   settledAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  billId?: Prisma.SortOrderInput | Prisma.SortOrder
+  billNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  lines?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.RoomChargeCountOrderByAggregateInput
   _avg?: Prisma.RoomChargeAvgOrderByAggregateInput
@@ -364,10 +426,15 @@ export type RoomChargeScalarWhereWithAggregatesInput = {
   quantity?: Prisma.IntWithAggregatesFilter<"RoomCharge"> | number
   unitPrice?: Prisma.DecimalWithAggregatesFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalWithAggregatesFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.StringNullableWithAggregatesFilter<"RoomCharge"> | string | null
+  commissionAmount?: Prisma.DecimalNullableWithAggregatesFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.StringNullableWithAggregatesFilter<"RoomCharge"> | string | null
   signatureData?: Prisma.StringNullableWithAggregatesFilter<"RoomCharge"> | string | null
   occurredAt?: Prisma.DateTimeWithAggregatesFilter<"RoomCharge"> | Date | string
   settledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RoomCharge"> | Date | string | null
+  billId?: Prisma.StringNullableWithAggregatesFilter<"RoomCharge"> | string | null
+  billNumber?: Prisma.IntNullableWithAggregatesFilter<"RoomCharge"> | number | null
+  lines?: Prisma.JsonNullableWithAggregatesFilter<"RoomCharge">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RoomCharge"> | Date | string
 }
 
@@ -378,13 +445,18 @@ export type RoomChargeCreateInput = {
   quantity?: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: string | null
   signatureData?: string | null
   occurredAt?: Date | string
   settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   stay: Prisma.RoomStayCreateNestedOneWithoutChargesInput
   order?: Prisma.OrderCreateNestedOneWithoutRoomChargeInput
+  commissionItem?: Prisma.CommissionItemCreateNestedOneWithoutChargesInput
 }
 
 export type RoomChargeUncheckedCreateInput = {
@@ -396,10 +468,15 @@ export type RoomChargeUncheckedCreateInput = {
   quantity?: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: string | null
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: string | null
   signatureData?: string | null
   occurredAt?: Date | string
   settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -410,13 +487,18 @@ export type RoomChargeUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stay?: Prisma.RoomStayUpdateOneRequiredWithoutChargesNestedInput
   order?: Prisma.OrderUpdateOneWithoutRoomChargeNestedInput
+  commissionItem?: Prisma.CommissionItemUpdateOneWithoutChargesNestedInput
 }
 
 export type RoomChargeUncheckedUpdateInput = {
@@ -428,10 +510,15 @@ export type RoomChargeUncheckedUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -444,10 +531,15 @@ export type RoomChargeCreateManyInput = {
   quantity?: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: string | null
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: string | null
   signatureData?: string | null
   occurredAt?: Date | string
   settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -458,10 +550,14 @@ export type RoomChargeUpdateManyMutationInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -474,10 +570,15 @@ export type RoomChargeUncheckedUpdateManyInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -500,10 +601,15 @@ export type RoomChargeCountOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  commissionItemId?: Prisma.SortOrder
+  commissionAmount?: Prisma.SortOrder
   signedByName?: Prisma.SortOrder
   signatureData?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
   settledAt?: Prisma.SortOrder
+  billId?: Prisma.SortOrder
+  billNumber?: Prisma.SortOrder
+  lines?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -511,6 +617,8 @@ export type RoomChargeAvgOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  commissionAmount?: Prisma.SortOrder
+  billNumber?: Prisma.SortOrder
 }
 
 export type RoomChargeMaxOrderByAggregateInput = {
@@ -522,10 +630,14 @@ export type RoomChargeMaxOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  commissionItemId?: Prisma.SortOrder
+  commissionAmount?: Prisma.SortOrder
   signedByName?: Prisma.SortOrder
   signatureData?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
   settledAt?: Prisma.SortOrder
+  billId?: Prisma.SortOrder
+  billNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -538,10 +650,14 @@ export type RoomChargeMinOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  commissionItemId?: Prisma.SortOrder
+  commissionAmount?: Prisma.SortOrder
   signedByName?: Prisma.SortOrder
   signatureData?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
   settledAt?: Prisma.SortOrder
+  billId?: Prisma.SortOrder
+  billNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -549,6 +665,8 @@ export type RoomChargeSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  commissionAmount?: Prisma.SortOrder
+  billNumber?: Prisma.SortOrder
 }
 
 export type RoomChargeNullableScalarRelationFilter = {
@@ -598,16 +716,50 @@ export type RoomChargeUncheckedUpdateManyWithoutStayNestedInput = {
   deleteMany?: Prisma.RoomChargeScalarWhereInput | Prisma.RoomChargeScalarWhereInput[]
 }
 
-export type EnumRoomChargeKindFieldUpdateOperationsInput = {
-  set?: $Enums.RoomChargeKind
+export type RoomChargeCreateNestedManyWithoutCommissionItemInput = {
+  create?: Prisma.XOR<Prisma.RoomChargeCreateWithoutCommissionItemInput, Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput> | Prisma.RoomChargeCreateWithoutCommissionItemInput[] | Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput[]
+  connectOrCreate?: Prisma.RoomChargeCreateOrConnectWithoutCommissionItemInput | Prisma.RoomChargeCreateOrConnectWithoutCommissionItemInput[]
+  createMany?: Prisma.RoomChargeCreateManyCommissionItemInputEnvelope
+  connect?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+export type RoomChargeUncheckedCreateNestedManyWithoutCommissionItemInput = {
+  create?: Prisma.XOR<Prisma.RoomChargeCreateWithoutCommissionItemInput, Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput> | Prisma.RoomChargeCreateWithoutCommissionItemInput[] | Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput[]
+  connectOrCreate?: Prisma.RoomChargeCreateOrConnectWithoutCommissionItemInput | Prisma.RoomChargeCreateOrConnectWithoutCommissionItemInput[]
+  createMany?: Prisma.RoomChargeCreateManyCommissionItemInputEnvelope
+  connect?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+}
+
+export type RoomChargeUpdateManyWithoutCommissionItemNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomChargeCreateWithoutCommissionItemInput, Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput> | Prisma.RoomChargeCreateWithoutCommissionItemInput[] | Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput[]
+  connectOrCreate?: Prisma.RoomChargeCreateOrConnectWithoutCommissionItemInput | Prisma.RoomChargeCreateOrConnectWithoutCommissionItemInput[]
+  upsert?: Prisma.RoomChargeUpsertWithWhereUniqueWithoutCommissionItemInput | Prisma.RoomChargeUpsertWithWhereUniqueWithoutCommissionItemInput[]
+  createMany?: Prisma.RoomChargeCreateManyCommissionItemInputEnvelope
+  set?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+  disconnect?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+  delete?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+  connect?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+  update?: Prisma.RoomChargeUpdateWithWhereUniqueWithoutCommissionItemInput | Prisma.RoomChargeUpdateWithWhereUniqueWithoutCommissionItemInput[]
+  updateMany?: Prisma.RoomChargeUpdateManyWithWhereWithoutCommissionItemInput | Prisma.RoomChargeUpdateManyWithWhereWithoutCommissionItemInput[]
+  deleteMany?: Prisma.RoomChargeScalarWhereInput | Prisma.RoomChargeScalarWhereInput[]
+}
+
+export type RoomChargeUncheckedUpdateManyWithoutCommissionItemNestedInput = {
+  create?: Prisma.XOR<Prisma.RoomChargeCreateWithoutCommissionItemInput, Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput> | Prisma.RoomChargeCreateWithoutCommissionItemInput[] | Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput[]
+  connectOrCreate?: Prisma.RoomChargeCreateOrConnectWithoutCommissionItemInput | Prisma.RoomChargeCreateOrConnectWithoutCommissionItemInput[]
+  upsert?: Prisma.RoomChargeUpsertWithWhereUniqueWithoutCommissionItemInput | Prisma.RoomChargeUpsertWithWhereUniqueWithoutCommissionItemInput[]
+  createMany?: Prisma.RoomChargeCreateManyCommissionItemInputEnvelope
+  set?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+  disconnect?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+  delete?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+  connect?: Prisma.RoomChargeWhereUniqueInput | Prisma.RoomChargeWhereUniqueInput[]
+  update?: Prisma.RoomChargeUpdateWithWhereUniqueWithoutCommissionItemInput | Prisma.RoomChargeUpdateWithWhereUniqueWithoutCommissionItemInput[]
+  updateMany?: Prisma.RoomChargeUpdateManyWithWhereWithoutCommissionItemInput | Prisma.RoomChargeUpdateManyWithWhereWithoutCommissionItemInput[]
+  deleteMany?: Prisma.RoomChargeScalarWhereInput | Prisma.RoomChargeScalarWhereInput[]
+}
+
+export type EnumRoomChargeKindFieldUpdateOperationsInput = {
+  set?: $Enums.RoomChargeKind
 }
 
 export type RoomChargeCreateNestedOneWithoutOrderInput = {
@@ -649,12 +801,17 @@ export type RoomChargeCreateWithoutStayInput = {
   quantity?: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: string | null
   signatureData?: string | null
   occurredAt?: Date | string
   settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   order?: Prisma.OrderCreateNestedOneWithoutRoomChargeInput
+  commissionItem?: Prisma.CommissionItemCreateNestedOneWithoutChargesInput
 }
 
 export type RoomChargeUncheckedCreateWithoutStayInput = {
@@ -665,10 +822,15 @@ export type RoomChargeUncheckedCreateWithoutStayInput = {
   quantity?: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: string | null
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: string | null
   signatureData?: string | null
   occurredAt?: Date | string
   settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -710,11 +872,82 @@ export type RoomChargeScalarWhereInput = {
   quantity?: Prisma.IntFilter<"RoomCharge"> | number
   unitPrice?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
+  commissionAmount?: Prisma.DecimalNullableFilter<"RoomCharge"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
   signatureData?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
   occurredAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
   settledAt?: Prisma.DateTimeNullableFilter<"RoomCharge"> | Date | string | null
+  billId?: Prisma.StringNullableFilter<"RoomCharge"> | string | null
+  billNumber?: Prisma.IntNullableFilter<"RoomCharge"> | number | null
+  lines?: Prisma.JsonNullableFilter<"RoomCharge">
   createdAt?: Prisma.DateTimeFilter<"RoomCharge"> | Date | string
+}
+
+export type RoomChargeCreateWithoutCommissionItemInput = {
+  id?: string
+  kind: $Enums.RoomChargeKind
+  description: string
+  quantity?: number
+  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  signedByName?: string | null
+  signatureData?: string | null
+  occurredAt?: Date | string
+  settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  stay: Prisma.RoomStayCreateNestedOneWithoutChargesInput
+  order?: Prisma.OrderCreateNestedOneWithoutRoomChargeInput
+}
+
+export type RoomChargeUncheckedCreateWithoutCommissionItemInput = {
+  id?: string
+  stayId: string
+  orderId?: string | null
+  kind: $Enums.RoomChargeKind
+  description: string
+  quantity?: number
+  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  signedByName?: string | null
+  signatureData?: string | null
+  occurredAt?: Date | string
+  settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+}
+
+export type RoomChargeCreateOrConnectWithoutCommissionItemInput = {
+  where: Prisma.RoomChargeWhereUniqueInput
+  create: Prisma.XOR<Prisma.RoomChargeCreateWithoutCommissionItemInput, Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput>
+}
+
+export type RoomChargeCreateManyCommissionItemInputEnvelope = {
+  data: Prisma.RoomChargeCreateManyCommissionItemInput | Prisma.RoomChargeCreateManyCommissionItemInput[]
+  skipDuplicates?: boolean
+}
+
+export type RoomChargeUpsertWithWhereUniqueWithoutCommissionItemInput = {
+  where: Prisma.RoomChargeWhereUniqueInput
+  update: Prisma.XOR<Prisma.RoomChargeUpdateWithoutCommissionItemInput, Prisma.RoomChargeUncheckedUpdateWithoutCommissionItemInput>
+  create: Prisma.XOR<Prisma.RoomChargeCreateWithoutCommissionItemInput, Prisma.RoomChargeUncheckedCreateWithoutCommissionItemInput>
+}
+
+export type RoomChargeUpdateWithWhereUniqueWithoutCommissionItemInput = {
+  where: Prisma.RoomChargeWhereUniqueInput
+  data: Prisma.XOR<Prisma.RoomChargeUpdateWithoutCommissionItemInput, Prisma.RoomChargeUncheckedUpdateWithoutCommissionItemInput>
+}
+
+export type RoomChargeUpdateManyWithWhereWithoutCommissionItemInput = {
+  where: Prisma.RoomChargeScalarWhereInput
+  data: Prisma.XOR<Prisma.RoomChargeUpdateManyMutationInput, Prisma.RoomChargeUncheckedUpdateManyWithoutCommissionItemInput>
 }
 
 export type RoomChargeCreateWithoutOrderInput = {
@@ -724,12 +957,17 @@ export type RoomChargeCreateWithoutOrderInput = {
   quantity?: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: string | null
   signatureData?: string | null
   occurredAt?: Date | string
   settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   stay: Prisma.RoomStayCreateNestedOneWithoutChargesInput
+  commissionItem?: Prisma.CommissionItemCreateNestedOneWithoutChargesInput
 }
 
 export type RoomChargeUncheckedCreateWithoutOrderInput = {
@@ -740,10 +978,15 @@ export type RoomChargeUncheckedCreateWithoutOrderInput = {
   quantity?: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: string | null
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: string | null
   signatureData?: string | null
   occurredAt?: Date | string
   settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -770,12 +1013,17 @@ export type RoomChargeUpdateWithoutOrderInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stay?: Prisma.RoomStayUpdateOneRequiredWithoutChargesNestedInput
+  commissionItem?: Prisma.CommissionItemUpdateOneWithoutChargesNestedInput
 }
 
 export type RoomChargeUncheckedUpdateWithoutOrderInput = {
@@ -786,10 +1034,15 @@ export type RoomChargeUncheckedUpdateWithoutOrderInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -801,10 +1054,15 @@ export type RoomChargeCreateManyStayInput = {
   quantity?: number
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: string | null
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: string | null
   signatureData?: string | null
   occurredAt?: Date | string
   settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -815,12 +1073,17 @@ export type RoomChargeUpdateWithoutStayInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneWithoutRoomChargeNestedInput
+  commissionItem?: Prisma.CommissionItemUpdateOneWithoutChargesNestedInput
 }
 
 export type RoomChargeUncheckedUpdateWithoutStayInput = {
@@ -831,10 +1094,15 @@ export type RoomChargeUncheckedUpdateWithoutStayInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -846,10 +1114,95 @@ export type RoomChargeUncheckedUpdateManyWithoutStayInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionItemId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RoomChargeCreateManyCommissionItemInput = {
+  id?: string
+  stayId: string
+  orderId?: string | null
+  kind: $Enums.RoomChargeKind
+  description: string
+  quantity?: number
+  unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  signedByName?: string | null
+  signatureData?: string | null
+  occurredAt?: Date | string
+  settledAt?: Date | string | null
+  billId?: string | null
+  billNumber?: number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+}
+
+export type RoomChargeUpdateWithoutCommissionItemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumRoomChargeKindFieldUpdateOperationsInput | $Enums.RoomChargeKind
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stay?: Prisma.RoomStayUpdateOneRequiredWithoutChargesNestedInput
+  order?: Prisma.OrderUpdateOneWithoutRoomChargeNestedInput
+}
+
+export type RoomChargeUncheckedUpdateWithoutCommissionItemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  stayId?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumRoomChargeKindFieldUpdateOperationsInput | $Enums.RoomChargeKind
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RoomChargeUncheckedUpdateManyWithoutCommissionItemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  stayId?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumRoomChargeKindFieldUpdateOperationsInput | $Enums.RoomChargeKind
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  commissionAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  signedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signatureData?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  billId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -864,13 +1217,19 @@ export type RoomChargeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   quantity?: boolean
   unitPrice?: boolean
   amount?: boolean
+  commissionItemId?: boolean
+  commissionAmount?: boolean
   signedByName?: boolean
   signatureData?: boolean
   occurredAt?: boolean
   settledAt?: boolean
+  billId?: boolean
+  billNumber?: boolean
+  lines?: boolean
   createdAt?: boolean
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
+  commissionItem?: boolean | Prisma.RoomCharge$commissionItemArgs<ExtArgs>
 }, ExtArgs["result"]["roomCharge"]>
 
 export type RoomChargeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -882,13 +1241,19 @@ export type RoomChargeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   quantity?: boolean
   unitPrice?: boolean
   amount?: boolean
+  commissionItemId?: boolean
+  commissionAmount?: boolean
   signedByName?: boolean
   signatureData?: boolean
   occurredAt?: boolean
   settledAt?: boolean
+  billId?: boolean
+  billNumber?: boolean
+  lines?: boolean
   createdAt?: boolean
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
+  commissionItem?: boolean | Prisma.RoomCharge$commissionItemArgs<ExtArgs>
 }, ExtArgs["result"]["roomCharge"]>
 
 export type RoomChargeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -900,13 +1265,19 @@ export type RoomChargeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   quantity?: boolean
   unitPrice?: boolean
   amount?: boolean
+  commissionItemId?: boolean
+  commissionAmount?: boolean
   signedByName?: boolean
   signatureData?: boolean
   occurredAt?: boolean
   settledAt?: boolean
+  billId?: boolean
+  billNumber?: boolean
+  lines?: boolean
   createdAt?: boolean
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
+  commissionItem?: boolean | Prisma.RoomCharge$commissionItemArgs<ExtArgs>
 }, ExtArgs["result"]["roomCharge"]>
 
 export type RoomChargeSelectScalar = {
@@ -918,25 +1289,33 @@ export type RoomChargeSelectScalar = {
   quantity?: boolean
   unitPrice?: boolean
   amount?: boolean
+  commissionItemId?: boolean
+  commissionAmount?: boolean
   signedByName?: boolean
   signatureData?: boolean
   occurredAt?: boolean
   settledAt?: boolean
+  billId?: boolean
+  billNumber?: boolean
+  lines?: boolean
   createdAt?: boolean
 }
 
-export type RoomChargeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "stayId" | "orderId" | "kind" | "description" | "quantity" | "unitPrice" | "amount" | "signedByName" | "signatureData" | "occurredAt" | "settledAt" | "createdAt", ExtArgs["result"]["roomCharge"]>
+export type RoomChargeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "stayId" | "orderId" | "kind" | "description" | "quantity" | "unitPrice" | "amount" | "commissionItemId" | "commissionAmount" | "signedByName" | "signatureData" | "occurredAt" | "settledAt" | "billId" | "billNumber" | "lines" | "createdAt", ExtArgs["result"]["roomCharge"]>
 export type RoomChargeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
+  commissionItem?: boolean | Prisma.RoomCharge$commissionItemArgs<ExtArgs>
 }
 export type RoomChargeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
+  commissionItem?: boolean | Prisma.RoomCharge$commissionItemArgs<ExtArgs>
 }
 export type RoomChargeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stay?: boolean | Prisma.RoomStayDefaultArgs<ExtArgs>
   order?: boolean | Prisma.RoomCharge$orderArgs<ExtArgs>
+  commissionItem?: boolean | Prisma.RoomCharge$commissionItemArgs<ExtArgs>
 }
 
 export type $RoomChargePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -944,6 +1323,7 @@ export type $RoomChargePayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     stay: Prisma.$RoomStayPayload<ExtArgs>
     order: Prisma.$OrderPayload<ExtArgs> | null
+    commissionItem: Prisma.$CommissionItemPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -954,10 +1334,15 @@ export type $RoomChargePayload<ExtArgs extends runtime.Types.Extensions.Internal
     quantity: number
     unitPrice: runtime.Decimal
     amount: runtime.Decimal
+    commissionItemId: string | null
+    commissionAmount: runtime.Decimal | null
     signedByName: string | null
     signatureData: string | null
     occurredAt: Date
     settledAt: Date | null
+    billId: string | null
+    billNumber: number | null
+    lines: runtime.JsonValue | null
     createdAt: Date
   }, ExtArgs["result"]["roomCharge"]>
   composites: {}
@@ -1355,6 +1740,7 @@ export interface Prisma__RoomChargeClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stay<T extends Prisma.RoomStayDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomStayDefaultArgs<ExtArgs>>): Prisma.Prisma__RoomStayClient<runtime.Types.Result.GetResult<Prisma.$RoomStayPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   order<T extends Prisma.RoomCharge$orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomCharge$orderArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  commissionItem<T extends Prisma.RoomCharge$commissionItemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoomCharge$commissionItemArgs<ExtArgs>>): Prisma.Prisma__CommissionItemClient<runtime.Types.Result.GetResult<Prisma.$CommissionItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1392,10 +1778,15 @@ export interface RoomChargeFieldRefs {
   readonly quantity: Prisma.FieldRef<"RoomCharge", 'Int'>
   readonly unitPrice: Prisma.FieldRef<"RoomCharge", 'Decimal'>
   readonly amount: Prisma.FieldRef<"RoomCharge", 'Decimal'>
+  readonly commissionItemId: Prisma.FieldRef<"RoomCharge", 'String'>
+  readonly commissionAmount: Prisma.FieldRef<"RoomCharge", 'Decimal'>
   readonly signedByName: Prisma.FieldRef<"RoomCharge", 'String'>
   readonly signatureData: Prisma.FieldRef<"RoomCharge", 'String'>
   readonly occurredAt: Prisma.FieldRef<"RoomCharge", 'DateTime'>
   readonly settledAt: Prisma.FieldRef<"RoomCharge", 'DateTime'>
+  readonly billId: Prisma.FieldRef<"RoomCharge", 'String'>
+  readonly billNumber: Prisma.FieldRef<"RoomCharge", 'Int'>
+  readonly lines: Prisma.FieldRef<"RoomCharge", 'Json'>
   readonly createdAt: Prisma.FieldRef<"RoomCharge", 'DateTime'>
 }
     
@@ -1814,6 +2205,25 @@ export type RoomCharge$orderArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.OrderInclude<ExtArgs> | null
   where?: Prisma.OrderWhereInput
+}
+
+/**
+ * RoomCharge.commissionItem
+ */
+export type RoomCharge$commissionItemArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommissionItem
+   */
+  select?: Prisma.CommissionItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommissionItem
+   */
+  omit?: Prisma.CommissionItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommissionItemInclude<ExtArgs> | null
+  where?: Prisma.CommissionItemWhereInput
 }
 
 /**

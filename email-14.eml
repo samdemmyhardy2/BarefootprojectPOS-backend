@@ -1,0 +1,266 @@
+Return-Path: <barefootproject.kohphayam+caf_=inbox=forward.starbridgemyanmar.tech@gmail.com>
+X-Original-To: inbox@forward.starbridgemyanmar.tech
+Delivered-To: inbox@forward.starbridgemyanmar.tech
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	by mail.starbridgemyanmar.tech (Postfix) with ESMTPS id 464F6C844E
+	for <inbox@forward.starbridgemyanmar.tech>; Mon,  2 Nov 2026 12:52:22 +0000 (UTC)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c46bd7a7345so599994166b.0
+        for <inbox@forward.starbridgemyanmar.tech>; Mon, 02 Nov 2026 04:52:22 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; t=1793623940; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=gYQlM+kr42wRT7tf4vO2jwhqHa2pBvJkQ+Gcbx0rveML/HpuMKYb+pWlBS2Is10Ysy
+         tyCYxdi4CXWmB/9XfqReBZ/ZHwdV54pHCqA89YpQ77j0UpPjUNMsw6AIB4stHxCBEaN0
+         mB3JKtgaqcIE8sG5pFg0vT65hSW4tCLf5YytCRXiJLNFDG/4xUgBqu/QpHGEnDAGqBqW
+         8CDls78mXG2zMnWJaBw7puVC4sk/O1c1x0woHJlRrNESeVcbiTJCzR2vTqNlBxI8FBq9
+         PkaJnC36IBMqcLE8kS2F6t8DeOHVF2m2NkOUQB3M0Q3wpei1iNSIgFQu6ViAvBJbnML+
+         OEkQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:mime-version:subject:message-id:from:date:dkim-signature
+         :dkim-signature:delivered-to;
+        bh=O4UxpnRfjs5EhpPOGzPZN2x9DmnfuNYxWDqe7NBwtrc=;
+        fh=dFprzHogxEr61vH8EZkCt2XrVOx20s+nyI0DZas6+Yo=;
+        b=mT7msIqQ+2NaNUHzoz86d/6NEv/w72RV7wlA7773BSYbgk4hvJSLt1O/xEKKNIOdCw
+         2UZvIF4iPOD9vIgtC+5jXMz9xapqxLzF1hTeNzt+BE/oeHVTikv5u0Sej8ZcFXdSV7k1
+         l5dMxgp83atb+0JnsxE6cLz6CgPslwiGJh+Ve1pezo2wKeBLa3TcWw22yQUlmfMKwd/L
+         gQ/HtoSHu1OFtBdYo/xruWB/eySGXu0bG7kFeGqintZ6mvudmJmPSpEHshRCqqqmGUAj
+         5iRTaLCnmAP0RImpuSWVwKiceiYqrNSXQ0qoBUudeVFsxxdiITPM3S9y7jAe2eR+X+Db
+         2Zrw==;
+        darn=forward.starbridgemyanmar.tech
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@okta.com header.s=smtpapi header.b=beuqwI+V;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b=xZX0nysm;
+       spf=pass (google.com: domain of bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com designates 159.183.193.109 as permitted sender) smtp.mailfrom="bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=okta.com
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793623940; x=1794228740;
+        h=content-type:to:mime-version:subject:message-id:from:date
+         :dkim-signature:dkim-signature:delivered-to:x-forwarded-for
+         :x-forwarded-to:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=O4UxpnRfjs5EhpPOGzPZN2x9DmnfuNYxWDqe7NBwtrc=;
+        b=llTz8l3TU0LbqMs76J7j8tZC87a5XTPCWw+qzwg0U+wcy0r63tlYkLXejI2YyCOZcl
+         PxsJ6z6bjrHTolV6EK/9jEAxbk+hKSjRcthbWWfqyKkKvmFQYXTfbAI2ohxQOmDSjv9F
+         ENwJvrtNj6uXTAlRtm66S7jmGCOanc5KvpAgfgVf9Baki06Gl8zfn6GgcrsCCMReDJa7
+         JGCL+GtxmWweJMc4EoOSxL7uj3I1vX+BKbeBXFwdiyuqA/5pohiA9gWH/5qt0sQN+gYi
+         3jOrnIj/1/vHO9cXoR5OdIjrZCa6JDwl4wF9zWqq2/ZOOUrpMuqFcO0/QCLBKLljNw8O
+         2XCw==
+X-Forwarded-Encrypted: i=2; AKwUvBwS9DQ7rhsw8OYKvne7tPpQgeMrCUH4Vt5ZmC0waEAy8AZ2Y/t1myYvmy1TFbQwii17whf+wg==@forward.starbridgemyanmar.tech
+X-Gm-Message-State: APuU4Z/6MhcX2GKB+Eweum4SQwOxdUEXjve+zofaW6oUcFdaQde6fr2Z
+	h+6s6+QW7sX3EXcM+e4lGwfGbVH39wUPTcs3wrxckK478sssrBAhmp7eJD89DZRG6UyZ4SYJZ+5
+	wE5HzyYiYe0wWk0qEtWAOnqehpAmIvkmsf1rAWiLegYdvaN18Lrd+eJoLtYhQfA==
+X-Received: by 2002:a17:907:3fa0:b0:c40:2439:4d9a with SMTP id a640c23a62f3a-c49d14c4200mr1082261966b.28.1793623939673;
+        Mon, 02 Nov 2026 04:52:19 -0800 (PST)
+X-Forwarded-To: inbox@forward.starbridgemyanmar.tech
+X-Forwarded-For: barefootproject.kohphayam@gmail.com inbox@forward.starbridgemyanmar.tech
+Delivered-To: barefootproject.kohphayam@gmail.com
+Received: by 2002:a05:7412:8c90:b0:230:df9d:739b with SMTP id xh16csp5369404rdb;
+        Mon, 2 Nov 2026 04:52:18 -0800 (PST)
+X-Received: by 2002:a17:903:1b26:b0:2eb:1e07:adc5 with SMTP id d9443c01a7336-2eb364026e5mr98788205ad.2.1793623938221;
+        Mon, 02 Nov 2026 04:52:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793623938; cv=none;
+        d=google.com; s=arc-20260327;
+        b=D0oNIJq5OsNPzmGLZ4dbaH501A0Yyyg4/RAoDkkOTHBimNSscZlx8XpV1KJXiURiv2
+         hQFX9RB0UPZxiUF00hubZjkHD3XE+jPa93gSHX7dqh0kYbDvMTsBK5PtqMDCCAlMGiLY
+         Lx8nDZWL+bEcFaA+d9mYsHPdOfr2vUvTWzCu4rgX3/WSdupnfmEtvC6kA+dF6iDyP0DS
+         hCeHtuUJoAfFkvet1rXVLCunzONNRu7MNd29GT3bSUic+kNKcVn6xWEkhCMmSDM7RkmA
+         142AO6Zz1oyiY4fORcvcthaIZbxUGgjwBZSF7dQBIxrsaI4/yu/xlJYRRp27ajO8S0Er
+         mNAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:mime-version:subject:message-id:from:date:dkim-signature
+         :dkim-signature;
+        bh=O4UxpnRfjs5EhpPOGzPZN2x9DmnfuNYxWDqe7NBwtrc=;
+        fh=AXim7Wzi8Oik6OAMU4xUX08Q27KdrXzfzs/YJ/E0Pxg=;
+        b=T9b4FlxPtVj7iiGppUiGPBtdCuLdbr6FlQD+41tcr4eXsm7bm/1pGv08Om9oCHP8J+
+         fk/sCkECVHRk+E8V6kQGK2c/XyDIGdfSJw6FvNAr3y7a+maV23RJ4+mCq/nSB5s3txjT
+         +dnIpKlbqdqz1tM4MclE3WG8/GnEw11EFAdPonFOQmaftgkXonZgrz/tr/0KFzW27at0
+         wg8xQuvFl9nQkQN5qNYPOekcKteGcLgTfX7rfa98VmxgfNLFlC25EHdJk4FK00GRzILq
+         l2ImE+p+ZIZ+vTz9yePhmdIYoGxn06WKM4BCCgU1GHQroRMST1zYQscuNCDpJq0Huv0X
+         nXZA==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@okta.com header.s=smtpapi header.b=beuqwI+V;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b=xZX0nysm;
+       spf=pass (google.com: domain of bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com designates 159.183.193.109 as permitted sender) smtp.mailfrom="bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=okta.com
+Received: from o20.mailrelay.okta.com (o20.mailrelay.okta.com. [159.183.193.109])
+        by mx.google.com with ESMTPS id d9443c01a7336-2eb3924df47si192573765ad.80.2026.11.02.04.52.17
+        for <barefootproject.kohphayam@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Nov 2026 04:52:18 -0800 (PST)
+Received-SPF: pass (google.com: domain of bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com designates 159.183.193.109 as permitted sender) client-ip=159.183.193.109;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@okta.com header.s=smtpapi header.b=beuqwI+V;
+       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b=xZX0nysm;
+       spf=pass (google.com: domain of bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com designates 159.183.193.109 as permitted sender) smtp.mailfrom="bounces+45915-e88b-barefootproject.kohphayam=gmail.com@mailrelay.okta.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=okta.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=okta.com;
+	h=date:from:subject:mime-version:to:content-type:cc:content-type:date:
+	feedback-id:from:subject:to;
+	s=smtpapi; t=1793623937;
+	bh=O4UxpnRfjs5EhpPOGzPZN2x9DmnfuNYxWDqe7NBwtrc=;
+	b=beuqwI+VnbPsClJZdUnCZAbvVSXs9FyM1+loy/l+x2Z5Hph/qI9TysSf/BLwcWdlIZO9
+	nN+93b6phtS5moKlkA0KLpQ2Ek2h9B89qzdsmWefPQec/y5yVseLu+5AbRSggalw+0bseA
+	G+gkPeQwamE+oJclDn1OQdhE7if9NKxdo=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sendgrid.info;
+	h=date:from:subject:mime-version:to:content-type:cc:content-type:date:
+	feedback-id:from:subject:to;
+	s=smtpapi; t=1793623937;
+	bh=O4UxpnRfjs5EhpPOGzPZN2x9DmnfuNYxWDqe7NBwtrc=;
+	b=xZX0nysm073OiIy7ummBtB3TF+t82Q7S1oVCa3HNF7jOKnlxR8Mi1hT+st/ZkesLj0Qk
+	McH35+PUdP+8gNsv1mFHZ1fmAFyMN/YwUVDfwy9GooaxMtX/lAV5yZ2AsvcnfL9L+5Ac/S
+	B0oLMf8/kQm5BG+ah/0ri9lj4ure7vtFQ=
+Received: by recvd-5dd7ccd7b6-xb2q5 with SMTP id recvd-5dd7ccd7b6-xb2q5-1-6AE88781-A
+	2026-11-02 12:52:17.056109159 +0000 UTC m=+2922703.781614194
+Received: from mailrelay.okta.com (unknown)
+	by geopod-ismtpd-8 (SG)
+	with ESMTP id K8pjwTKUSWmLyIe7Q8Npag
+	for <barefootproject.kohphayam@gmail.com>;
+	Mon, 02 Nov 2026 12:52:17.039 +0000 (UTC)
+Received: from ok12-majorapp-664bd7b89b-x7rfd (unknown [127.0.0.6])
+	by mailrelay.okta.com (Postfix) with ESMTP id EBEF51411D969
+	for <barefootproject.kohphayam@gmail.com>; Mon, 02 Nov 2026 12:52:16 +0000 (UTC)
+Date: Mon, 02 Nov 2026 12:52:17 +0000 (UTC)
+From: Okta <noreply@okta.com>
+Message-ID: <115978126.89682.1793623936956@okta.com>
+Subject: One-time verification code: 823099
+MIME-Version: 1.0
+X-SG-EID: 
+ =?us-ascii?Q?u001=2EcS44OXziC4iAKBVoW6hV9+Vzl2M9iX8v+knqf+qhfG+qYT0XUef1oUXZa?=
+ =?us-ascii?Q?jwg2TebIf8kEchzaXOly1n0JkoP8m=2FUvMX6mg66?=
+ =?us-ascii?Q?RJgMnmQ35A4x5JYlioNURKNFfLWVK+vozj0i+Tp?=
+ =?us-ascii?Q?wKAuMTj7PGYet0hJJsTynHgS=2F9ZxdIvj3dn2q=2F8?=
+ =?us-ascii?Q?HKvvNSLnjQLLh14+reyC2Q3eiIdXxxA+w9eazPe?=
+ =?us-ascii?Q?pRLb11P3AOS179B3EZSvS3vLoAO7C=2FP9Q64GSI7?= =?us-ascii?Q?LUxu?=
+X-SG-ID: 
+ =?us-ascii?Q?u001=2ESdBcvi+Evd=2FbQef8eZF3BharjHh+=2Fbgzm6D0hrkkBYgsUSlOEHMtJ3bsw?=
+ =?us-ascii?Q?fsG5ISFn9kCxwLPExKKe7x3y+UKuD=2Fb+bzDwAoB?=
+ =?us-ascii?Q?Z9xEYECt0EVMYI4L6iuYp5bwmu7EQufMo6dfZFL?=
+ =?us-ascii?Q?kmFYk0BmHKjIei0ctxPJPinfFo1wnoa3YJNcKKF?=
+ =?us-ascii?Q?2AenQtGF7UH4QNJ8vUMGuGz1VVIhJCDlMX2Jmw5?=
+ =?us-ascii?Q?yp2yhdWUC6s+UbqzR5Lgh9pqSk0LODbtakRGhcx?=
+ =?us-ascii?Q?bkC+bvRuleywFdmSW3blbHZofCLZBjB5aBLu8p7?=
+ =?us-ascii?Q?NFEA+HtIKY5K6NMVZjibf5S+=2Foe+tL=2FnAd1ZASp?=
+ =?us-ascii?Q?TFupER=2FebP1caFJ4s1D+Y7vAJGhMzL0GvlrFlZC?=
+ =?us-ascii?Q?jIPXkf8EWcqczkj9Kqlq6RfeOx3kS2KukrmbaEC?=
+ =?us-ascii?Q?MGqHEbXdAP0uE3cLdPeJa2nc7iUZfpLNW0VSmaw?=
+ =?us-ascii?Q?600v3Dv89oXAX1EZUMfOYG=2FrX3xyg484YKcNQIC?=
+ =?us-ascii?Q?2YSEE=3D?=
+To: barefootproject.kohphayam@gmail.com
+X-Entity-ID: u001.MofRC1Mfq+VAFIClfby/Lg==
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_89682_721024485.1793623936956"
+
+------=_Part_89682_721024485.1793623936956
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+
+
+
+    
+
+
+
+    
+        
+        
+            
+                
+                    
+                        Hi Sam,
+                    
+                
+                                
+                    
+                        To finish signing in to Cloudbeds, click the button below or enter the provided code.
+                    
+                
+                
+                    
+                        
+                            
+                                
+                                    Sign In
+                                
+                            
+                            
+                                
+                                    This link expires in 5 minutes.
+                                
+                            
+                            
+                                
+                                    Can't use the link? Enter this code instead: 823099
+                                
+                            
+                        
+                    
+                
+                                
+                    
+                        If you did not request this email, please notify your supervisor or property manager.
+                    
+                
+            
+        
+        
+            
+                This is an automatically generated message. Replies are not monitored or answered.
+            
+        
+    
+
+
+
+
+------=_Part_89682_721024485.1793623936956
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
+<body><div style="background-color:#ebebed;margin:0">
+  <table style="font-family:'proxima nova' , 'century gothic' , 'arial' , 'verdana' , sans-serif;font-size:14px;color:#5e5e5e;width:98%;max-width:600px;float:none;margin:0 auto" border="0" cellpadding="0" cellspacing="0" valign="top" align="left">
+    <tbody>
+      <tr align="middle">
+        <td style="padding-top:30px;padding-bottom:32px"><img src="https://ok12static.oktacdn.com/fs/bco/1/fs0rcgtsgcSvtWtaT5d7" height="37" /></td>
+      </tr>
+      <tr bgcolor="#ffffff">
+        <td>
+          <table bgcolor="#ffffff" style="width:100%;line-height:20px;padding:32px;border:1px solid;border-color:#f0f0f0" cellpadding="0">
+            <tbody>
+              <tr>
+                <td style="vertical-align:bottom">Hi Sam,</td>
+              </tr>
+              <tr>
+                <td style="padding-top:24px">To finish signing in to Cloudbeds, click the button below or enter the provided code.</td>
+              </tr>
+              <tr>
+                <td align="center">
+                  <table border="0" cellpadding="0" cellspacing="0" valign="top">
+                    <tbody>
+                      <tr>
+                        <td align="center" style="height:32px;padding-top:24px;padding-bottom:16px"><a id="email-authentication-button" href="https://signin.cloudbeds.com/email/verify?token=ftlqyZfEAuW8YRPbD49CnigNI8zPwg7oQV" style="text-decoration:none"><span style="padding:13px 32px 13px 31px;text-align:center;cursor:pointer;color:#fff;border-radius:20px;background-color:#32c0a0;text-transform:uppercase">Sign In</span></a></td>
+                      </tr>
+                      <tr>
+                        <td align="center" style="color:#999">This link expires in 5 minutes.</td>
+                      </tr>
+                      <tr>
+                        <td align="center" style="padding-top:16px">Can't use the link? Enter this code instead: <b>823099</b></td>
+                      </tr>
+                    </tbody>
+                  </table></td>
+              </tr>
+              <tr>
+                <td style="padding-top:24px">If you did not request this email, please notify your supervisor or property manager.</td>
+              </tr>
+            </tbody>
+          </table></td>
+      </tr>
+      <tr>
+        <td style="font-size:12px;padding:16px 0 30px 50px;color:#999">This is an automatically generated message. Replies are not monitored or answered.</td>
+      </tr>
+    </tbody>
+  </table>
+</div></body></html>
+------=_Part_89682_721024485.1793623936956--

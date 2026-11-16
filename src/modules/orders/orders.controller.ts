@@ -26,10 +26,11 @@ import {
   ApiNotFoundResponse,
   ApiUnauthorizedResponse,
   ApiForbiddenResponse,
+  ApiConflictResponse,
   ApiQuery,
 } from '@nestjs/swagger';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { CreateOrderDto, RemoveOrderItemDto, SetKitchenFlagDto } from './dto/create-order.dto';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
@@ -38,7 +39,9 @@ import { JobPermissions } from 'src/common/decorators/job-permissions.decorator'
 import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { PrepStation, Role } from 'prisma/generated/prisma/enums';
 import { AcceptStreamToken } from 'src/common/decorators/stream-token.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
 import { OrderPageQueryDto } from './dto/order-page-query.dto';
+import { CreateCommissionItemDto } from './dto/create-commission-item.dto';
 import { RedirectPrepTicketDto } from './dto/redirect-prep-ticket.dto';
 
 @ApiTags('Orders')
@@ -83,6 +86,37 @@ export class OrdersController {
     return this.ordersService.create(waiterId, createOrderDto);
   }
 
+  @JobPermissions('ORDER_CREATE')
+  @Patch(':id/items/:itemId/kitchen-flag')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Mark or clear the kitchen comment icon for one dish' })
+  @ApiParam({ name: 'id', description: 'Order id' })
+  @ApiParam({ name: 'itemId', description: 'Order line id' })
+  setKitchenFlag(@Param('id', ParseUUIDPipe) id: string, @Param('itemId', ParseUUIDPipe) itemId: string, @Body() dto: SetKitchenFlagDto) {
+    return this.ordersService.setKitchenFlag(id, itemId, dto.flagged);
+  }
+
+  @JobPermissions('ORDER_CREATE')
+  @Delete(':id/items/:itemId')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Remove one dish that was sent to the table by mistake' })
+  @ApiParam({ name: 'id', description: 'Order id' })
+  @ApiParam({ name: 'itemId', description: 'Order line id' })
+  @ApiConflictResponse({ description: 'The dish is already paid or on a settled bill.' })
+  removeItem(@Param('id', ParseUUIDPipe) id: string, @Param('itemId', ParseUUIDPipe) itemId: string) {
+    return this.ordersService.removeItem(id, itemId);
+  }
+
+  @JobPermissions('ORDER_CREATE')
+  @Patch(':id/items/:itemId/remove')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Remove one dish from a room order and keep it on the order with the reason' })
+  @ApiParam({ name: 'id', description: 'Order id' })
+  @ApiParam({ name: 'itemId', description: 'Order line id' })
+  voidItem(@Param('id', ParseUUIDPipe) id: string, @Param('itemId', ParseUUIDPipe) itemId: string, @Body() dto: RemoveOrderItemDto) {
+    return this.ordersService.voidItem(id, itemId, dto.reason);
+  }
+
   @JobPermissions('ORDER_VIEW')
   @Get()
   @Roles(Role.ADMIN, Role.EMPLOYEE)
@@ -103,11 +137,24 @@ export class OrdersController {
   @JobPermissions('ORDER_VIEW')
   @Get('page')
   @Roles(Role.ADMIN, Role.EMPLOYEE)
-  @ApiOperation({ summary: 'Get a page of orders, optionally filtered by a date range' })
+  @ApiOperation({ summary: 'Get a page of orders filtered by date, status, payment, or place, plus date sales for total, room, and cash' })
   @ApiResponse({ status: 200, description: 'Orders and pagination metadata.' })
   findPage(@Query() query: OrderPageQueryDto) {
     return this.ordersService.findPage(query);
   }
+
+  @JobPermissions('ORDER_VIEW')
+  @Get('commission-items')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'List commission items such as a speed boat transfer' })
+  commissionItems() { return this.ordersService.commissionItems(); }
+
+  @JobPermissions('ORDER_VIEW')
+  @Post('commission-items')
+  @Roles(Role.ADMIN, Role.EMPLOYEE)
+  @ApiOperation({ summary: 'Add a commission item. The guest pays the price. The daily report shows only the commission.' })
+  @ApiBadRequestResponse({ description: 'The commission is higher than the guest price, or the name is empty.' })
+  createCommissionItem(@Body() dto: CreateCommissionItemDto) { return this.ordersService.createCommissionItem(dto); }
 
   @JobPermissions('ORDER_SERVE')
   @Get('ready')
@@ -229,9 +276,8 @@ export class OrdersController {
     return this.ordersService.updateStatus(id, updateOrderStatusDto, actorId);
   }
 
-  @JobPermissions('KITCHEN')
+  @Public()
   @Get('kitchen/prep-queue')
-  @Roles(Role.ADMIN, Role.EMPLOYEE)
   prepKitchenQueue() { return this.ordersService.prepQueue(PrepStation.KITCHEN); }
 
   @JobPermissions('BAR')
@@ -257,20 +303,18 @@ export class OrdersController {
   @Roles(Role.ADMIN, Role.EMPLOYEE)
   readyKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string) { return this.ordersService.updatePrepTicket(ticketId, PrepStation.KITCHEN, 'ready'); }
 
-  @JobPermissions('KITCHEN', 'ORDER_SERVE')
+  @Public()
   @Patch('kitchen/tickets/:ticketId/pickup')
-  @Roles(Role.ADMIN, Role.EMPLOYEE)
-  @ApiOperation({ summary: 'Waiter picks up a kitchen ticket and marks the order served' })
-  pickupKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string, @GetUser('id') servedById: string) {
-    return this.ordersService.pickupKitchenTicket(ticketId, servedById);
+  @ApiOperation({ summary: 'Pick up a kitchen ticket from the open kitchen display' })
+  pickupKitchenTicket(@Param('ticketId', ParseUUIDPipe) ticketId: string, @GetUser('id') servedById?: string) {
+    return this.ordersService.pickupKitchenTicket(ticketId, servedById ?? null);
   }
 
-  @JobPermissions('KITCHEN', 'ORDER_SERVE')
+  @Public()
   @Patch('kitchen/orders/:id/pickup')
-  @Roles(Role.ADMIN, Role.EMPLOYEE)
-  @ApiOperation({ summary: 'Waiter picks up a kitchen order that has no prep ticket' })
-  pickupKitchenOrder(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') servedById: string) {
-    return this.ordersService.pickupKitchenOrder(id, servedById);
+  @ApiOperation({ summary: 'Pick up a kitchen order from the open kitchen display' })
+  pickupKitchenOrder(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') servedById?: string) {
+    return this.ordersService.pickupKitchenOrder(id, servedById ?? null);
   }
 
   @JobPermissions('BAR')

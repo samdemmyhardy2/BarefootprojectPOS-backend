@@ -32,11 +32,31 @@ export class ModifierGroupsService {
     this.assertRules({ ...current, ...dto, options: dto.options ?? current.options });
     if (dto.options) await this.assertOpenedGroups(dto.options);
     const { options, ...data } = dto;
-    return this.prisma.modifierGroup.update({
-      where: { id },
-      data: { ...data, ...(options ? { options: { deleteMany: {}, create: this.optionsData(options) } } : {}) },
-      include: { options: { orderBy: { position: 'asc' } }, menuItems: true },
+    if (!options) return this.prisma.modifierGroup.update({ where: { id }, data, include: { options: { orderBy: { position: 'asc' } }, menuItems: true } });
+    const currentIds = new Set(current.options.map((option) => option.id));
+    const keptIds = options.flatMap((option) => option.id && currentIds.has(option.id) ? [option.id] : []);
+    await this.prisma.$transaction(async (tx) => {
+      await tx.modifierGroup.update({ where: { id }, data });
+      await tx.modifierOption.deleteMany({ where: { groupId: id, ...(keptIds.length ? { id: { notIn: keptIds } } : {}) } });
+      for (const [index, option] of options.entries()) {
+        const row: Prisma.ModifierOptionUncheckedCreateInput = {
+          name: option.name,
+          groupId: id,
+          nameMy: option.nameMy ?? '',
+          nameTh: option.nameTh ?? '',
+          priceAdjustment: option.priceAdjustment ?? 0,
+          defaultSelected: option.defaultSelected ?? false,
+          active: option.active ?? true,
+          position: option.position ?? index,
+          opensGroupId: option.opensGroupId ?? null,
+        };
+        if (option.id && currentIds.has(option.id)) {
+          const { groupId: _groupId, ...fields } = row;
+          await tx.modifierOption.update({ where: { id: option.id }, data: fields });
+        } else await tx.modifierOption.create({ data: row });
+      }
     });
+    return this.findOne(id);
   }
 
   async remove(id: string) {
@@ -73,7 +93,10 @@ export class ModifierGroupsService {
   }
 
   private optionsData(options: CreateModifierGroupDto['options']): Prisma.ModifierOptionCreateWithoutGroupInput[] {
-    return options.map((option, index) => ({ ...option, position: option.position ?? index }));
+    return options.map((option, index) => {
+      const { id: _kept, ...fields } = option;
+      return { ...fields, position: option.position ?? index };
+    });
   }
 
   private async assertOpenedGroups(options: CreateModifierGroupDto['options']) {

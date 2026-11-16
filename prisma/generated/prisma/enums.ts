@@ -69,6 +69,18 @@ export const RoomStatus = {
 export type RoomStatus = (typeof RoomStatus)[keyof typeof RoomStatus]
 
 
+export const InboundEmailStatus = {
+  PROCESSED: 'PROCESSED',
+  DUPLICATE: 'DUPLICATE',
+  FAILED: 'FAILED',
+  SKIPPED: 'SKIPPED',
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING'
+} as const
+
+export type InboundEmailStatus = (typeof InboundEmailStatus)[keyof typeof InboundEmailStatus]
+
+
 export const RoomChargeKind = {
   ROOM_FEE: 'ROOM_FEE',
   WATER: 'WATER',
@@ -116,6 +128,17 @@ export const TaskStatus = {
 export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
 
 
+export const PrintJobStatus = {
+  PENDING: 'PENDING',
+  RENDERING: 'RENDERING',
+  PRINTING: 'PRINTING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type PrintJobStatus = (typeof PrintJobStatus)[keyof typeof PrintJobStatus]
+
+
 export const ModifierSelectionType = {
   SINGLE: 'SINGLE',
   MULTIPLE: 'MULTIPLE'
@@ -126,7 +149,8 @@ export type ModifierSelectionType = (typeof ModifierSelectionType)[keyof typeof 
 
 export const PrepStation = {
   KITCHEN: 'KITCHEN',
-  BAR: 'BAR'
+  BAR: 'BAR',
+  NONE: 'NONE'
 } as const
 
 export type PrepStation = (typeof PrepStation)[keyof typeof PrepStation]
